@@ -17,7 +17,7 @@ interface Deferred<T> {
 
 export abstract class DialogBase {
 	protected _toDispose: vscode.Disposable[] = [];
-	protected _dialogObject: azdata.window.Dialog;
+	public dialogObject: azdata.window.Dialog;
 	protected initDialogComplete: Deferred<void> | undefined;
 	protected initDialogPromise: Promise<void> = new Promise<void>((resolve, reject) => this.initDialogComplete = { resolve, reject });
 	protected workspaceDescriptionFormComponent: azdata.FormComponent | undefined;
@@ -25,28 +25,26 @@ export abstract class DialogBase {
 	protected workspaceInputFormComponent: azdata.FormComponent | undefined;
 
 	constructor(dialogTitle: string, dialogName: string, dialogWidth: azdata.window.DialogWidth = 600) {
-		this._dialogObject = azdata.window.createModelViewDialog(dialogTitle, dialogName, dialogWidth);
-		this._dialogObject.okButton.label = constants.OkButtonText;
-		this.register(this._dialogObject.cancelButton.onClick(() => this.onCancelButtonClicked()));
-		this.register(this._dialogObject.okButton.onClick(() => this.onOkButtonClicked()));
-		this._dialogObject.registerCloseValidator(async () => {
+		this.dialogObject = azdata.window.createModelViewDialog(dialogTitle, dialogName, dialogWidth);
+		this.dialogObject.okButton.label = constants.OkButtonText;
+		this.register(this.dialogObject.cancelButton.onClick(() => this.onCancelButtonClicked()));
+		this.register(this.dialogObject.okButton.onClick(() => this.onOkButtonClicked()));
+		this.dialogObject.registerCloseValidator(async () => {
 			return this.validate();
 		});
 	}
 
 	protected abstract initialize(view: azdata.ModelView): Promise<void>;
 
-	protected async validate(): Promise<boolean> {
-		return Promise.resolve(true);
-	}
+	abstract validate(): Promise<boolean>;
 
 	public async open(): Promise<void> {
 		const tab = azdata.window.createTab('');
 		tab.registerContent(async (view: azdata.ModelView) => {
 			return this.initialize(view);
 		});
-		this._dialogObject.content = [tab];
-		azdata.window.openDialog(this._dialogObject);
+		this.dialogObject.content = [tab];
+		azdata.window.openDialog(this.dialogObject);
 		await this.initDialogPromise;
 	}
 
@@ -71,10 +69,14 @@ export abstract class DialogBase {
 	}
 
 	protected showErrorMessage(message: string): void {
-		this._dialogObject.message = {
+		this.dialogObject.message = {
 			text: message,
 			level: azdata.window.MessageLevel.Error
 		};
+	}
+
+	public getErrorMessage(): azdata.window.DialogMessage {
+		return this.dialogObject.message;
 	}
 
 	protected createHorizontalContainer(view: azdata.ModelView, items: azdata.Component[]): azdata.FlexContainer {
@@ -159,30 +161,25 @@ export abstract class DialogBase {
 		}
 	}
 
-	protected async validateNewWorkspace(sameFolderAsNewProject: boolean): Promise<boolean> {
+	public async validateNewWorkspace(sameFolderAsNewProject: boolean): Promise<void> {
 		// workspace file should end in .code-workspace
 		const workspaceValid = this.workspaceInputBox!.value!.endsWith(constants.WorkspaceFileExtension);
 		if (!workspaceValid) {
-			this.showErrorMessage(constants.WorkspaceFileInvalidError(this.workspaceInputBox!.value!));
-			return false;
+			throw new Error(constants.WorkspaceFileInvalidError(this.workspaceInputBox!.value!));
 		}
 
 		// if the workspace file is not going to be in the same folder as the newly created project, then check that it's a valid folder
 		if (!sameFolderAsNewProject) {
 			const workspaceParentDirectoryExists = await directoryExist(path.dirname(this.workspaceInputBox!.value!));
 			if (!workspaceParentDirectoryExists) {
-				this.showErrorMessage(constants.WorkspaceParentDirectoryNotExistError(this.workspaceInputBox!.value!));
-				return false;
+				throw new Error(constants.WorkspaceParentDirectoryNotExistError(path.dirname(this.workspaceInputBox!.value!)));
 			}
 		}
 
 		// workspace file should not be an existing workspace file
 		const workspaceFileExists = await fileExist(this.workspaceInputBox!.value!);
 		if (workspaceFileExists) {
-			this.showErrorMessage(constants.WorkspaceFileAlreadyExistsError(this.workspaceInputBox!.value!));
-			return false;
+			throw new Error(constants.WorkspaceFileAlreadyExistsError(this.workspaceInputBox!.value!));
 		}
-
-		return true;
 	}
 }
