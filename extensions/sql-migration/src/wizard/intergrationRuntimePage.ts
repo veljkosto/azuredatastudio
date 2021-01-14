@@ -6,9 +6,12 @@
 import * as azdata from 'azdata';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
-
+import { CreateIntegrationRuntimeDialog } from './createMigrationControllerDialog';
 export class IntergrationRuntimePage extends MigrationWizardPage {
 
+	private migrationControllerSubscriptionDropdown!: azdata.DropDownComponent;
+	private migrationControllerResourceGroupDropdown!: azdata.DropDownComponent;
+	private migrationControllerRegionDropdown!: azdata.DropDownComponent;
 	private migrationControllerDropdown!: azdata.DropDownComponent;
 
 	private defaultSetupRadioButton!: azdata.RadioButtonComponent;
@@ -30,10 +33,24 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 			value: 'An migration controller is an ARM (Azure Resource Manager) resource created in your Azure subscription and it is needed to coordinate and monitor data migration activities. If one already exists in your subscription, you can reuse it here. Alternatively you can create a new one by clicking New. {0}',
 			links: [
 				{
-					url: '',
+					url: 'https://www.xyz.com',
 					text: 'Learn More'
 				},
 			]
+		}).component();
+
+		const subscriptionLable = view.modelBuilder.text().withProps({
+			value: 'Subscription'
+		}).component();
+		this.migrationControllerSubscriptionDropdown = view.modelBuilder.dropDown().withProps({
+		}).component();
+
+		this.migrationControllerResourceGroupDropdown = view.modelBuilder.dropDown().withProps({
+
+		}).component();
+
+		this.migrationControllerDropdown = view.modelBuilder.dropDown().withProps({
+
 		}).component();
 
 		this.migrationControllerDropdown = view.modelBuilder.dropDown().withProps({
@@ -55,6 +72,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 			label: 'Setup with defaults: Add migration controller with one click express setup using default options.',
 			name: setupButtonGroup
 		}).component();
+		this.defaultSetupRadioButton.checked = true;
 
 		this.customSetupRadioButton = view.modelBuilder.radioButton().withProps({
 			label: 'Custom setup: Add migration controller after customizing most options.',
@@ -67,10 +85,15 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}).component();
 
 		this.startSetupButton.onDidClick((e) => {
+			const dialog = new CreateIntegrationRuntimeDialog();
+			dialog.initialize();
+			return;
 			if (this.defaultSetupRadioButton.checked) {
-
+				console.log('Doing default setup');
 			} else {
-
+				console.log('Doing custom setup opening the dialog');
+				const dialog = new CreateIntegrationRuntimeDialog();
+				dialog.initialize();
 			}
 		});
 
@@ -134,4 +157,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 
 	protected async handleStateChange(e: StateChangeEvent): Promise<void> {
 	}
+
 }
+
+

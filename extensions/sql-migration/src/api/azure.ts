@@ -33,6 +33,13 @@ export async function getSubscriptions(account: azdata.Account): Promise<Subscri
 	return subscriptions.subscriptions;
 }
 
+export type ResourceGroup = azureResource.AzureResource;
+export async function getResourceGroup(account: azdata.Account, subscription: Subscription): Promise<ResourceGroup[]> {
+	const api = await getAzureCoreAPI();
+	const result = await api.getResourceGroups(account, subscription, false);
+	return result.resourceGroups;
+}
+
 export type AzureProduct = azureResource.AzureGraphResource;
 
 export type SqlManagedInstance = AzureProduct;
