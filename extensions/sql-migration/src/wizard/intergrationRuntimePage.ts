@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as azdata from 'azdata';
-import { getMigrationControllerRegions, getResourceGroups, getSubscriptions, Subscription } from '../api/azure';
+import { getMigrationController, getMigrationControllerRegions, getResourceGroups, getSubscriptions, Subscription } from '../api/azure';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
 import { CreateIntegrationRuntimeDialog } from './createMigrationControllerDialog';
@@ -66,7 +66,10 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}).component();
 
 		createNewController.onDidClick((e) => {
-			this.createMigrationContainer.display = 'inline';
+			const dialog = new CreateIntegrationRuntimeDialog();
+			dialog.initialize();
+			// TODO: Allow express creation in later updates.
+			// this.createMigrationContainer.display = 'inline';
 		});
 
 		const setupButtonGroup = 'setupOptions';
@@ -190,7 +193,9 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}).component();
 
 		this.migrationControllerResourceGroupDropdown.onValueChanged((e) => {
-
+			if (this.migrationControllerResourceGroupDropdown.value) {
+				this.populateMigrationController();
+			}
 		});
 
 		const regionsDropdownLabel = this._view.modelBuilder.text().withProps({
@@ -203,7 +208,6 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}).component();
 
 		this.migrationControllerRegionDropdown.onValueChanged((e) => {
-
 		});
 
 		const flexContainer = this._view.modelBuilder.flexContainer().withItems([
@@ -222,6 +226,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 	private async populateSubscriptions(): Promise<void> {
 		this.migrationControllerSubscriptionDropdown.loading = true;
 		this.migrationControllerResourceGroupDropdown.loading = true;
+		this.migrationControllerDropdown.loading = true;
 		const subscriptions = await getSubscriptions(this.migrationStateModel.azureAccount);
 
 		let subscriptionDropdownValues: azdata.CategoryValue[] = [];
@@ -258,7 +263,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		if (resourceGroups && resourceGroups.length > 0) {
 			resourceGroups.forEach((resourceGroup) => {
 				resourceGroupDropdownValues.push({
-					name: resourceGroup.id,
+					name: resourceGroup.name,
 					displayName: resourceGroup.name
 				});
 			});
@@ -272,6 +277,33 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}
 		this.migrationControllerResourceGroupDropdown.values = resourceGroupDropdownValues;
 		this.migrationControllerResourceGroupDropdown.loading = false;
+		this.populateMigrationController();
+	}
+
+	private async populateMigrationController(): Promise<void> {
+		this.migrationControllerDropdown.loading = true;
+		let subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+		let regionName = (this.migrationControllerRegionDropdown.value as azdata.CategoryValue).name!;
+		let resourceGroupName = (this.migrationControllerResourceGroupDropdown.value as azdata.CategoryValue).name!;
+		const migrationControllers = await getMigrationController(this.migrationStateModel.azureAccount, subscription, resourceGroupName, regionName);
+		let migrationContollerValues: azdata.CategoryValue[] = [];
+		if (migrationControllers && migrationControllers.length > 0) {
+			migrationControllers.forEach((controller) => {
+				migrationContollerValues.push({
+					name: controller.name,
+					displayName: controller.name
+				});
+			});
+		} else {
+			migrationContollerValues = [
+				{
+					displayName: 'No Migration Controllers found. Please create a new one',
+					name: ''
+				}
+			];
+		}
+		this.migrationControllerDropdown.values = migrationContollerValues;
+		this.migrationControllerDropdown.loading = false;
 	}
 
 }

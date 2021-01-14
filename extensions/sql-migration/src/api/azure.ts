@@ -91,6 +91,14 @@ export async function getBlobContainers(account: azdata.Account, subscription: S
 	return blobContainers!;
 }
 
+export async function getMigrationController(account: azdata.Account, subscription: Subscription, resourceGroupName: string, regionName: string): Promise<azureResource.MigrationController[]> {
+	const api = await getAzureCoreAPI();
+	let result = await api.getMigrationController(account, subscription, resourceGroupName, regionName, true);
+	let controllers = result.controllers;
+	sortResourceArrayByName(controllers!);
+	return controllers!;
+}
+
 /**
  * For now only east us euap is supported. Proper APIs will be added in the public release.
  */
@@ -98,7 +106,7 @@ export function getMigrationControllerRegions(): azdata.CategoryValue[] {
 	return [
 		{
 			displayName: 'East US EUAP',
-			name: 'eastuseuap'
+			name: 'eastus2euap'
 		}
 	];
 }
