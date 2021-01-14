@@ -45,7 +45,6 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 			if (this._azureAccountsDropdown.value) {
 				const selectedAccount = (this._azureAccountsDropdown.value as azdata.CategoryValue).name;
 				this.migrationStateModel.azureAccount = this._accountsMap.get(selectedAccount)!;
-				console.log(this.migrationStateModel.azureAccount);
 			}
 		});
 

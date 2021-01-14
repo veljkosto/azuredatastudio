@@ -34,9 +34,10 @@ export async function getSubscriptions(account: azdata.Account): Promise<Subscri
 }
 
 export type ResourceGroup = azureResource.AzureResource;
-export async function getResourceGroup(account: azdata.Account, subscription: Subscription): Promise<ResourceGroup[]> {
+export async function getResourceGroups(account: azdata.Account, subscription: Subscription): Promise<ResourceGroup[]> {
 	const api = await getAzureCoreAPI();
 	const result = await api.getResourceGroups(account, subscription, false);
+	sortResourceArrayByName(result.resourceGroups);
 	return result.resourceGroups;
 }
 
@@ -90,12 +91,24 @@ export async function getBlobContainers(account: azdata.Account, subscription: S
 	return blobContainers!;
 }
 
+/**
+ * For now only east us euap is supported. Proper APIs will be added in the public release.
+ */
+export function getMigrationControllerRegions(): azdata.CategoryValue[] {
+	return [
+		{
+			displayName: 'East US EUAP',
+			name: 'eastuseuap'
+		}
+	];
+}
+
 function sortResourceArrayByName(resourceArray: AzureProduct[] | azureResource.FileShare[] | azureResource.BlobContainer[] | undefined): void {
 	if (!resourceArray) {
 		return;
 	}
 	resourceArray.sort((a: AzureProduct | azureResource.BlobContainer | azureResource.FileShare, b: AzureProduct | azureResource.BlobContainer | azureResource.FileShare) => {
-		if (a.name! < b.name!) {
+		if (a.name.toLocaleLowerCase()! < b.name.toLocaleLowerCase()!) {
 			return -1;
 		}
 		if (a.name! > b.name!) {

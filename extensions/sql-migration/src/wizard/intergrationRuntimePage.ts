@@ -4,9 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as azdata from 'azdata';
+import { getMigrationControllerRegions, getResourceGroups, getSubscriptions, Subscription } from '../api/azure';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
 import { CreateIntegrationRuntimeDialog } from './createMigrationControllerDialog';
+import * as constants from '../models/strings';
+
 export class IntergrationRuntimePage extends MigrationWizardPage {
 
 	private migrationControllerSubscriptionDropdown!: azdata.DropDownComponent;
@@ -22,13 +25,16 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 
 	private createMigrationContainer!: azdata.FlexContainer;
 
+	private _subscriptionMap: Map<string, Subscription> = new Map();
+
+	private _view!: azdata.ModelView;
 
 	constructor(wizard: azdata.window.Wizard, migrationStateModel: MigrationStateModel) {
 		super(wizard, azdata.window.createWizardPage('Migration Controller'), migrationStateModel);
 	}
 
 	protected async registerContent(view: azdata.ModelView): Promise<void> {
-
+		this._view = view;
 		const descriptionText = view.modelBuilder.text().withProps({
 			value: 'An migration controller is an ARM (Azure Resource Manager) resource created in your Azure subscription and it is needed to coordinate and monitor data migration activities. If one already exists in your subscription, you can reuse it here. Alternatively you can create a new one by clicking New. {0}',
 			links: [
@@ -39,11 +45,8 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 			]
 		}).component();
 
-		const subscriptionLable = view.modelBuilder.text().withProps({
-			value: 'Subscription'
-		}).component();
-		this.migrationControllerSubscriptionDropdown = view.modelBuilder.dropDown().withProps({
-		}).component();
+
+
 
 		this.migrationControllerResourceGroupDropdown = view.modelBuilder.dropDown().withProps({
 
@@ -134,6 +137,9 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 						component: descriptionText
 					},
 					{
+						component: this.migrationControllerDropdownsContainer()
+					},
+					{
 						title: 'Select a migration controller',
 						component: this.migrationControllerDropdown
 					},
@@ -150,12 +156,122 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 	}
 
 	public async onPageEnter(): Promise<void> {
+		this.populateSubscriptions();
 	}
 
 	public async onPageLeave(): Promise<void> {
 	}
 
 	protected async handleStateChange(e: StateChangeEvent): Promise<void> {
+	}
+
+	private migrationControllerDropdownsContainer(): azdata.FlexContainer {
+
+		const subscriptionDropdownLabel = this._view.modelBuilder.text().withProps({
+			value: 'Subscription'
+		}).component();
+
+		this.migrationControllerSubscriptionDropdown = this._view.modelBuilder.dropDown().withProps({
+			required: true
+		}).component();
+
+		this.migrationControllerSubscriptionDropdown.onValueChanged((e) => {
+			if (this.migrationControllerSubscriptionDropdown.value) {
+				this.populateResourceGroups();
+			}
+		});
+
+		const resourceGroupDropdownLabel = this._view.modelBuilder.text().withProps({
+			value: 'Resource Group'
+		}).component();
+
+		this.migrationControllerResourceGroupDropdown = this._view.modelBuilder.dropDown().withProps({
+			required: true
+		}).component();
+
+		this.migrationControllerResourceGroupDropdown.onValueChanged((e) => {
+
+		});
+
+		const regionsDropdownLabel = this._view.modelBuilder.text().withProps({
+			value: 'Region'
+		}).component();
+
+		this.migrationControllerRegionDropdown = this._view.modelBuilder.dropDown().withProps({
+			required: true,
+			values: getMigrationControllerRegions()
+		}).component();
+
+		this.migrationControllerRegionDropdown.onValueChanged((e) => {
+
+		});
+
+		const flexContainer = this._view.modelBuilder.flexContainer().withItems([
+			subscriptionDropdownLabel,
+			this.migrationControllerSubscriptionDropdown,
+			resourceGroupDropdownLabel,
+			this.migrationControllerResourceGroupDropdown,
+			regionsDropdownLabel,
+			this.migrationControllerRegionDropdown
+		]).withLayout({
+			flexFlow: 'column'
+		}).component();
+		return flexContainer;
+	}
+
+	private async populateSubscriptions(): Promise<void> {
+		this.migrationControllerSubscriptionDropdown.loading = true;
+		this.migrationControllerResourceGroupDropdown.loading = true;
+		const subscriptions = await getSubscriptions(this.migrationStateModel.azureAccount);
+
+		let subscriptionDropdownValues: azdata.CategoryValue[] = [];
+		if (subscriptions && subscriptions.length > 0) {
+
+			subscriptions.forEach((subscription) => {
+				this._subscriptionMap.set(subscription.id, subscription);
+				subscriptionDropdownValues.push({
+					name: subscription.id,
+					displayName: subscription.name + ' - ' + subscription.id,
+				});
+			});
+
+
+		} else {
+			subscriptionDropdownValues = [
+				{
+					displayName: constants.NO_SUBSCRIPTIONS_FOUND,
+					name: ''
+				}
+			];
+		}
+
+		this.migrationControllerSubscriptionDropdown.values = subscriptionDropdownValues;
+		this.migrationControllerSubscriptionDropdown.loading = false;
+		this.populateResourceGroups();
+	}
+
+	private async populateResourceGroups(): Promise<void> {
+		this.migrationControllerResourceGroupDropdown.loading = true;
+		let subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+		const resourceGroups = await getResourceGroups(this.migrationStateModel.azureAccount, subscription);
+		let resourceGroupDropdownValues: azdata.CategoryValue[] = [];
+		if (resourceGroups && resourceGroups.length > 0) {
+			resourceGroups.forEach((resourceGroup) => {
+				resourceGroupDropdownValues.push({
+					name: resourceGroup.id,
+					displayName: resourceGroup.name
+				});
+			});
+		} else {
+			resourceGroupDropdownValues = [
+				{
+					displayName: 'No Resource Groups found',
+					name: ''
+				}
+			];
+		}
+		this.migrationControllerResourceGroupDropdown.values = resourceGroupDropdownValues;
+		this.migrationControllerResourceGroupDropdown.loading = false;
 	}
 
 }
