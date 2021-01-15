@@ -45,28 +45,13 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 			]
 		}).component();
 
-
-
-
-		this.migrationControllerResourceGroupDropdown = view.modelBuilder.dropDown().withProps({
-
-		}).component();
-
-		this.migrationControllerDropdown = view.modelBuilder.dropDown().withProps({
-
-		}).component();
-
-		this.migrationControllerDropdown = view.modelBuilder.dropDown().withProps({
-		}).component();
-
-
 		const createNewController = view.modelBuilder.button().withProps({
 			label: 'New',
 			width: '100px'
 		}).component();
 
 		createNewController.onDidClick((e) => {
-			const dialog = new CreateIntegrationRuntimeDialog();
+			const dialog = new CreateIntegrationRuntimeDialog(this.migrationStateModel);
 			dialog.initialize();
 			// TODO: Allow express creation in later updates.
 			// this.createMigrationContainer.display = 'inline';
@@ -91,14 +76,14 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		}).component();
 
 		this.startSetupButton.onDidClick((e) => {
-			const dialog = new CreateIntegrationRuntimeDialog();
+			const dialog = new CreateIntegrationRuntimeDialog(this.migrationStateModel);
 			dialog.initialize();
 			return;
 			if (this.defaultSetupRadioButton.checked) {
 				console.log('Doing default setup');
 			} else {
 				console.log('Doing custom setup opening the dialog');
-				const dialog = new CreateIntegrationRuntimeDialog();
+				const dialog = new CreateIntegrationRuntimeDialog(this.migrationStateModel);
 				dialog.initialize();
 			}
 		});
@@ -141,10 +126,6 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 					},
 					{
 						component: this.migrationControllerDropdownsContainer()
-					},
-					{
-						title: 'Select a migration controller',
-						component: this.migrationControllerDropdown
 					},
 					{
 						component: createNewController
@@ -210,13 +191,23 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		this.migrationControllerRegionDropdown.onValueChanged((e) => {
 		});
 
+		const migrationControllerDropdownLabel = this._view.modelBuilder.text().withProps({
+			value: 'Select a migration controller'
+		}).component();
+
+		this.migrationControllerDropdown = this._view.modelBuilder.dropDown().withProps({
+			required: true,
+		}).component();
+
 		const flexContainer = this._view.modelBuilder.flexContainer().withItems([
 			subscriptionDropdownLabel,
 			this.migrationControllerSubscriptionDropdown,
 			resourceGroupDropdownLabel,
 			this.migrationControllerResourceGroupDropdown,
 			regionsDropdownLabel,
-			this.migrationControllerRegionDropdown
+			this.migrationControllerRegionDropdown,
+			migrationControllerDropdownLabel,
+			this.migrationControllerDropdown
 		]).withLayout({
 			flexFlow: 'column'
 		}).component();
