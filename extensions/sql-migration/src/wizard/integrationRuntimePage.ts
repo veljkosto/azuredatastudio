@@ -145,6 +145,12 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 	}
 
 	public async onPageLeave(): Promise<void> {
+		this.wizard.registerNavigationValidator((pagechangeInfo) => {
+			return true;
+		});
+		this.wizard.message = {
+			text: ''
+		};
 	}
 
 	protected async handleStateChange(e: StateChangeEvent): Promise<void> {
