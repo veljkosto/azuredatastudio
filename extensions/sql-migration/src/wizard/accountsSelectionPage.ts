@@ -5,6 +5,7 @@
 
 import * as azdata from 'azdata';
 import * as vscode from 'vscode';
+import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
 import * as constants from '../models/strings';
@@ -30,7 +31,9 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 
 	private createAzureAccountsDropdown(view: azdata.ModelView): azdata.FormComponent {
 
-		this._azureAccountsDropdown = view.modelBuilder.dropDown().withValidation((c) => {
+		this._azureAccountsDropdown = view.modelBuilder.dropDown().withProps({
+			width: WIZARD_INPUT_COMPONENT_WIDTH
+		}).withValidation((c) => {
 			if ((<azdata.CategoryValue>c.value).displayName === constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR) {
 				this.wizard.message = {
 					text: constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR,

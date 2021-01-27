@@ -7,10 +7,12 @@ import * as vscode from 'vscode';
 import * as azdata from 'azdata';
 import { WizardController } from './wizard/wizardController';
 import { AssessmentResultsDialog } from './dialog/assessmentResults/assessmentResultsDialog';
+import { IconPathHelper } from './constants';
 
 class SQLMigration {
 
 	constructor(private readonly context: vscode.ExtensionContext) {
+		IconPathHelper.setExtensionContext(context);
 	}
 
 	async start(): Promise<void> {

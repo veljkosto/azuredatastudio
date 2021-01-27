@@ -11,6 +11,7 @@ import * as constants from '../models/strings';
 import * as os from 'os';
 import { azureResource } from 'azureResource';
 import { IntergrationRuntimePage } from './integrationRuntimePage';
+import { IconPathHelper } from '../constants';
 
 export class CreateMigrationControllerDialog {
 
@@ -22,9 +23,11 @@ export class CreateMigrationControllerDialog {
 
 	private _statusLoadingComponent!: azdata.LoadingComponent;
 	private migrationControllerAuthKeyTable!: azdata.DeclarativeTableComponent;
-	private _connectionStatus!: azdata.TextComponent;
+	private _connectionStatus!: azdata.InfoBoxComponent;
 	private _copyKey1Button!: azdata.ButtonComponent;
 	private _copyKey2Button!: azdata.ButtonComponent;
+	private _refreshKey1Button!: azdata.ButtonComponent;
+	private _refreshKey2Button!: azdata.ButtonComponent;
 	private _setupContainer!: azdata.FlexContainer;
 
 	private _dialogObject!: azdata.window.Dialog;
@@ -32,7 +35,7 @@ export class CreateMigrationControllerDialog {
 	private _subscriptionMap: Map<string, Subscription> = new Map();
 
 	constructor(private migrationStateModel: MigrationStateModel, private irPage: IntergrationRuntimePage) {
-		this._dialogObject = azdata.window.createModelViewDialog(constants.IR_PAGE_TITLE, 'MigrationControllerDialog', 'wide');
+		this._dialogObject = azdata.window.createModelViewDialog(constants.IR_PAGE_TITLE, 'MigrationControllerDialog', 'medium');
 	}
 
 	initialize() {
@@ -278,8 +281,10 @@ export class CreateMigrationControllerDialog {
 
 	private createControllerStatus(): azdata.FlexContainer {
 
-		const informationTextBox = this._view.modelBuilder.text().withProps({
-			value: constants.CONTROLLER_DIALOG_CONTROLLER_CONTAINER_DESCRIPTION
+		const informationTextBox = this._view.modelBuilder.infoBox().withProps({
+			text: constants.CONTROLLER_DIALOG_CONTROLLER_CONTAINER_DESCRIPTION,
+			style: 'information',
+			width: 'auto'
 		}).component();
 
 		const expressSetupTitle = this._view.modelBuilder.text().withProps({
@@ -321,12 +326,20 @@ export class CreateMigrationControllerDialog {
 			}
 		}).component();
 
-		this._connectionStatus = this._view.modelBuilder.text().withProps({
-			value: ''
-		}).component();
+		this._connectionStatus = this._view.modelBuilder.infoBox().component();
+
+		this._connectionStatus.CSSStyles = {
+			'width': '350px'
+		};
 
 		const refreshButton = this._view.modelBuilder.button().withProps({
 			label: constants.REFRESH,
+			iconPath: IconPathHelper.refresh,
+			height: '50px',
+			width: '75px',
+			CSSStyles: {
+				'margin-left': '5px'
+			}
 		}).component();
 
 		const refreshLoadingIndicator = this._view.modelBuilder.loadingComponent().withProps({
@@ -348,7 +361,12 @@ export class CreateMigrationControllerDialog {
 				this._connectionStatus,
 				refreshButton,
 				refreshLoadingIndicator
-			]
+			],
+			{
+				CSSStyles: {
+					'margin-right': '10px'
+				}
+			}
 		).component();
 
 
@@ -357,19 +375,31 @@ export class CreateMigrationControllerDialog {
 				{
 					displayName: constants.NAME,
 					valueType: azdata.DeclarativeDataType.string,
-					width: '100px',
+					width: '50px',
 					isReadOnly: true,
+					rowCssStyles: {
+						'text-align': 'center'
+					}
 				},
 				{
 					displayName: constants.AUTH_KEY_COLUMN_HEADER,
 					valueType: azdata.DeclarativeDataType.string,
-					width: '300px',
+					width: '250',
+					isReadOnly: true,
+					rowCssStyles: {
+						overflow: 'scroll'
+					}
+				},
+				{
+					displayName: '',
+					valueType: azdata.DeclarativeDataType.component,
+					width: '15px',
 					isReadOnly: true,
 				},
 				{
 					displayName: '',
 					valueType: azdata.DeclarativeDataType.component,
-					width: '100px',
+					width: '15px',
 					isReadOnly: true,
 				}
 			],
@@ -378,18 +408,6 @@ export class CreateMigrationControllerDialog {
 			}
 		}).component();
 
-		const refreshKeyButton = this._view.modelBuilder.button().withProps({
-			label: constants.REFRESH_KEYS,
-			CSSStyles: {
-				'margin-top': '10px'
-			},
-			width: '100px'
-		}).component();
-
-		refreshKeyButton.onDidClick(async (e) => {
-			this.refreshAuthTable();
-
-		});
 
 		this._setupContainer = this._view.modelBuilder.flexContainer().withItems(
 			[
@@ -399,7 +417,6 @@ export class CreateMigrationControllerDialog {
 				manualSetupTitle,
 				manualSetupButton,
 				manualSetupSecondDescription,
-				refreshKeyButton,
 				this.migrationControllerAuthKeyTable,
 				connectionStatusTitle,
 				connectionStatusContainer
@@ -421,10 +438,17 @@ export class CreateMigrationControllerDialog {
 			const state = controllerStatus.properties.integrationRuntimeState;
 
 			if (state === 'Online') {
-				this._connectionStatus.value = constants.CONTRLLER_READY(this.migrationStateModel.migrationController!.name, os.hostname());
+				this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
+					text: constants.CONTRLLER_READY(this.migrationStateModel.migrationController!.name, os.hostname()),
+					style: 'success'
+				});
 				this._dialogObject.okButton.enabled = true;
 			} else {
-				this._connectionStatus.value = constants.CONTRLLER_NOT_READY(this.migrationStateModel.migrationController!.name);
+				this._connectionStatus.text = constants.CONTRLLER_NOT_READY(this.migrationStateModel.migrationController!.name);
+				this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
+					text: constants.CONTRLLER_NOT_READY(this.migrationStateModel.migrationController!.name),
+					style: 'warning'
+				});
 				this._dialogObject.okButton.enabled = false;
 			}
 		}
@@ -437,7 +461,7 @@ export class CreateMigrationControllerDialog {
 		const keys = await getMigrationControllerAuthKeys(this.migrationStateModel.azureAccount, subscription, resourceGroup, region, this.migrationStateModel.migrationController!.name);
 
 		this._copyKey1Button = this._view.modelBuilder.button().withProps({
-			label: constants.COPY_KEY
+			iconPath: IconPathHelper.copy
 		}).component();
 
 		this._copyKey1Button.onDidClick((e) => {
@@ -446,8 +470,24 @@ export class CreateMigrationControllerDialog {
 		});
 
 		this._copyKey2Button = this._view.modelBuilder.button().withProps({
-			label: constants.COPY_KEY
+			iconPath: IconPathHelper.copy
 		}).component();
+
+		this._refreshKey1Button = this._view.modelBuilder.button().withProps({
+			iconPath: IconPathHelper.refresh
+		}).component();
+
+		this._refreshKey1Button.onDidClick((e) => {
+			this.refreshAuthTable();
+		});
+
+		this._refreshKey2Button = this._view.modelBuilder.button().withProps({
+			iconPath: IconPathHelper.refresh
+		}).component();
+
+		this._refreshKey2Button.onDidClick((e) => {
+			this.refreshAuthTable();
+		});
 
 		this._copyKey2Button.onDidClick((e) => {
 			vscode.env.clipboard.writeText(<string>this.migrationControllerAuthKeyTable.dataValues![1][1].value);
@@ -465,6 +505,9 @@ export class CreateMigrationControllerDialog {
 					},
 					{
 						value: this._copyKey1Button
+					},
+					{
+						value: this._refreshKey1Button
 					}
 				],
 				[
@@ -476,6 +519,9 @@ export class CreateMigrationControllerDialog {
 					},
 					{
 						value: this._copyKey2Button
+					},
+					{
+						value: this._refreshKey2Button
 					}
 				]
 			]
