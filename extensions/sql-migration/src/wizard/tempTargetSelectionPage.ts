@@ -6,6 +6,7 @@
 import * as azdata from 'azdata';
 import { azureResource } from 'azureResource';
 import { getAvailableManagedInstanceProducts, getSubscriptions, SqlManagedInstance, Subscription } from '../api/azure';
+import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
 import * as constants from '../models/strings';
@@ -27,14 +28,18 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		const managedInstanceSubscriptionDropdownLabel = view.modelBuilder.text().withProps({
 			value: constants.SUBSCRIPTION
 		}).component();
-		this._managedInstanceSubscriptionDropdown = view.modelBuilder.dropDown().component();
+		this._managedInstanceSubscriptionDropdown = view.modelBuilder.dropDown().withProps({
+			width: WIZARD_INPUT_COMPONENT_WIDTH
+		}).component();
 		this._managedInstanceSubscriptionDropdown.onValueChanged((e) => {
 			this.populateManagedInstanceDropdown();
 		});
 		const managedInstanceDropdownLabel = view.modelBuilder.text().withProps({
 			value: constants.MANAGED_INSTANCE
 		}).component();
-		this._managedInstanceDropdown = view.modelBuilder.dropDown().component();
+		this._managedInstanceDropdown = view.modelBuilder.dropDown().withProps({
+			width: WIZARD_INPUT_COMPONENT_WIDTH
+		}).component();
 
 		const targetContainer = view.modelBuilder.flexContainer().withItems(
 			[

@@ -7,6 +7,7 @@ import * as azdata from 'azdata';
 import { azureResource } from 'azureResource';
 import { EOL } from 'os';
 import { getAvailableStorageAccounts, getBlobContainers, getFileShares, getSubscriptions, StorageAccount, Subscription } from '../api/azure';
+import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { BlobContainer, FileShare, MigrationCutover, MigrationStateModel, NetworkContainerType, NetworkShare, StateChangeEvent } from '../models/stateMachine';
 import * as constants from '../models/strings';
@@ -137,6 +138,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 		}).component();
 		this._fileShareSubscriptionDropdown = view.modelBuilder.dropDown().withProps({
 			required: true,
+			width: WIZARD_INPUT_COMPONENT_WIDTH
 		}).component();
 		this._fileShareSubscriptionDropdown.onValueChanged(async (value) => {
 			if (this._fileShareSubscriptionDropdown.value) {
@@ -152,7 +154,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._fileShareStorageAccountDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._fileShareStorageAccountDropdown.onValueChanged(async (value) => {
 			if (this._fileShareStorageAccountDropdown.value) {
@@ -168,7 +171,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._fileShareFileShareDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._fileShareFileShareDropdown.onValueChanged((value) => {
 			if (this._fileShareFileShareDropdown.value) {
@@ -202,7 +206,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._blobContainerSubscriptionDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._blobContainerSubscriptionDropdown.onValueChanged(async (value) => {
 			if (this._blobContainerSubscriptionDropdown.value) {
@@ -218,7 +223,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._blobContainerStorageAccountDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._blobContainerStorageAccountDropdown.onValueChanged(async (value) => {
 			if (this._blobContainerStorageAccountDropdown.value) {
@@ -230,6 +236,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 		const containerLabel = view.modelBuilder.text().withProps({
 			value: constants.DATABASE_BACKUP_BLOB_STORAGE_ACCOUNT_CONTAINER_LABEL,
 			requiredIndicator: true,
+			width: WIZARD_INPUT_COMPONENT_WIDTH
 		}).component();
 		this._blobContainerBlobDropdown = view.modelBuilder.dropDown()
 			.withProps({
@@ -273,6 +280,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			.withProps({
 				placeHolder: '\\\\Servername.domainname.com\\Backupfolder',
 				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				validationErrorMessage: constants.INVALID_NETWORK_SHARE_LOCATION
 			})
 			.withValidation((component) => {
@@ -298,6 +306,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			.withProps({
 				placeHolder: 'Domain\\username',
 				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				validationErrorMessage: constants.INVALID_USER_ACCOUNT
 			})
 			.withValidation((component) => {
@@ -323,6 +332,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			.withProps({
 				placeHolder: constants.DATABASE_BACKUP_NETWORK_SHARE_PASSWORD_PLACEHOLDER,
 				inputType: 'password',
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				required: true
 			}).component();
 		this._passwordText.onTextChanged((value) => {
@@ -341,7 +351,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._networkShareContainerSubscriptionDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._networkShareContainerSubscriptionDropdown.onValueChanged(async (value) => {
 			if (this._networkShareContainerSubscriptionDropdown.value) {
@@ -357,7 +368,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._networkShareContainerStorageAccountDropdown = view.modelBuilder.dropDown()
 			.withProps({
-				required: true
+				required: true,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 		this._networkShareContainerStorageAccountDropdown.onValueChanged((value) => {
 			if (this._networkShareContainerStorageAccountDropdown.value) {
@@ -506,6 +518,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 	}
 
 	public async onPageLeave(): Promise<void> {
+		this.wizard.registerNavigationValidator((pageChangeInfo) => {
+			return true;
+		});
 	}
 
 	protected async handleStateChange(e: StateChangeEvent): Promise<void> {
