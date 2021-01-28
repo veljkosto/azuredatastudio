@@ -129,6 +129,7 @@ export const CONTROLLER_NOT_SETUP_ERROR = localize('sql.migration.controller.not
 export const MANAGED_INSTANCE = localize('sql.migration.managed.instance', "Azure SQL managed instance");
 export const NO_MANAGED_INSTANCE_FOUND = localize('sql.migration.no.managedInstance.found', "No managed instance found");
 export const TARGET_SELECTION_PAGE_TITLE = localize('sql.migration.target.page.title', "Choose the target Azure SQL");
+export const INVALID_MANAGED_INSTANCE_ERROR = localize('sql.migration.invalid.managed.instance.error', "Please select a valid managed instance to proceed.");
 
 // common strings
 export const LEARN_MORE = localize('sql.migration.learn.more', "Learn more");

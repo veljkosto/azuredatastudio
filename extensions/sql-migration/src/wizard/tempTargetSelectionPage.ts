@@ -38,6 +38,18 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		}).component();
 		this._managedInstanceDropdown = view.modelBuilder.dropDown().withProps({
 			width: WIZARD_INPUT_COMPONENT_WIDTH
+		}).withValidation((c) => {
+			if ((<azdata.CategoryValue>c.value).displayName === constants.NO_MANAGED_INSTANCE_FOUND) {
+				this.wizard.message = {
+					text: constants.INVALID_MANAGED_INSTANCE_ERROR
+				};
+				return false;
+			} else {
+				this.wizard.message = {
+					text: ''
+				};
+			}
+			return true;
 		}).component();
 		this._managedInstanceDropdown.onValueChanged((e) => {
 			if (this._managedInstanceDropdown.value) {
