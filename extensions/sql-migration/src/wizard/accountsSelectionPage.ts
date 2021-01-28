@@ -31,18 +31,10 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 
 	private createAzureAccountsDropdown(view: azdata.ModelView): azdata.FormComponent {
 
-		this._azureAccountsDropdown = view.modelBuilder.dropDown().withProps({
-			width: WIZARD_INPUT_COMPONENT_WIDTH
-		}).withValidation((c) => {
-			if ((<azdata.CategoryValue>c.value).displayName === constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR) {
-				this.wizard.message = {
-					text: constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR,
-					level: azdata.window.MessageLevel.Error
-				};
-				return false;
-			}
-			return true;
-		}).component();
+		this._azureAccountsDropdown = view.modelBuilder.dropDown()
+			.withProps({
+				width: WIZARD_INPUT_COMPONENT_WIDTH
+			}).component();
 
 		this._azureAccountsDropdown.onValueChanged(async (value) => {
 			if (this._azureAccountsDropdown.value) {
@@ -52,7 +44,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 		});
 
 		const addAccountButton = view.modelBuilder.button()
-			.withProperties<azdata.ButtonProperties>({
+			.withProps({
 				label: constants.ACCOUNT_ADD_BUTTON_LABEL,
 				width: '100px'
 			})
@@ -67,7 +59,16 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 			.withLayout({
 				flexFlow: 'column'
 			})
-			.withItems([this._azureAccountsDropdown, addAccountButton], { CSSStyles: { 'margin': '10px', } })
+			.withItems(
+				[
+					this._azureAccountsDropdown,
+					addAccountButton
+				],
+				{
+					CSSStyles: {
+						'margin': '10px'
+					}
+				})
 			.component();
 
 		return {
@@ -102,6 +103,33 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 	}
 
 	public async onPageEnter(): Promise<void> {
+		this.wizard.registerNavigationValidator(async (pageChangeInfo) => {
+			if (!this._azureAccountsDropdown.value) {
+				return false;
+			}
+			if (this._azureAccountsDropdown.value && !this.migrationStateModel.azureAccount) {
+				this.wizard.message = {
+					text: constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR,
+					level: azdata.window.MessageLevel.Error
+				};
+				return false;
+			}
+
+			try {
+				await this.migrationStateModel.loadSubscriptions();
+			} catch (e) {
+				console.error(e);
+				this.wizard.message = {
+					text: constants.CANNOT_LOAD_SUBSCRIPTION_ERROR
+				};
+				return false;
+			}
+
+			this.wizard.message = {
+				text: ''
+			};
+			return true;
+		});
 	}
 
 	public async onPageLeave(): Promise<void> {

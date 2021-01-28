@@ -44,7 +44,7 @@ export const ACCOUNT_ADD_BUTTON_LABEL = localize('sql.migration.wizard.account.a
 export function accountLinkedMessage(count: number): string {
 	return count === 1 ? localize('sql.migration.wizard.account.count.single.message', '{0} account linked', count) : localize('sql.migration.wizard.account.count.multiple.message', '{0} accounts linked', count);
 }
-
+export const CANNOT_LOAD_SUBSCRIPTION_ERROR = localize('sql.migration.cannot.load.subscription', "Cannot load subscriptions for this account. Please try a different one");
 
 // database backup page
 export const DATABASE_BACKUP_PAGE_TITLE = localize('sql.migration.database.page.title', "Database Backup");

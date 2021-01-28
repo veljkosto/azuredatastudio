@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as azdata from 'azdata';
-import { azureResource } from 'azureResource';
-import { getAvailableManagedInstanceProducts, getSubscriptions, SqlManagedInstance, Subscription } from '../api/azure';
+import { getAvailableManagedInstanceProducts, SqlManagedInstance } from '../api/azure';
 import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
@@ -15,9 +14,6 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 
 	private _managedInstanceSubscriptionDropdown!: azdata.DropDownComponent;
 	private _managedInstanceDropdown!: azdata.DropDownComponent;
-	private _subscriptionDropdownValues: azdata.CategoryValue[] = [];
-	private _subscriptionMap: Map<string, Subscription> = new Map();
-
 
 	constructor(wizard: azdata.window.Wizard, migrationStateModel: MigrationStateModel) {
 		super(wizard, azdata.window.createWizardPage(constants.TARGET_SELECTION_PAGE_TITLE), migrationStateModel);
@@ -32,7 +28,10 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 			width: WIZARD_INPUT_COMPONENT_WIDTH
 		}).component();
 		this._managedInstanceSubscriptionDropdown.onValueChanged((e) => {
-			this.populateManagedInstanceDropdown();
+			if (this._managedInstanceSubscriptionDropdown.value) {
+				this.migrationStateModel._targetSubscriptionId = (<azdata.CategoryValue>this._managedInstanceSubscriptionDropdown.value).name;
+				this.populateManagedInstanceDropdown();
+			}
 		});
 		const managedInstanceDropdownLabel = view.modelBuilder.text().withProps({
 			value: constants.MANAGED_INSTANCE
@@ -40,7 +39,11 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		this._managedInstanceDropdown = view.modelBuilder.dropDown().withProps({
 			width: WIZARD_INPUT_COMPONENT_WIDTH
 		}).component();
-
+		this._managedInstanceDropdown.onValueChanged((e) => {
+			if (this._managedInstanceDropdown.value) {
+				this.migrationStateModel._targetSQLMIServer = (<azdata.CategoryValue>this._managedInstanceDropdown.value).name;
+			}
+		});
 		const targetContainer = view.modelBuilder.flexContainer().withItems(
 			[
 				managedInstanceSubscriptionDropdownLabel,
@@ -71,35 +74,8 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 	}
 
 	private async populateSubscriptionDropdown(): Promise<void> {
-		this._managedInstanceSubscriptionDropdown.loading = true;
-		this._managedInstanceDropdown.loading = true;
-		let subscriptions: azureResource.AzureResourceSubscription[] = [];
-		try {
-			subscriptions = await getSubscriptions(this.migrationStateModel.azureAccount);
-			subscriptions.forEach((subscription) => {
-				this._subscriptionMap.set(subscription.id, subscription);
-				this._subscriptionDropdownValues.push({
-					name: subscription.id,
-					displayName: subscription.name + ' - ' + subscription.id,
-				});
-			});
-
-			if (!this._subscriptionDropdownValues || this._subscriptionDropdownValues.length === 0) {
-				this._subscriptionDropdownValues = [
-					{
-						displayName: constants.NO_SUBSCRIPTIONS_FOUND,
-						name: ''
-					}
-				];
-			}
-
-			this._managedInstanceSubscriptionDropdown.values = this._subscriptionDropdownValues;
-		} catch (error) {
-			this.setEmptyDropdownPlaceHolder(this._managedInstanceSubscriptionDropdown, constants.NO_SUBSCRIPTIONS_FOUND);
-			this._managedInstanceDropdown.loading = false;
-		}
+		this._managedInstanceSubscriptionDropdown.values = this.migrationStateModel.getSubscriptionDropdownValue();
 		this.populateManagedInstanceDropdown();
-		this._managedInstanceSubscriptionDropdown.loading = false;
 	}
 
 	private async populateManagedInstanceDropdown(): Promise<void> {
@@ -107,9 +83,7 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		let mis: SqlManagedInstance[] = [];
 		let miValues: azdata.CategoryValue[] = [];
 		try {
-			const subscriptionId = (<azdata.CategoryValue>this._managedInstanceSubscriptionDropdown.value).name;
-
-			mis = await getAvailableManagedInstanceProducts(this.migrationStateModel.azureAccount, this._subscriptionMap.get(subscriptionId)!);
+			mis = await getAvailableManagedInstanceProducts(this.migrationStateModel.azureAccount, this.migrationStateModel._subscriptionMap.get(this.migrationStateModel._targetSubscriptionId)!);
 			mis.forEach((mi) => {
 				miValues.push({
 					name: mi.name,

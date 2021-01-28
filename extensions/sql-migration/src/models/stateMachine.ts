@@ -8,6 +8,8 @@ import * as vscode from 'vscode';
 import * as mssql from '../../../mssql';
 import { SKURecommendations } from './externalContract';
 import { azureResource } from 'azureResource';
+import { getSubscriptions } from '../api/azure';
+import * as constants from '../models/strings';
 
 export enum State {
 	INIT,
@@ -88,6 +90,10 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	private _azureAccount!: azdata.Account;
 	private _databaseBackup!: DatabaseBackupModel;
 	private _migrationController!: azureResource.MigrationController | undefined;
+	private _subscriptions!: azureResource.AzureResourceSubscription[];
+	public _subscriptionMap: Map<string, azureResource.AzureResourceSubscription>;
+	public _targetSubscriptionId!: string;
+	public _targetSQLMIServer!: string;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -96,6 +102,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	) {
 		this._currentState = State.INIT;
 		this.databaseBackup = {} as DatabaseBackupModel;
+		this._subscriptionMap = new Map();
 	}
 
 	public get azureAccount(): azdata.Account {
@@ -166,6 +173,14 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		return this._migrationController;
 	}
 
+	public get subscriptions(): azureResource.AzureResourceSubscription[] {
+		return this._subscriptions;
+	}
+
+	public set subscriptions(subscriptions: azureResource.AzureResourceSubscription[]) {
+		this._subscriptions = subscriptions;
+	}
+
 	dispose() {
 		this._stateChangeEventEmitter.dispose();
 	}
@@ -173,27 +188,33 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public getExtensionPath(): string {
 		return this._extensionContext.extensionPath;
 	}
-}
 
-export enum WizardInputComponents {
-	ACCOUNTS_DROPDOWN,
-	TARGET_SUBSCRIPTION_DROPDOWN,
-	TARGET_MANAGED_INSTANCE_DROPDOWN,
-	BACKUP_NETWORK_SHARE,
-	BACKUP_WINDOWS_USER,
-	BACKUP_WINDOWS_PASSWORD,
-	BACKUP_NETWORK_SHARE_STORAGE_SUBSCRIPTION,
-	BACKUP_NETWORK_SHARE_STORAGE_ACCOUNT,
-	BACKUP_BLOB_CONTAINER_STORAGE_ACCOUNT_SUBSCRIPTION,
-	BACKUP_BLOB_CONTAINER_TORAGE_ACCOUNT,
-	BACKUP_BLOB_CONTAINER,
-	BACKUP_FILE_SHARE_STORAGE_SUBSCRIPTION,
-	BACKUP_FILE_SHARE_STORAGE_ACCOUNT,
-	BACKUP_FILE_SHARE,
-	MIGRATION_CONTROLLER_DROPDOWN,
-	MIGRATION_CONTROLLER_SUBSCRIPTION,
-	MIGRATION_CONTROLLER_RESOURCE_GROUP,
-	MIGRATION_CONTROLLER_NAME,
-	MIGRATION_CONTROLLER_REGION,
-	_LENGTH // Please keep this entry at the end to get the length of the enum
+	public async loadSubscriptions(): Promise<void> {
+		if (this.azureAccount) {
+			this._subscriptions = await getSubscriptions(this.azureAccount);
+			this._subscriptions.forEach((subscription) => {
+				this._subscriptionMap.set(subscription.id, subscription);
+			});
+		}
+	}
+
+	public getSubscriptionDropdownValue(): azdata.CategoryValue[] {
+		let dropdownValues = this._subscriptions.map((subscription) => {
+			return {
+				name: subscription.id,
+				displayName: subscription.name + ' - ' + subscription.id,
+			};
+		});
+
+		if (!dropdownValues) {
+			dropdownValues = [
+				{
+					displayName: constants.NO_SUBSCRIPTIONS_FOUND,
+					name: ''
+				}
+			];
+		}
+
+		return dropdownValues;
+	}
 }
