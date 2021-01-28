@@ -94,6 +94,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public _subscriptionMap: Map<string, azureResource.AzureResourceSubscription>;
 	public _targetSubscriptionId!: string;
 	public _targetSQLMIServer!: string;
+	public _nodeName!: string;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -216,5 +217,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		}
 
 		return dropdownValues;
+	}
+
+	public getSubscriptionName(id: string): string {
+		return this._subscriptionMap.get(id)!.name;
 	}
 }

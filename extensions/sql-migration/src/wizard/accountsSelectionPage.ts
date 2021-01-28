@@ -133,6 +133,9 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 	}
 
 	public async onPageLeave(): Promise<void> {
+		this.wizard.registerNavigationValidator(async (pageChangeInfo) => {
+			return true;
+		});
 	}
 
 	protected async handleStateChange(e: StateChangeEvent): Promise<void> {

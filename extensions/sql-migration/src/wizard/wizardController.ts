@@ -15,6 +15,7 @@ import { DatabaseBackupPage } from './databaseBackupPage';
 import { AccountsSelectionPage } from './accountsSelectionPage';
 import { IntergrationRuntimePage } from './integrationRuntimePage';
 import { TempTargetSelectionPage } from './tempTargetSelectionPage';
+import { SummaryPage } from './summaryPage';
 
 export class WizardController {
 	constructor(private readonly extensionContext: vscode.ExtensionContext) {
@@ -42,15 +43,17 @@ export class WizardController {
 		const tempTargetSelectionPage = new TempTargetSelectionPage(wizard, stateModel);
 		const databaseBackupPage = new DatabaseBackupPage(wizard, stateModel);
 		const integrationRuntimePage = new IntergrationRuntimePage(wizard, stateModel);
+		const summaryPage = new SummaryPage(wizard, stateModel);
 
 		const pages: MigrationWizardPage[] = [
-			// subscriptionSelectionPage,
+			//subscriptionSelectionPage,
 			azureAccountsPage,
 			tempTargetSelectionPage,
 			sourceConfigurationPage,
 			skuRecommendationPage,
 			databaseBackupPage,
-			integrationRuntimePage
+			//integrationRuntimePage,
+			summaryPage
 		];
 
 		wizard.pages = pages.map(p => p.getwizardPage());

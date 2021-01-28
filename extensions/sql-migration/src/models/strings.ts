@@ -143,3 +143,21 @@ export const REFRESH = localize('sql.migration.refresh', "Refresh");
 export const SUBMIT = localize('sql.migration.submit', "Submit");
 export const CREATE = localize('sql.migration.create', "Create");
 export const CANCEL = localize('sql.migration.cancel', "Cancel");
+export const TYPE = localize('sql.migration.type', "Type");
+export const PATH = localize('sql.migration.path', "Path");
+export const USER_ACCOUNT = localize('sql.migration.path.user.account', "User Account");
+
+
+//Summary Page
+export const SUMMARY_PAGE_TITLE = localize('sql.migration.summary.page.title', "Summary");
+export const AZURE_ACCOUNT_LINKED = localize('sql.migration.summary.azure.account.linked', "Azure account linked");
+export const MIGRATION_TARGET = localize('sql.migration.summary.migration.target', "Migration target");
+export const SUMMARY_MI_TYPE = localize('sql.migration.summary.mi.type', "Azure SQL Managed Instance");
+export const SUMMARY_VM_TYPE = localize('sql.migration.summary.vm.type', "Azure SQL Virtual Machine");
+export const SUMMARY_DATABASE_COUNT_LABEL = localize('sql.migration.summary.database.count', "Number of database to be migrated");
+export const SUMMARY_AZURE_STORAGE_SUBSCRIPTION = localize('sql.migration.summary.azure.storage.subscription', "Azure storage subscription");
+export const SUMMARY_AZURE_STORAGE = localize('sql.migation.summary.azure.storage', "Azure storage");
+export const SUMMARY_IR_NODE = localize('sql.migration.ir.node', "Integration Runtime node");
+export const NETWORK_SHARE = localize('sql.migration.network.share', "Network Share");
+export const BLOB_CONTAINER = localize('sql.migration.blob.container', "Blob Container");
+export const FILE_SHARE = localize('sql.migration.file.share', "File Share");

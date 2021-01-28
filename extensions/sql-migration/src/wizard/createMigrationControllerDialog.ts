@@ -5,7 +5,7 @@
 
 import * as azdata from 'azdata';
 import * as vscode from 'vscode';
-import { createMigrationController, getMigrationControllerRegions, getMigrationController, getResourceGroups, getSubscriptions, Subscription, getMigrationControllerAuthKeys } from '../api/azure';
+import { createMigrationController, getMigrationControllerRegions, getMigrationController, getResourceGroups, getMigrationControllerAuthKeys } from '../api/azure';
 import { MigrationStateModel } from '../models/stateMachine';
 import * as constants from '../models/strings';
 import * as os from 'os';
@@ -32,7 +32,6 @@ export class CreateMigrationControllerDialog {
 
 	private _dialogObject!: azdata.window.Dialog;
 	private _view!: azdata.ModelView;
-	private _subscriptionMap: Map<string, Subscription> = new Map();
 
 	constructor(private migrationStateModel: MigrationStateModel, private irPage: IntergrationRuntimePage) {
 		this._dialogObject = azdata.window.createModelViewDialog(constants.IR_PAGE_TITLE, 'MigrationControllerDialog', 'medium');
@@ -55,7 +54,7 @@ export class CreateMigrationControllerDialog {
 				this._statusLoadingComponent.loading = true;
 				this._formSubmitButton.enabled = false;
 
-				const subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+				const subscription = this.migrationStateModel._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
 				const resourceGroup = (this.migrationControllerResourceGroupDropdown.value as azdata.CategoryValue).name;
 				const region = (this.migrationControllerRegionDropdown.value as azdata.CategoryValue).name;
 				const controllerName = this.migrationControllerNameText.value;
@@ -227,37 +226,14 @@ export class CreateMigrationControllerDialog {
 	private async populateSubscriptions(): Promise<void> {
 		this.migrationControllerSubscriptionDropdown.loading = true;
 		this.migrationControllerResourceGroupDropdown.loading = true;
-		const subscriptions = await getSubscriptions(this.migrationStateModel.azureAccount);
-
-		let subscriptionDropdownValues: azdata.CategoryValue[] = [];
-		if (subscriptions && subscriptions.length > 0) {
-
-			subscriptions.forEach((subscription) => {
-				this._subscriptionMap.set(subscription.id, subscription);
-				subscriptionDropdownValues.push({
-					name: subscription.id,
-					displayName: subscription.name + ' - ' + subscription.id,
-				});
-			});
-
-
-		} else {
-			subscriptionDropdownValues = [
-				{
-					displayName: constants.NO_SUBSCRIPTIONS_FOUND,
-					name: ''
-				}
-			];
-		}
-
-		this.migrationControllerSubscriptionDropdown.values = subscriptionDropdownValues;
+		this.migrationControllerSubscriptionDropdown.values = this.migrationStateModel.getSubscriptionDropdownValue();
 		this.migrationControllerSubscriptionDropdown.loading = false;
 		this.populateResourceGroups();
 	}
 
 	private async populateResourceGroups(): Promise<void> {
 		this.migrationControllerResourceGroupDropdown.loading = true;
-		let subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+		let subscription = this.migrationStateModel._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
 		const resourceGroups = await getResourceGroups(this.migrationStateModel.azureAccount, subscription);
 		let resourceGroupDropdownValues: azdata.CategoryValue[] = [];
 		if (resourceGroups && resourceGroups.length > 0) {
@@ -430,7 +406,7 @@ export class CreateMigrationControllerDialog {
 	}
 
 	private async refreshStatus(): Promise<void> {
-		const subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+		const subscription = this.migrationStateModel._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
 		const resourceGroup = (this.migrationControllerResourceGroupDropdown.value as azdata.CategoryValue).name;
 		const region = (this.migrationControllerRegionDropdown.value as azdata.CategoryValue).name;
 		const controllerStatus = await getMigrationController(this.migrationStateModel.azureAccount, subscription, resourceGroup, region, this.migrationStateModel.migrationController!.name);
@@ -455,7 +431,7 @@ export class CreateMigrationControllerDialog {
 
 	}
 	private async refreshAuthTable(): Promise<void> {
-		const subscription = this._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
+		const subscription = this.migrationStateModel._subscriptionMap.get((this.migrationControllerSubscriptionDropdown.value as azdata.CategoryValue).name)!;
 		const resourceGroup = (this.migrationControllerResourceGroupDropdown.value as azdata.CategoryValue).name;
 		const region = (this.migrationControllerRegionDropdown.value as azdata.CategoryValue).name;
 		const keys = await getMigrationControllerAuthKeys(this.migrationStateModel.azureAccount, subscription, resourceGroup, region, this.migrationStateModel.migrationController!.name);

@@ -190,6 +190,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 				}
 			];
 
+			this.migrationStateModel._nodeName = os.hostname();
 			this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
 				text: constants.CONTRLLER_READY(this.migrationStateModel.migrationController!.name, os.hostname()),
 				style: 'success'
