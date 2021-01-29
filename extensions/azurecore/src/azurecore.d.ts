@@ -123,7 +123,7 @@ declare module 'azurecore' {
 				SourceSqlConnection: {
 					DataSource: string,
 					Username: string,
-					Passowrd: string,
+					Password: string,
 					Authentication: 'SqlAuthentication'
 				},
 				Scope: string

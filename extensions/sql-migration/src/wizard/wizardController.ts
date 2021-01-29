@@ -83,8 +83,8 @@ export class WizardController {
 		await Promise.all(wizardSetupPromises);
 		await pages[0].onPageEnter();
 
-		wizard.doneButton.onClick((e) => {
-
+		wizard.doneButton.onClick(async (e) => {
+			await stateModel.startMigration();
 		});
 	}
 }

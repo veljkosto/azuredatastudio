@@ -8,8 +8,9 @@ import * as vscode from 'vscode';
 import * as mssql from '../../../mssql';
 import { SKURecommendations } from './externalContract';
 import { azureResource } from 'azureResource';
-import { getSubscriptions, startDatabaseMigration } from '../api/azure';
+import { getSubscriptions } from '../api/azure';
 import * as constants from '../models/strings';
+import * as azurecore from 'azurecore';
 
 export enum State {
 	INIT,
@@ -225,6 +226,54 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	}
 
 	public async startMigration() {
-		await startDatabaseMigration(this.azureAccount, this._subscriptionMap());
+		const sqlConnections = await azdata.connection.getConnections();
+		const currentConnection = sqlConnections.find((value) => {
+			if (value.connectionId === this.sourceConnectionId) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		const networkContainer = this.databaseBackup.networkContainer as NetworkShare;
+		const requestBody: azurecore.StartDatabaseMigrationRequest = {
+			location: this.migrationController?.properties.location!,
+			properties: {
+				SourceDatabaseName: currentConnection?.databaseName!,
+				MigrationController: this.migrationController?.name!,
+				AutoCutoverConfiguration: undefined,
+				BackupConfiguration: {
+					TargetLocation: {
+						StorageAccountResourceId: networkContainer.storageAccountId,
+						AccountKey: networkContainer.storageKey,
+					},
+					SourceLocation: {
+						FileShare: {
+							Path: networkContainer.networkShareLocation,
+							Username: networkContainer.windowsUser,
+							Password: networkContainer.password,
+						}
+					},
+					SourceSqlConnection: {
+						DataSource: currentConnection?.serverName!,
+						Username: currentConnection?.userName!,
+						Password: currentConnection?.password!,
+						Authentication: 'SqlAuthentication'
+					},
+					Scope: `/subscriptions/${this._targetSubscriptionId}/resourceGroups/${this.migrationController?.properties.resourceGroup}/providers/Microsoft.Sql/managedInstances/${this._targetSQLMIServer}`
+				}
+			}
+		};
+
+		console.log(requestBody);
+		// await startDatabaseMigration(
+		// 	this.azureAccount,
+		// 	this._subscriptionMap.get(this._targetSubscriptionId)!,
+		// 	this.migrationController?.properties.resourceGroup!,
+		// 	this.migrationController?.properties.location!,
+		// 	this._targetSQLMIServer,
+		// 	this.migrationController?.name!,
+		// 	requestBody
+		// 	);
 	}
 }
