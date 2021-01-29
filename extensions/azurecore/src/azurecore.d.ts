@@ -79,7 +79,7 @@ declare module 'azurecore' {
 		createMigrationController(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<CreateMigrationControllerResult>;
 		getMigrationControllerAuthKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<GetMigrationControllerAuthKeysResult>;
 		getStorageAccountAccessKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetStorageAccountAccessKeysResult>;
-		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, managedInstance: string, migrationControllerName: string, requestBody: startDatabaseMigrationRequest): any;
+		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors?: boolean): any;
 		/**
 		 * Converts a region value (@see AzureRegion) into the localized Display Name
 		 * @param region The region value
@@ -102,7 +102,7 @@ declare module 'azurecore' {
 	export type CreateMigrationControllerResult = { controller: azureResource.MigrationController | undefined, errors: Error[] };
 	export type GetMigrationControllerAuthKeysResult = { keyName1: string, keyName2: string, errors: Error[] };
 	export type GetStorageAccountAccessKeysResult = { keyName1: string, keyName2: string, errors: Error[] };
-	export type startDatabaseMigrationRequest = {
+	export type StartDatabaseMigrationRequest = {
 		location: string;
 		properties: {
 			SourceDatabaseName: string,

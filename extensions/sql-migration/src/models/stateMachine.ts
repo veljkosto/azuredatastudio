@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 import * as mssql from '../../../mssql';
 import { SKURecommendations } from './externalContract';
 import { azureResource } from 'azureResource';
-import { getSubscriptions } from '../api/azure';
+import { getSubscriptions, startDatabaseMigration } from '../api/azure';
 import * as constants from '../models/strings';
 
 export enum State {
@@ -224,7 +224,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		return this._subscriptionMap.get(id)!.name;
 	}
 
-	public startMigration() {
-
+	public async startMigration() {
+		await startDatabaseMigration(this.azureAccount, this._subscriptionMap());
 	}
 }

@@ -228,8 +228,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<azurec
 		},
 		startDatabaseMigration(account: azdata.Account,
 			subscription: azureResource.AzureResourceSubscription,
-		) {
-
+			resourceGroupName: string,
+			regionName: string,
+			managedInstance: string,
+			migrationControllerName: string,
+			requestBody: azurecore.StartDatabaseMigrationRequest,
+			ignoreErrors: boolean): any {
+			return azureResourceUtils.createMigrationController(account, subscription, resourceGroupName, resourceGroupName, migrationControllerName, ignoreErrors);
 		},
 		getRegionDisplayName: utils.getRegionDisplayName,
 		runGraphQuery<T extends azureResource.AzureGraphResource>(account: azdata.Account,
