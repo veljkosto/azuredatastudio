@@ -220,6 +220,17 @@ export async function activate(context: vscode.ExtensionContext): Promise<azurec
 			ignoreErrors: boolean): Promise<azurecore.GetMigrationControllerAuthKeysResult> {
 			return azureResourceUtils.getMigrationControllerAuthKeys(account, subscription, resourceGroupName, regionName, controllerName, ignoreErrors);
 		},
+		getStorageAccountAccessKeys(account: azdata.Account,
+			subscription: azureResource.AzureResourceSubscription,
+			storageAccount: azureResource.AzureGraphResource,
+			ignoreErrors: boolean): Promise<azurecore.GetStorageAccountAccessKeysResult> {
+			return azureResourceUtils.getStorageAccountKey(account, subscription, storageAccount, ignoreErrors);
+		},
+		startDatabaseMigration(account: azdata.Account,
+			subscription: azureResource.AzureResourceSubscription,
+		) {
+
+		},
 		getRegionDisplayName: utils.getRegionDisplayName,
 		runGraphQuery<T extends azureResource.AzureGraphResource>(account: azdata.Account,
 			subscriptions: azureResource.AzureResourceSubscription[],

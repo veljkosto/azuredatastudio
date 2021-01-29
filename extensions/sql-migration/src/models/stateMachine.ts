@@ -46,6 +46,7 @@ export interface NetworkShare {
 	password: string;
 	storageSubscriptionId: string;
 	storageAccountId: string;
+	storageKey: string;
 }
 
 export interface BlobContainer {
@@ -221,5 +222,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 
 	public getSubscriptionName(id: string): string {
 		return this._subscriptionMap.get(id)!.name;
+	}
+
+	public startMigration() {
+
 	}
 }

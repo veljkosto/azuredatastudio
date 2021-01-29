@@ -52,7 +52,7 @@ export class WizardController {
 			sourceConfigurationPage,
 			skuRecommendationPage,
 			databaseBackupPage,
-			//integrationRuntimePage,
+			integrationRuntimePage,
 			summaryPage
 		];
 
@@ -82,5 +82,9 @@ export class WizardController {
 
 		await Promise.all(wizardSetupPromises);
 		await pages[0].onPageEnter();
+
+		wizard.doneButton.onClick((e) => {
+
+		});
 	}
 }

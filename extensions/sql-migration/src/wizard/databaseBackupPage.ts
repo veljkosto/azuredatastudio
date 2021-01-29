@@ -5,7 +5,7 @@
 
 import * as azdata from 'azdata';
 import { EOL } from 'os';
-import { getAvailableStorageAccounts, getBlobContainers, getFileShares, StorageAccount } from '../api/azure';
+import { getAvailableStorageAccounts, getBlobContainers, getFileShares, getStorageAccountAccessKeys, StorageAccount } from '../api/azure';
 import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { BlobContainer, FileShare, MigrationCutover, MigrationStateModel, NetworkContainerType, NetworkShare, StateChangeEvent } from '../models/stateMachine';
@@ -284,9 +284,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			.withValidation((component) => {
 				if (this.migrationStateModel.databaseBackup.networkContainerType === NetworkContainerType.NETWORK_SHARE) {
 					if (component.value) {
-						if (!/^(\\)(\\[\w\.-_]+){2,}(\\?)$/.test(component.value)) {
-							return false;
-						}
+						// if (!/^(\\)(\\[\w\.-_]+){2,}(\\?)$/.test(component.value)) {
+						// 	return false;
+						// }
 					}
 				}
 				return true;
@@ -309,11 +309,11 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			})
 			.withValidation((component) => {
 				if (this.migrationStateModel.databaseBackup.networkContainerType === NetworkContainerType.NETWORK_SHARE) {
-					if (component.value) {
-						if (!/^[a-zA-Z][a-zA-Z0-9\-\.]{0,61}[a-zA-Z]\\\w[\w\.\- ]*$/.test(component.value)) {
-							return false;
-						}
-					}
+					// if (component.value) {
+					// 	if (!/^[a-zA-Z][a-zA-Z0-9\-\.]{0,61}[a-zA-Z]\\\w[\w\.\- ]*$/.test(component.value)) {
+					// 		return false;
+					// 	}
+					// }
 				}
 				return true;
 			}).component();
@@ -369,9 +369,11 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 				required: true,
 				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
-		this._networkShareContainerStorageAccountDropdown.onValueChanged((value) => {
-			if (this._networkShareContainerStorageAccountDropdown.value) {
+		this._networkShareContainerStorageAccountDropdown.onValueChanged(async (value) => {
+			if (this._networkShareContainerStorageAccountDropdown.value && (this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).displayName !== constants.NO_STORAGE_ACCOUNT_FOUND) {
 				this._networkShare.storageAccountId = (this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).displayName;
+				const storageAccount = this._storageAccountMap.get((this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).name)!;
+				this._networkShare.storageKey = (await getStorageAccountAccessKeys(this.migrationStateModel.azureAccount, this.migrationStateModel._subscriptionMap.get(this._networkShare.storageSubscriptionId)!, storageAccount)).keyName1;
 			}
 		});
 
