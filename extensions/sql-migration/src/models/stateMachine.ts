@@ -84,12 +84,15 @@ export interface StateChangeEvent {
 }
 
 export class MigrationStateModel implements Model, vscode.Disposable {
+	private _azureAccount!: azdata.Account;
+	private _azureAccounts: azdata.Account[] = [];
+	private _azureAccountIndex!: number;
+
 	private _stateChangeEventEmitter = new vscode.EventEmitter<StateChangeEvent>();
 	private _currentState: State;
 	private _gatheringInformationError: string | undefined;
 	private _skuRecommendations: SKURecommendations | undefined;
 	private _assessmentResults: mssql.SqlMigrationAssessmentResultItem[] | undefined;
-	private _azureAccount!: azdata.Account;
 	private _databaseBackup!: DatabaseBackupModel;
 	private _migrationController!: azureResource.MigrationController | undefined;
 	private _subscriptions!: azureResource.AzureResourceSubscription[];
@@ -108,6 +111,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		this._subscriptionMap = new Map();
 	}
 
+
 	public get azureAccount(): azdata.Account {
 		return this._azureAccount;
 	}
@@ -115,6 +119,36 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public set azureAccount(account: azdata.Account) {
 		this._azureAccount = account;
 	}
+	public async getAzureAccountDropdownValues(): Promise<azdata.CategoryValue[]> {
+		const dropdownValues: azdata.CategoryValue[] = [];
+		this._azureAccounts = await azdata.accounts.getAllAccounts();
+
+		if (this._azureAccounts.length === 0) {
+			dropdownValues.push({
+				displayName: constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR,
+				name: ''
+			});
+		} else {
+			dropdownValues.push(
+				... this._azureAccounts.map(account =>
+					<azdata.CategoryValue>
+					{
+						displayName: account.displayInfo.displayName,
+						name: account.displayInfo.userId
+					}
+				));
+		}
+		return dropdownValues;
+	}
+	public selectAzureAccount(index: number): void {
+		this._azureAccountIndex = index;
+		this._azureAccount = this._azureAccounts[index];
+	}
+	public getSelectedAccountIndex(): number {
+		return this._azureAccountIndex;
+	}
+
+
 
 	public get databaseBackup(): DatabaseBackupModel {
 		return this._databaseBackup;

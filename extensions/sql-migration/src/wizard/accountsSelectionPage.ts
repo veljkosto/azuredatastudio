@@ -26,7 +26,10 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 				]
 			);
 		await view.initializeModel(form.component());
-		await this.populateAzureAccountsDropdown();
+		console.log(await this.migrationStateModel.getAzureAccountDropdownValues());
+		this._azureAccountsDropdown.updateProperties({
+			values: await this.migrationStateModel.getAzureAccountDropdownValues()
+		});
 	}
 
 	private createAzureAccountsDropdown(view: azdata.ModelView): azdata.FormComponent {
@@ -37,6 +40,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 			}).component();
 
 		this._azureAccountsDropdown.onValueChanged(async (value) => {
+			console.log(value);
 			if (this._azureAccountsDropdown.value) {
 				const selectedAccount = (this._azureAccountsDropdown.value as azdata.CategoryValue).name;
 				this.migrationStateModel.azureAccount = this._accountsMap.get(selectedAccount)!;
@@ -52,7 +56,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 
 		addAccountButton.onDidClick(async (event) => {
 			await vscode.commands.executeCommand('workbench.actions.modal.linkedAccount');
-			await this.populateAzureAccountsDropdown();
+			this._azureAccountsDropdown.values = await this.migrationStateModel.getAzureAccountDropdownValues();
 		});
 
 		const flexContainer = view.modelBuilder.flexContainer()
@@ -75,31 +79,6 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 			title: '',
 			component: flexContainer
 		};
-	}
-
-	private async populateAzureAccountsDropdown(): Promise<void> {
-		this._azureAccountsDropdown.loading = true;
-		let accounts = await azdata.accounts.getAllAccounts();
-
-		if (accounts.length === 0) {
-			this._azureAccountsDropdown.value = {
-				displayName: constants.ACCOUNT_SELECTION_PAGE_NO_LINKED_ACCOUNTS_ERROR,
-				name: ''
-			};
-			return;
-		}
-
-		this._azureAccountsDropdown.values = accounts.map((account): azdata.CategoryValue => {
-			let accountCategoryValue = {
-				displayName: account.displayInfo.displayName,
-				name: account.displayInfo.userId
-			};
-			this._accountsMap.set(accountCategoryValue.name, account);
-			return accountCategoryValue;
-		});
-
-		this.migrationStateModel.azureAccount = accounts[0];
-		this._azureAccountsDropdown.loading = false;
 	}
 
 	public async onPageEnter(): Promise<void> {
