@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 import * as mssql from '../../../mssql';
 import { SKURecommendations } from './externalContract';
 import { azureResource } from 'azureResource';
-import { getSubscriptions } from '../api/azure';
+import { getSubscriptions, SqlManagedInstance, startDatabaseMigration, StorageAccount } from '../api/azure';
 import * as constants from '../models/strings';
 import * as azurecore from 'azurecore';
 
@@ -95,8 +95,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	private _subscriptions!: azureResource.AzureResourceSubscription[];
 	public _subscriptionMap: Map<string, azureResource.AzureResourceSubscription>;
 	public _targetSubscriptionId!: string;
-	public _targetSQLMIServer!: string;
+	public _targetSQLMIServer!: SqlManagedInstance;
 	public _nodeName!: string;
+	public _networkContainerStorageAccount!: StorageAccount;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -240,11 +241,11 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			location: this.migrationController?.properties.location!,
 			properties: {
 				SourceDatabaseName: currentConnection?.databaseName!,
-				MigrationController: this.migrationController?.name!,
+				MigrationController: this.migrationController?.id!,
 				AutoCutoverConfiguration: undefined,
 				BackupConfiguration: {
 					TargetLocation: {
-						StorageAccountResourceId: networkContainer.storageAccountId,
+						StorageAccountResourceId: this._networkContainerStorageAccount.id,
 						AccountKey: networkContainer.storageKey,
 					},
 					SourceLocation: {
@@ -260,20 +261,21 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 						Password: currentConnection?.password!,
 						Authentication: 'SqlAuthentication'
 					},
-					Scope: `/subscriptions/${this._targetSubscriptionId}/resourceGroups/${this.migrationController?.properties.resourceGroup}/providers/Microsoft.Sql/managedInstances/${this._targetSQLMIServer}`
+					Scope: this._targetSQLMIServer.id
 				}
 			}
 		};
-
 		console.log(requestBody);
-		// await startDatabaseMigration(
-		// 	this.azureAccount,
-		// 	this._subscriptionMap.get(this._targetSubscriptionId)!,
-		// 	this.migrationController?.properties.resourceGroup!,
-		// 	this.migrationController?.properties.location!,
-		// 	this._targetSQLMIServer,
-		// 	this.migrationController?.name!,
-		// 	requestBody
-		// 	);
+		const response = await startDatabaseMigration(
+			this.azureAccount,
+			this._subscriptionMap.get(this._targetSubscriptionId)!,
+			this.migrationController?.properties.resourceGroup!,
+			this.migrationController?.properties.location!,
+			this._targetSQLMIServer.name,
+			this.migrationController?.name!,
+			requestBody
+		);
+
+		console.log(response);
 	}
 }

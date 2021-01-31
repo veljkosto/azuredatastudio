@@ -42,7 +42,7 @@ export class SummaryPage extends MigrationWizardPage {
 				this.createHeadingTextComponent(constants.MIGRATION_TARGET),
 				this.createInformationRow(constants.TYPE, constants.SUMMARY_MI_TYPE),
 				this.createInformationRow(constants.SUBSCRIPTION, this.migrationStateModel.getSubscriptionName(this.migrationStateModel._targetSubscriptionId)),
-				this.createInformationRow(constants.SUMMARY_MI_TYPE, this.migrationStateModel._targetSQLMIServer),
+				this.createInformationRow(constants.SUMMARY_MI_TYPE, this.migrationStateModel._targetSQLMIServer.name),
 				this.createInformationRow(constants.SUMMARY_DATABASE_COUNT_LABEL, '1'),
 
 				this.createHeadingTextComponent(constants.DATABASE_BACKUP_PAGE_TITLE),

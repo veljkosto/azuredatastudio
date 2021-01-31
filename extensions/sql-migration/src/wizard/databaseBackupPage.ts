@@ -226,7 +226,8 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._blobContainerStorageAccountDropdown.onValueChanged(async (value) => {
 			if (this._blobContainerStorageAccountDropdown.value) {
-				this._blob.storageAccountId = (this._blobContainerStorageAccountDropdown.value as azdata.CategoryValue).displayName;
+				this._blob.storageAccountId = (this._blobContainerStorageAccountDropdown.value as azdata.CategoryValue).name;
+				this.migrationStateModel._networkContainerStorageAccount = this._storageAccountMap.get(this._blob.storageAccountId)!;
 				await this.loadBlobContainerDropdown();
 			}
 		});
@@ -371,8 +372,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._networkShareContainerStorageAccountDropdown.onValueChanged(async (value) => {
 			if (this._networkShareContainerStorageAccountDropdown.value && (this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).displayName !== constants.NO_STORAGE_ACCOUNT_FOUND) {
-				this._networkShare.storageAccountId = (this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).displayName;
+				this._networkShare.storageAccountId = (this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).name;
 				const storageAccount = this._storageAccountMap.get((this._networkShareContainerStorageAccountDropdown.value as azdata.CategoryValue).name)!;
+				this.migrationStateModel._networkContainerStorageAccount = this._storageAccountMap.get(this._networkShare.storageAccountId)!;
 				this._networkShare.storageKey = (await getStorageAccountAccessKeys(this.migrationStateModel.azureAccount, this.migrationStateModel._subscriptionMap.get(this._networkShare.storageSubscriptionId)!, storageAccount)).keyName1;
 			}
 		});

@@ -15,6 +15,8 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 	private _managedInstanceSubscriptionDropdown!: azdata.DropDownComponent;
 	private _managedInstanceDropdown!: azdata.DropDownComponent;
 
+	private _miMap: Map<string, SqlManagedInstance> = new Map();
+
 	constructor(wizard: azdata.window.Wizard, migrationStateModel: MigrationStateModel) {
 		super(wizard, azdata.window.createWizardPage(constants.TARGET_SELECTION_PAGE_TITLE), migrationStateModel);
 	}
@@ -53,7 +55,7 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		}).component();
 		this._managedInstanceDropdown.onValueChanged((e) => {
 			if (this._managedInstanceDropdown.value) {
-				this.migrationStateModel._targetSQLMIServer = (<azdata.CategoryValue>this._managedInstanceDropdown.value).name;
+				this.migrationStateModel._targetSQLMIServer = this._miMap.get((<azdata.CategoryValue>this._managedInstanceDropdown.value).name)!;
 			}
 		});
 		const targetContainer = view.modelBuilder.flexContainer().withItems(
@@ -97,6 +99,7 @@ export class TempTargetSelectionPage extends MigrationWizardPage {
 		try {
 			mis = await getAvailableManagedInstanceProducts(this.migrationStateModel.azureAccount, this.migrationStateModel._subscriptionMap.get(this.migrationStateModel._targetSubscriptionId)!);
 			mis.forEach((mi) => {
+				this._miMap.set(mi.name, mi);
 				miValues.push({
 					name: mi.name,
 					displayName: mi.name
