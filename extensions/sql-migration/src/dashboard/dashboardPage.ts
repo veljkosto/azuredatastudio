@@ -6,6 +6,8 @@
 import * as azdata from 'azdata';
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { MigrationContext, Migrations } from '../models/migration';
+import { getMigrationStatus } from '../api/azure';
 
 interface IActionMetadata {
 	title?: string,
@@ -19,6 +21,8 @@ const maxWidth = 800;
 const headerMaxHeight = 300;
 export class DashboardWidget {
 
+	private _migrationStatusController!: azdata.FlexContainer;
+	private _view!: azdata.ModelView;
 	/**
 	 * Creates new instance of dashboard
 	 */
@@ -26,8 +30,10 @@ export class DashboardWidget {
 	}
 
 	public register(): Promise<void> {
+		//Migrations.clearMigrations();
 		return new Promise<void>(resolve => {
 			azdata.ui.registerModelViewProvider('migration.dashboard', async (view) => {
+				this._view = view;
 				const container = view.modelBuilder.flexContainer().withLayout({
 					flexFlow: 'column',
 					width: '100%',
@@ -36,6 +42,8 @@ export class DashboardWidget {
 				const header = this.createHeader(view);
 
 				const tasksContainer = await this.createTasks(view);
+
+				const statusContainer = await this.createMigrationStatusContainer(view);
 
 				container.addItem(header, {
 					CSSStyles: {
@@ -54,6 +62,7 @@ export class DashboardWidget {
 						'height': '150px',
 					}
 				});
+
 				const mainContainer = view.modelBuilder.flexContainer()
 					.withLayout({
 						flexFlow: 'column',
@@ -63,6 +72,13 @@ export class DashboardWidget {
 					}).component();
 				mainContainer.addItem(container, {
 					CSSStyles: { 'padding-top': '25px', 'padding-left': '5px' }
+				});
+				mainContainer.addItem(statusContainer, {
+					CSSStyles: {
+						'width': `${maxWidth}px`,
+						'height': '150px',
+						'margin-top': '20px'
+					}
 				});
 				await view.initializeModel(mainContainer);
 				resolve();
@@ -230,4 +246,79 @@ export class DashboardWidget {
 		});
 		return mainContainer;
 	}
+
+	private async createMigrationStatusContainer(view: azdata.ModelView): Promise<azdata.FlexContainer> {
+		this._migrationStatusController = view.modelBuilder.flexContainer().withItems(
+			[
+
+			]
+		).withLayout({
+			flexFlow: 'column'
+		}).component();
+
+		await this.refreshMigrations();
+		return this._migrationStatusController;
+	}
+
+	private async refreshMigrations(): Promise<void> {
+		this._migrationStatusController.clearItems();
+		const currentConnection = (await azdata.connection.getCurrentConnection());
+		const getMigrations = Migrations.getMigrations(currentConnection);
+		getMigrations.forEach((migration) => {
+			const button = this._view.modelBuilder.button().withProps({
+				label: `Migration to ${migration.targetMI.name} using controller ${migration.migration.name}`
+			}).component();
+
+			button.onDidClick((e) => {
+				this.openStatusDialog(migration);
+			});
+			this._migrationStatusController.addItem(
+				button
+			);
+		});
+	}
+
+
+	private async openStatusDialog(migration: MigrationContext) {
+
+		const wizard = azdata.window.createModelViewDialog('Status of Migration');
+
+		const tab = azdata.window.createTab('');
+		const status = await getMigrationStatus(migration.azureAccount, migration.subscription, migration.migration);
+		console.log(status.result);
+		tab.registerContent((view: azdata.ModelView) => {
+			const statusHeader = view.modelBuilder.text().withProps({
+				value: `Migration Status: ${status.result.properties.migrationStatus}`,
+				CSSStyles: {
+					'font-size': '16px',
+					'font-weight': 'bold'
+				}
+			}).component();
+			const statusText = view.modelBuilder.text().withProps({
+				value: JSON.stringify(status.result, undefined, 2)
+			}).component();
+			const formBuilder = view.modelBuilder.formContainer().withFormItems(
+				[
+					{
+						component: statusHeader
+					},
+					{
+						component: statusText
+					}
+				],
+				{
+					horizontal: false
+				}
+			);
+			const form = formBuilder.withLayout({ width: '100%' }).component();
+			return view.initializeModel(form).then(() => {
+			});
+		});
+
+		wizard.content = [tab];
+
+		azdata.window.openDialog(wizard);
+	}
+
+
 }

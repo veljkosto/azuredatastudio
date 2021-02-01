@@ -4,6 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 import * as vscode from 'vscode';
 import { azureResource } from 'azureResource';
+import { SqlManagedInstance } from '../api/azure';
+import * as azdata from 'azdata';
 
 
 export class Migrations {
@@ -14,40 +16,50 @@ export class Migrations {
 		Migrations.context = context;
 	}
 
-	public static getMigrations(connectionId: string): azureResource.DatabaseMigration[] {
+	public static getMigrations(connectionProfile: azdata.connection.ConnectionProfile): MigrationContext[] {
 
-		let dataBaseMigrations: azureResource.DatabaseMigration[] = [];
-
+		let dataBaseMigrations: MigrationContext[] = [];
 		try {
 			const migrationMementos: MigrationContext[] = this.context.globalState.get(this.mementoToken) || [];
 
 			dataBaseMigrations = migrationMementos.filter((memento) => {
-				return memento.connectionId === connectionId;
+				return memento.connection.serverName === connectionProfile.serverName;
 			}).map((memento) => {
-				return memento.migration;
+				return memento;
 			});
 		} catch (e) {
 			console.log(e);
 		}
 
+
 		return dataBaseMigrations;
 	}
 
-	public static saveMigration(connectionId: string, migration: azureResource.DatabaseMigration): void {
+	public static saveMigration(connection: azdata.connection.ConnectionProfile, migration: azureResource.DatabaseMigration, targetMI: SqlManagedInstance, azureAccount: azdata.Account, subscription: azureResource.AzureResourceSubscription): void {
 		try {
 			const migrationMementos: MigrationContext[] = this.context.globalState.get(this.mementoToken) || [];
 			migrationMementos.push({
-				connectionId: connectionId,
-				migration: migration
+				connection: connection,
+				migration: migration,
+				targetMI: targetMI,
+				subscription: subscription,
+				azureAccount: azureAccount
 			});
 			this.context.globalState.update(this.mementoToken, migrationMementos);
 		} catch (e) {
 			console.log(e);
 		}
 	}
+
+	public static clearMigrations() {
+		this.context.globalState.update(this.mementoToken, ([] as MigrationContext[]));
+	}
 }
 
 export interface MigrationContext {
-	connectionId: string,
-	migration: azureResource.DatabaseMigration
+	connection: azdata.connection.ConnectionProfile,
+	migration: azureResource.DatabaseMigration,
+	targetMI: SqlManagedInstance,
+	azureAccount: azdata.Account,
+	subscription: azureResource.AzureResourceSubscription
 }

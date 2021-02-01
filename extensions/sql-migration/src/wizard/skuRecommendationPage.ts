@@ -35,6 +35,8 @@ export class SKURecommendationPage extends MigrationWizardPage {
 	private _subscriptionDropdownValues: azdata.CategoryValue[] = [];
 	private _subscriptionMap: Map<string, Subscription> = new Map();
 	private view: azdata.ModelView | undefined;
+	private _miMap: Map<string, SqlManagedInstance> = new Map();
+
 
 	private async initialState(view: azdata.ModelView) {
 		this.igComponent = this.createStatusComponent(view); // The first component giving basic information
@@ -53,7 +55,11 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			value: constants.MANAGED_INSTANCE
 		}).component();
 		this._managedInstanceDropdown = view.modelBuilder.dropDown().component();
-
+		this._managedInstanceDropdown.onValueChanged((e) => {
+			if (this._managedInstanceDropdown.value) {
+				this.migrationStateModel._targetSQLMIServer = this._miMap.get((<azdata.CategoryValue>this._managedInstanceDropdown.value).name)!;
+			}
+		});
 		const targetContainer = view.modelBuilder.flexContainer().withItems(
 			[
 				managedInstanceSubscriptionDropdownLabel,
@@ -265,6 +271,7 @@ export class SKURecommendationPage extends MigrationWizardPage {
 
 			mis = await getAvailableManagedInstanceProducts(this.migrationStateModel.azureAccount, this._subscriptionMap.get(subscriptionId)!);
 			mis.forEach((mi) => {
+				this._miMap.set(mi.name, mi);
 				miValues.push({
 					name: mi.name,
 					displayName: mi.name

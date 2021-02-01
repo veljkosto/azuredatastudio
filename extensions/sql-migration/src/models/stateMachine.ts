@@ -273,7 +273,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		console.log(requestBody);
 		const response = await startDatabaseMigration(
 			this.azureAccount,
-			this._subscriptionMap.get(this._targetSubscriptionId)!,
+			this._subscriptionMap.get(this._targetSQLMIServer.subscriptionId)!,
 			this._targetSQLMIServer.resourceGroup!,
 			this.migrationController?.properties.location!,
 			this._targetSQLMIServer.name,
@@ -282,8 +282,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		);
 
 		console.log(response);
-
-		Migrations.saveMigration(this.sourceConnectionId, response);
+		if (!response.error) {
+			Migrations.saveMigration(currentConnection!, response, this._targetSQLMIServer, this._azureAccount, this._subscriptionMap.get(this.migrationController?.properties.subscriptionId!)!);
+		}
 
 		vscode.window.showInformationMessage('Migration has started successfully. You can view the status of the migration in the dashboard');
 	}

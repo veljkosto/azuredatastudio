@@ -236,6 +236,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<azurec
 			ignoreErrors: boolean): Promise<azurecore.StartDatabaseMigrationResult> {
 			return azureResourceUtils.startDatabaseMigration(account, subscription, resourceGroupName, managedInstance, migrationControllerName, requestBody, ignoreErrors);
 		},
+		getDatabaseMigrationStatus(account: azdata.Account,
+			subscription: azureResource.AzureResourceSubscription,
+			migration: azureResource.DatabaseMigration,
+			ignoreErrors: boolean): Promise<any> {
+			return azureResourceUtils.getDatabaseMigrationStatus(account, subscription, migration, ignoreErrors);
+		},
 		getRegionDisplayName: utils.getRegionDisplayName,
 		runGraphQuery<T extends azureResource.AzureGraphResource>(account: azdata.Account,
 			subscriptions: azureResource.AzureResourceSubscription[],

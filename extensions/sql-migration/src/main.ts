@@ -9,7 +9,8 @@ import { WizardController } from './wizard/wizardController';
 import { DashboardWidget } from './dashboard/dashboardPage';
 import { IconPathHelper } from './constants';
 import { Migrations } from './models/migration';
-
+import * as path from 'path';
+import * as fs from 'fs';
 class SQLMigration {
 
 	constructor(private readonly context: vscode.ExtensionContext) {
@@ -40,11 +41,46 @@ class SQLMigration {
 		];
 
 		azdata.tasks.registerTask('sqlmigration.start', async () => {
-			let currentConnection: any = await azdata.connection.getCurrentConnection();
-			let connection = currentConnection as azdata.connection.Connection;
-
+			let activeConnection = await azdata.connection.getCurrentConnection();
+			let connectionId: string = '';
+			if (!activeConnection) {
+				const connection = await azdata.connection.openConnectionDialog();
+				if (connection) {
+					connectionId = connection.connectionId;
+				}
+			} else {
+				connectionId = activeConnection.connectionId;
+			}
 			const wizardController = new WizardController(this.context);
-			await wizardController.openWizard(connection.connectionId);
+			await wizardController.openWizard(connectionId);
+		});
+
+		azdata.tasks.registerTask('sqlmigration.notebooks', async () => {
+			const input = vscode.window.createQuickPick<vscodeQuickPickItems>();
+			input.placeholder = 'Types to search for notebooks';
+
+			input.items = [
+				{
+					label: '1. Inline Migration Notebook',
+					notebook: vscode.Uri.parse(path.join(this.context.extensionPath, 'notebooks', 'Inline_Migration_ADS_Notebook.ipynb'))
+				}
+			];
+
+			input.onDidAccept(async (e) => {
+				const item = input.selectedItems[0].notebook;
+				const content = fs.readFileSync(item.fsPath).toString();
+				const uri: vscode.Uri = vscode.Uri.parse(`untitled: Inline Migration Notebook`);
+				azdata.nb.showNotebookDocument(uri, {
+					connectionProfile: undefined,
+					preview: false,
+					initialContent: content,
+					initialDirtyState: true
+				});
+
+				input.hide();
+			});
+
+			input.show();
 		});
 
 		this.context.subscriptions.push(...commandDisposables);
@@ -67,4 +103,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate(): void {
 	sqlMigration.stop();
+}
+
+interface vscodeQuickPickItems {
+	label: string,
+	notebook: vscode.Uri
 }

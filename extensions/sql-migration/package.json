@@ -14,7 +14,8 @@
   "activationEvents": [
     "*",
     "onCommand:sqlmigration.start",
-    "onCommand:sqlmigration.testDialog"
+    "onCommand:sqlmigration.testDialog",
+    "onCommand:sqlmigration.notebooks"
   ],
   "main": "./out/main",
   "repository": {
@@ -29,6 +30,15 @@
       {
         "command": "sqlmigration.start",
         "title": "Migrate",
+        "category": "SQL Migration",
+        "icon": {
+					"light": "./images/manageModels.svg",
+					"dark": "./images/manageModels.svg"
+				}
+      },
+      {
+        "command": "sqlmigration.notebooks",
+        "title": "Migration Notebooks",
         "category": "SQL Migration",
         "icon": {
 					"light": "./images/manageModels.svg",

@@ -80,6 +80,7 @@ declare module 'azurecore' {
 		getMigrationControllerAuthKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<GetMigrationControllerAuthKeysResult>;
 		getStorageAccountAccessKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetStorageAccountAccessKeysResult>;
 		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors?: boolean): Promise<StartDatabaseMigrationResult>;
+		getDatabaseMigrationStatus(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, migration: azureResource.DatabaseMigration, ignoreErrors: boolean): Promise<any>;
 		/**
 		 * Converts a region value (@see AzureRegion) into the localized Display Name
 		 * @param region The region value

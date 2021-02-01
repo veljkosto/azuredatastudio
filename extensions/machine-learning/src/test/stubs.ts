@@ -8,6 +8,9 @@ import * as azurecore from 'azurecore';
 import { azureResource } from 'azureResource';
 
 export class AzurecoreApiStub implements azurecore.IExtension {
+	getDatabaseMigrationStatus(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _migration: azureResource.DatabaseMigration, _ignoreErrors: boolean): Promise<any> {
+		throw new Error('Method not implemented.');
+	}
 	startDatabaseMigration(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _resourceGroupName: string, _regionName: string, _managedInstance: string, _migrationControllerName: string, _requestBody: azurecore.StartDatabaseMigrationRequest, _ignoreErrors?: boolean): Promise<azurecore.StartDatabaseMigrationResult> {
 		throw new Error('Method not implemented.');
 	}

@@ -112,6 +112,12 @@ export async function startDatabaseMigration(account: azdata.Account, subscripti
 	return result.databaseMigration;
 }
 
+export async function getMigrationStatus(account: azdata.Account, subscription: Subscription, migration: azureResource.DatabaseMigration): Promise<any> {
+	const api = await getAzureCoreAPI();
+	let result = await api.getDatabaseMigrationStatus(account, subscription, migration, true);
+	return result;
+}
+
 /**
  * For now only east us euap is supported. Actual API calls will be added in the public release.
  */

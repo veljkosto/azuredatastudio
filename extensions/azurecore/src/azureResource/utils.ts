@@ -455,3 +455,14 @@ export async function startDatabaseMigration(account: azdata.Account, subscripti
 		databaseMigration: response.response.data
 	};
 }
+
+export async function getDatabaseMigrationStatus(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, migration: azureResource.DatabaseMigration, ignoreErrors: boolean): Promise<any> {
+	const apiEndpoint = `https://eastus2euap.management.azure.com/${migration.id}?$expand=MigrationStatusDetails&api-version=2020-09-01-preview`;
+	console.log(apiEndpoint);
+	const response = await makeHttpRequest(account, subscription, ignoreErrors, apiEndpoint, HttpRequestType.GET);
+	console.log(response);
+	return {
+		errors: response.errors,
+		result: response.response.data
+	};
+}
