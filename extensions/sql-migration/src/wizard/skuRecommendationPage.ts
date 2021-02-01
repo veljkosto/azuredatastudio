@@ -7,7 +7,7 @@ import * as azdata from 'azdata';
 import * as path from 'path';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
 import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
-import { Product, ProductLookupTable } from '../models/product';
+import { MigrationProductType, Product, ProductLookupTable } from '../models/product';
 import { Disposable } from 'vscode';
 import { AssessmentResultsDialog } from '../dialog/assessmentResults/assessmentResultsDialog';
 import { getAvailableManagedInstanceProducts, getSubscriptions, SqlManagedInstance, Subscription } from '../api/azure';
@@ -204,7 +204,7 @@ export class SKURecommendationPage extends MigrationWizardPage {
 		});
 
 		rbg.component().onLinkClick(async (e) => {
-			let dialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, 'Assessment Results', (e.card as MigrationCard).productType);
+			let dialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, 'Assessment Results');
 
 			await dialog.openDialog();
 		});

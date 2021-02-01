@@ -40,7 +40,7 @@ class SQLMigration {
 			let connection = currentConnection as azdata.connection.Connection;
 
 			const wizardController = new WizardController(this.context);
-			await wizardController.openWizard(connection);
+			await wizardController.openWizard(connection.connectionId);
 		});
 
 		this.context.subscriptions.push(...commandDisposables);
