@@ -88,6 +88,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	private _azureAccount!: azdata.Account;
 	private _databaseBackup!: DatabaseBackupModel;
 	private _migrationController!: azureResource.MigrationController | undefined;
+	private _rulePickedEvent!: vscode.EventEmitter<mssql.SqlMigrationAssessmentResultItem | undefined>;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -104,6 +105,11 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 
 	public set azureAccount(account: azdata.Account) {
 		this._azureAccount = account;
+		this._rulePickedEvent = new vscode.EventEmitter;
+	}
+
+	public get rulePickedEvent(): vscode.EventEmitter<mssql.SqlMigrationAssessmentResultItem | undefined> {
+		return this._rulePickedEvent;
 	}
 
 	public get databaseBackup(): DatabaseBackupModel {

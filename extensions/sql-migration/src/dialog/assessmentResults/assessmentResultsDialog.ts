@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as azdata from 'azdata';
+// import * as mssql from '../../../../mssql';
 import { MigrationStateModel } from '../../models/stateMachine';
 import { SqlDatabaseTree } from './sqlDatabasesTree';
 // import { SqlAssessmentResultList } from './sqlAssessmentResultsList';
@@ -39,6 +40,7 @@ export class AssessmentResultsDialog {
 		// this._list = new SqlAssessmentResultList();
 	}
 
+
 	private async initializeDialog(dialog: azdata.window.Dialog): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			dialog.registerContent(async (view) => {
@@ -70,7 +72,7 @@ export class AssessmentResultsDialog {
 		});
 	}
 
-	public async openDialog(dialogName?: string) {
+	public async openDialog() {
 		if (!this._isOpen) {
 			this._isOpen = true;
 			this.dialog = azdata.window.createModelViewDialog(this.title, this.title, true);
@@ -131,3 +133,51 @@ export class AssessmentResultsDialog {
 		return this._isOpen;
 	}
 }
+
+
+	// private convertAssessmentToData(assessments: mssql.SqlMigrationAssessmentResultItem[] | undefined): Array<string | number>[] {
+	// 	let result: Array<string | number>[] = [];
+	// 	if (assessments) {
+	// 		assessments.forEach(assessment => {
+	// 			if (assessment.impactedObjects && assessment.impactedObjects.length > 0) {
+	// 				assessment.impactedObjects.forEach(impactedObject => {
+	// 					this.addAssessmentColumn(result, assessment, impactedObject);
+	// 				});
+	// 			} else {
+	// 				this.addAssessmentColumn(result, assessment, undefined);
+	// 			}
+	// 		});
+	// 	}
+	// 	return result;
+	// }
+
+	// private addAssessmentColumn(
+	// 	result: Array<string | number>[],
+	// 	assessment: mssql.SqlMigrationAssessmentResultItem,
+	// 	impactedObject: mssql.SqlMigrationImpactedObjectInfo | undefined): void {
+	// 	let cols = [];
+	// 	//cols.push(assessment.appliesToMigrationTargetPlatform);
+	// 	cols.push(assessment.displayName);
+	// 	cols.push(assessment.checkId);
+	// 	//cols.push(assessment.rulesetName);
+	// 	cols.push(assessment.description);
+	// 	cols.push(impactedObject?.name ?? '');
+	// 	result.push(cols);
+	// }
+
+
+	// private _assessmentTable: azdata.TableComponent | undefined;
+	// private createResultsList(view: azdata.ModelView): void {
+	// 	this._assessmentTable = view.modelBuilder.table()
+	// 		.withProperties({
+	// 			columns: [
+	// 				'Rule',
+	// 				'Rule ID',
+	// 				'Description',
+	// 				'Impacted Objects'
+	// 			],
+	// 			data: [],
+	// 			height: 700,
+	// 			width: 1100
+	// 		}).component();
+	// }

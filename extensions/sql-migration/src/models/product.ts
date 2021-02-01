@@ -5,7 +5,7 @@
 import * as nls from 'vscode-nls';
 const localize = nls.loadMessageBundle();
 
-export type MigrationProductType = 'AzureSQLMI' | 'AzureSQLVM' | 'AzureSQL';
+export type MigrationProductType = 'AzureSQLMI' | 'AzureSQLVM'; // | 'AzureSQL';
 export interface MigrationProduct {
 	readonly type: MigrationProductType;
 }
@@ -53,9 +53,23 @@ export const ProductLookupTable: { [key in MigrationProductType]: Product } = {
 	'AzureSQLVM': {
 		type: 'AzureSQLVM',
 		name: localize('sql.migration.products.azuresqlvm.name', 'Azure SQL Virtual Machine (Customer managed)'),
-	},
-	'AzureSQL': {
-		type: 'AzureSQL',
-		name: localize('sql.migration.products.azuresql.name', 'Azure SQL'),
 	}
+	// ,
+	// 'AzureSQL': {
+	// 	type: 'AzureSQL',
+	// 	name: localize('sql.migration.products.azuresql.name', 'Azure SQL'),
+	// }
 };
+
+
+export function isSameProduct(prodType: MigrationProductType, sqlAssessmentExternalProdType: string) {
+	if (sqlAssessmentExternalProdType.toLowerCase() === 'sqlazure' && prodType === 'AzureSQLVM') {
+		return true;
+	}
+
+	if (sqlAssessmentExternalProdType.toLowerCase() === 'azuremi' && prodType === 'AzureSQLMI') {
+		return true;
+	}
+
+	return false;
+}

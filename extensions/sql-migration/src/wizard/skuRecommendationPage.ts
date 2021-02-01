@@ -83,8 +83,8 @@ export class SKURecommendationPage extends MigrationWizardPage {
 		this.view = view;
 		const formContainer = view.modelBuilder.formContainer().withFormItems(
 			[
-				this.igComponent,
-				this.detailsComponent,
+				// this.igComponent,
+				// this.detailsComponent,
 				this.chooseTargetComponent,
 				this.azureSubscriptionText,
 				{
@@ -175,7 +175,10 @@ export class SKURecommendationPage extends MigrationWizardPage {
 					},
 					linkCodiconStyles: {
 						'font-size': '1em',
-						'color': 'royalblue'
+						'color': 'cornflowerblue'
+					},
+					linkStyles: {
+						'color': 'cornflowerblue'
 					}
 				},
 				{
@@ -184,7 +187,10 @@ export class SKURecommendationPage extends MigrationWizardPage {
 					displayLinkCodicon: true,
 					linkCodiconStyles: {
 						'font-size': '1em',
-						'color': 'royalblue'
+						'color': 'cornflowerblue'
+					},
+					linkStyles: {
+						'color': 'cornflowerblue'
 					}
 				}
 			];
@@ -192,8 +198,15 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			rbg.component().cards.push({
 				id: product.name,
 				icon: imagePath,
-				descriptions
-			});
+				descriptions,
+				productType: product.type
+			} as MigrationCard);
+		});
+
+		rbg.component().onLinkClick(async (e) => {
+			let dialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, 'Assessment Results', (e.card as MigrationCard).productType);
+
+			await dialog.openDialog();
 		});
 
 		this.chooseTargetComponent?.component.addItem(rbg.component());
@@ -299,4 +312,8 @@ export class SKURecommendationPage extends MigrationWizardPage {
 		}
 	}
 
+}
+
+interface MigrationCard extends azdata.RadioCard {
+	productType: MigrationProductType;
 }
