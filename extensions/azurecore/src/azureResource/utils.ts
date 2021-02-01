@@ -7,7 +7,7 @@ import { ResourceGraphClient } from '@azure/arm-resourcegraph';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import axios, { AxiosRequestConfig } from 'axios';
 import * as azdata from 'azdata';
-import { HttpRequestResult, GetResourceGroupsResult, GetSubscriptionsResult, ResourceQueryResult, GetBlobContainersResult, GetFileSharesResult, GetMigrationControllerResult, CreateMigrationControllerResult, GetMigrationControllerAuthKeysResult, GetStorageAccountAccessKeysResult, StartDatabaseMigrationRequest } from 'azurecore';
+import { HttpRequestResult, GetResourceGroupsResult, GetSubscriptionsResult, ResourceQueryResult, GetBlobContainersResult, GetFileSharesResult, GetMigrationControllerResult, CreateMigrationControllerResult, GetMigrationControllerAuthKeysResult, GetStorageAccountAccessKeysResult, StartDatabaseMigrationRequest, StartDatabaseMigrationResult } from 'azurecore';
 import { azureResource } from 'azureResource';
 import { EOL } from 'os';
 import * as nls from 'vscode-nls';
@@ -444,10 +444,14 @@ export async function getStorageAccountKey(account: azdata.Account, subscription
 	};
 }
 
-export async function startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors: boolean): Promise<any> {
+export async function startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors: boolean): Promise<StartDatabaseMigrationResult> {
 	const apiEndpoint = `https://eastus2euap.management.azure.com/subscriptions/${subscription.id}/resourceGroups/${resourceGroupName}/providers/Microsoft.Sql/managedInstances/${managedInstance}/providers/Microsoft.DataMigration/databaseMigrations/${migrationControllerName}?api-version=2020-09-01-preview`;
 	console.log(apiEndpoint);
-	const response = await makeHttpRequest(account, subscription, ignoreErrors, apiEndpoint, HttpRequestType.PUT);
+	const response = await makeHttpRequest(account, subscription, ignoreErrors, apiEndpoint, HttpRequestType.PUT, requestBody);
 	console.log(response);
-	return response;
+	return {
+		errors: response.errors,
+		status: response.response.status,
+		databaseMigration: response.response.data
+	};
 }

@@ -122,7 +122,7 @@ export class SummaryPage extends MigrationWizardPage {
 						this.createInformationRow(constants.PATH, networkShare.networkShareLocation),
 						this.createInformationRow(constants.USER_ACCOUNT, networkShare.windowsUser),
 						this.createInformationRow(constants.SUMMARY_AZURE_STORAGE_SUBSCRIPTION, this.migrationStateModel.getSubscriptionName(networkShare.storageSubscriptionId)),
-						this.createInformationRow(constants.SUMMARY_AZURE_STORAGE, networkShare.storageAccountId),
+						this.createInformationRow(constants.SUMMARY_AZURE_STORAGE, this.migrationStateModel._networkContainerStorageAccount.name),
 					]
 				);
 				break;

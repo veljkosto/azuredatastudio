@@ -8,10 +8,10 @@ import * as azurecore from 'azurecore';
 import { azureResource } from 'azureResource';
 
 export class AzurecoreApiStub implements azurecore.IExtension {
-	startDatabaseMigration(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _resourceGroupName: string, _regionName: string, _managedInstance: string, _migrationControllerName: string, _requestBody: azurecore.StartDatabaseMigrationRequest, _ignoreErrors?: boolean) {
+	startDatabaseMigration(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _resourceGroupName: string, _regionName: string, _managedInstance: string, _migrationControllerName: string, _requestBody: azurecore.StartDatabaseMigrationRequest, _ignoreErrors?: boolean): Promise<azurecore.StartDatabaseMigrationResult> {
 		throw new Error('Method not implemented.');
 	}
-	getStorageAccountAccessKeys(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _storageAccount: azureResource.AzureGraphResource, _ignoreErrors?: boolean): Promise<any> {
+	getStorageAccountAccessKeys(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _storageAccount: azureResource.AzureGraphResource, _ignoreErrors?: boolean): Promise<azurecore.GetStorageAccountAccessKeysResult> {
 		throw new Error('Method not implemented.');
 	}
 	getMigrationControllerAuthKeys(_account: azdata.Account, _subscription: azureResource.AzureResourceSubscription, _resourceGroupName: string, _regionName: string, _controllerName: string, _ignoreErrors?: boolean): Promise<azurecore.GetMigrationControllerAuthKeysResult> {

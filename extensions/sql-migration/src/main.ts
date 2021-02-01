@@ -8,11 +8,13 @@ import * as azdata from 'azdata';
 import { WizardController } from './wizard/wizardController';
 import { AssessmentResultsDialog } from './dialog/assessmentResults/assessmentResultsDialog';
 import { IconPathHelper } from './constants';
+import { Migrations } from './models/migration';
 
 class SQLMigration {
 
 	constructor(private readonly context: vscode.ExtensionContext) {
 		IconPathHelper.setExtensionContext(context);
+		Migrations.setExtensionContext(context);
 	}
 
 	async start(): Promise<void> {

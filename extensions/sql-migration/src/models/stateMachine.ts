@@ -11,6 +11,7 @@ import { azureResource } from 'azureResource';
 import { getSubscriptions, SqlManagedInstance, startDatabaseMigration, StorageAccount } from '../api/azure';
 import * as constants from '../models/strings';
 import * as azurecore from 'azurecore';
+import { Migrations } from './migration';
 
 export enum State {
 	INIT,
@@ -242,7 +243,6 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			properties: {
 				SourceDatabaseName: currentConnection?.databaseName!,
 				MigrationController: this.migrationController?.id!,
-				AutoCutoverConfiguration: undefined,
 				BackupConfiguration: {
 					TargetLocation: {
 						StorageAccountResourceId: this._networkContainerStorageAccount.id,
@@ -255,21 +255,20 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 							Password: networkContainer.password,
 						}
 					},
-					SourceSqlConnection: {
-						DataSource: currentConnection?.serverName!,
-						Username: currentConnection?.userName!,
-						Password: currentConnection?.password!,
-						Authentication: 'SqlAuthentication'
-					},
-					Scope: this._targetSQLMIServer.id
-				}
+				},
+				SourceSqlConnection: {
+					DataSource: currentConnection?.serverName!,
+					Username: currentConnection?.userName!,
+					Password: 'testAdmin123'
+				},
+				Scope: this._targetSQLMIServer.id
 			}
 		};
 		console.log(requestBody);
 		const response = await startDatabaseMigration(
 			this.azureAccount,
 			this._subscriptionMap.get(this._targetSubscriptionId)!,
-			this.migrationController?.properties.resourceGroup!,
+			this._targetSQLMIServer.resourceGroup!,
 			this.migrationController?.properties.location!,
 			this._targetSQLMIServer.name,
 			this.migrationController?.name!,
@@ -277,5 +276,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		);
 
 		console.log(response);
+
+		Migrations.saveMigration(this.sourceConnectionId, response);
+
+		vscode.window.showInformationMessage('Migration has started successfully. You can view the status of the migration in the dashboard');
 	}
 }

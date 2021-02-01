@@ -79,7 +79,7 @@ declare module 'azurecore' {
 		createMigrationController(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<CreateMigrationControllerResult>;
 		getMigrationControllerAuthKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<GetMigrationControllerAuthKeysResult>;
 		getStorageAccountAccessKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetStorageAccountAccessKeysResult>;
-		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors?: boolean): any;
+		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors?: boolean): Promise<StartDatabaseMigrationResult>;
 		/**
 		 * Converts a region value (@see AzureRegion) into the localized Display Name
 		 * @param region The region value
@@ -107,7 +107,6 @@ declare module 'azurecore' {
 		properties: {
 			SourceDatabaseName: string,
 			MigrationController: string,
-			AutoCutoverConfiguration: undefined,
 			BackupConfiguration: {
 				TargetLocation: {
 					StorageAccountResourceId: string,
@@ -120,16 +119,16 @@ declare module 'azurecore' {
 						Password: string,
 					}
 				},
-				SourceSqlConnection: {
-					DataSource: string,
-					Username: string,
-					Password: string,
-					Authentication: 'SqlAuthentication'
-				},
-				Scope: string
-			}
+			},
+			SourceSqlConnection: {
+				DataSource: string,
+				Username: string,
+				Password: string
+			},
+			Scope: string
 		}
 	};
+	export type StartDatabaseMigrationResult = { status: number, databaseMigration: azureResource.DatabaseMigration, errors: Error[] };
 	export type ResourceQueryResult<T extends azureResource.AzureGraphResource> = { resources: T[], errors: Error[] };
 	export type HttpRequestResult = { response: any, errors: Error[] };
 }

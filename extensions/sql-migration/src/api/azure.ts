@@ -109,7 +109,7 @@ export async function getStorageAccountAccessKeys(account: azdata.Account, subsc
 export async function startDatabaseMigration(account: azdata.Account, subscription: Subscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: azurecore.StartDatabaseMigrationRequest): Promise<any> {
 	const api = await getAzureCoreAPI();
 	let result = await api.startDatabaseMigration(account, subscription, resourceGroupName, regionName, managedInstance, migrationControllerName, requestBody, true);
-	return result;
+	return result.databaseMigration;
 }
 
 /**

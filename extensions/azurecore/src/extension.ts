@@ -233,7 +233,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<azurec
 			managedInstance: string,
 			migrationControllerName: string,
 			requestBody: azurecore.StartDatabaseMigrationRequest,
-			ignoreErrors: boolean): any {
+			ignoreErrors: boolean): Promise<azurecore.StartDatabaseMigrationResult> {
 			return azureResourceUtils.startDatabaseMigration(account, subscription, resourceGroupName, managedInstance, migrationControllerName, requestBody, ignoreErrors);
 		},
 		getRegionDisplayName: utils.getRegionDisplayName,
