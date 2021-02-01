@@ -45,8 +45,6 @@ export class Migrations {
 			console.log(e);
 		}
 	}
-
-
 }
 
 export interface MigrationContext {
