@@ -7,7 +7,7 @@ import { ResourceGraphClient } from '@azure/arm-resourcegraph';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import axios, { AxiosRequestConfig } from 'axios';
 import * as azdata from 'azdata';
-import { HttpRequestResult, GetResourceGroupsResult, GetSubscriptionsResult, ResourceQueryResult, GetBlobContainersResult, GetFileSharesResult, GetMigrationControllerResult, CreateMigrationControllerResult, GetMigrationControllerAuthKeysResult } from 'azurecore';
+import { HttpRequestResult, GetResourceGroupsResult, GetSubscriptionsResult, ResourceQueryResult, GetBlobContainersResult, GetFileSharesResult, GetMigrationControllerResult, CreateMigrationControllerResult, GetMigrationControllerAuthKeysResult, GetStorageAccountAccessKeysResult, StartDatabaseMigrationRequest, StartDatabaseMigrationResult } from 'azurecore';
 import { azureResource } from 'azureResource';
 import { EOL } from 'os';
 import * as nls from 'vscode-nls';
@@ -430,5 +430,28 @@ export async function getMigrationControllerAuthKeys(account: azdata.Account, su
 		keyName1: response?.response?.data?.keyName1 ?? '',
 		keyName2: response?.response?.data?.keyName2 ?? '',
 		errors: response.errors ? response.errors : []
+	};
+}
+
+export async function getStorageAccountKey(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors: boolean): Promise<GetStorageAccountAccessKeysResult> {
+	const apiEndpoint = `https://management.azure.com/subscriptions/${subscription.id}/resourceGroups/${storageAccount.resourceGroup}/providers/Microsoft.Storage/storageAccounts/${storageAccount.name}/listKeys?api-version=2019-06-01`;
+	const response = await makeHttpRequest(account, subscription, ignoreErrors, apiEndpoint, HttpRequestType.POST);
+	console.log(response);
+	return {
+		keyName1: response?.response?.data?.keys[0].value ?? '',
+		keyName2: response?.response?.data?.keys[0].value ?? '',
+		errors: response.errors ? response.errors : []
+	};
+}
+
+export async function startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors: boolean): Promise<StartDatabaseMigrationResult> {
+	const apiEndpoint = `https://eastus2euap.management.azure.com/subscriptions/${subscription.id}/resourceGroups/${resourceGroupName}/providers/Microsoft.Sql/managedInstances/${managedInstance}/providers/Microsoft.DataMigration/databaseMigrations/${migrationControllerName}?api-version=2020-09-01-preview`;
+	console.log(apiEndpoint);
+	const response = await makeHttpRequest(account, subscription, ignoreErrors, apiEndpoint, HttpRequestType.PUT, requestBody);
+	console.log(response);
+	return {
+		errors: response.errors,
+		status: response.response.status,
+		databaseMigration: response.response.data
 	};
 }

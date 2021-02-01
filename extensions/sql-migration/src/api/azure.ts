@@ -100,6 +100,18 @@ export async function getMigrationControllerAuthKeys(accounts: azdata.Account, s
 	return result;
 }
 
+export async function getStorageAccountAccessKeys(account: azdata.Account, subscription: Subscription, storageAccount: StorageAccount): Promise<azurecore.GetStorageAccountAccessKeysResult> {
+	const api = await getAzureCoreAPI();
+	let result = await api.getStorageAccountAccessKeys(account, subscription, storageAccount, true);
+	return result;
+}
+
+export async function startDatabaseMigration(account: azdata.Account, subscription: Subscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: azurecore.StartDatabaseMigrationRequest): Promise<any> {
+	const api = await getAzureCoreAPI();
+	let result = await api.startDatabaseMigration(account, subscription, resourceGroupName, regionName, managedInstance, migrationControllerName, requestBody, true);
+	return result.databaseMigration;
+}
+
 /**
  * For now only east us euap is supported. Actual API calls will be added in the public release.
  */

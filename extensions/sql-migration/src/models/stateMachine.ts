@@ -8,6 +8,10 @@ import * as vscode from 'vscode';
 import * as mssql from '../../../mssql';
 import { SKURecommendations } from './externalContract';
 import { azureResource } from 'azureResource';
+import { getSubscriptions, SqlManagedInstance, startDatabaseMigration, StorageAccount } from '../api/azure';
+import * as constants from '../models/strings';
+import * as azurecore from 'azurecore';
+import { Migrations } from './migration';
 
 export enum State {
 	INIT,
@@ -44,6 +48,7 @@ export interface NetworkShare {
 	password: string;
 	storageSubscriptionId: string;
 	storageAccountId: string;
+	storageKey: string;
 }
 
 export interface BlobContainer {
@@ -89,6 +94,12 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	private _databaseBackup!: DatabaseBackupModel;
 	private _migrationController!: azureResource.MigrationController | undefined;
 	private _rulePickedEvent!: vscode.EventEmitter<mssql.SqlMigrationAssessmentResultItem | undefined>;
+	private _subscriptions!: azureResource.AzureResourceSubscription[];
+	public _subscriptionMap: Map<string, azureResource.AzureResourceSubscription>;
+	public _targetSubscriptionId!: string;
+	public _targetSQLMIServer!: SqlManagedInstance;
+	public _nodeName!: string;
+	public _networkContainerStorageAccount!: StorageAccount;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -97,6 +108,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	) {
 		this._currentState = State.INIT;
 		this.databaseBackup = {} as DatabaseBackupModel;
+		this._subscriptionMap = new Map();
 	}
 
 	public get azureAccount(): azdata.Account {
@@ -172,11 +184,107 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		return this._migrationController;
 	}
 
+	public get subscriptions(): azureResource.AzureResourceSubscription[] {
+		return this._subscriptions;
+	}
+
+	public set subscriptions(subscriptions: azureResource.AzureResourceSubscription[]) {
+		this._subscriptions = subscriptions;
+	}
+
 	dispose() {
 		this._stateChangeEventEmitter.dispose();
 	}
 
 	public getExtensionPath(): string {
 		return this._extensionContext.extensionPath;
+	}
+
+	public async loadSubscriptions(): Promise<void> {
+		if (this.azureAccount) {
+			this._subscriptions = await getSubscriptions(this.azureAccount);
+			this._subscriptions.forEach((subscription) => {
+				this._subscriptionMap.set(subscription.id, subscription);
+			});
+		}
+	}
+
+	public getSubscriptionDropdownValue(): azdata.CategoryValue[] {
+		let dropdownValues = this._subscriptions.map((subscription) => {
+			return {
+				name: subscription.id,
+				displayName: subscription.name + ' - ' + subscription.id,
+			};
+		});
+
+		if (!dropdownValues) {
+			dropdownValues = [
+				{
+					displayName: constants.NO_SUBSCRIPTIONS_FOUND,
+					name: ''
+				}
+			];
+		}
+
+		return dropdownValues;
+	}
+
+	public getSubscriptionName(id: string): string {
+		return this._subscriptionMap.get(id)!.name;
+	}
+
+	public async startMigration() {
+		const sqlConnections = await azdata.connection.getConnections();
+		const currentConnection = sqlConnections.find((value) => {
+			if (value.connectionId === this.sourceConnectionId) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		const networkContainer = this.databaseBackup.networkContainer as NetworkShare;
+		const requestBody: azurecore.StartDatabaseMigrationRequest = {
+			location: this.migrationController?.properties.location!,
+			properties: {
+				SourceDatabaseName: currentConnection?.databaseName!,
+				MigrationController: this.migrationController?.id!,
+				BackupConfiguration: {
+					TargetLocation: {
+						StorageAccountResourceId: this._networkContainerStorageAccount.id,
+						AccountKey: networkContainer.storageKey,
+					},
+					SourceLocation: {
+						FileShare: {
+							Path: networkContainer.networkShareLocation,
+							Username: networkContainer.windowsUser,
+							Password: networkContainer.password,
+						}
+					},
+				},
+				SourceSqlConnection: {
+					DataSource: currentConnection?.serverName!,
+					Username: currentConnection?.userName!,
+					Password: 'testAdmin123'
+				},
+				Scope: this._targetSQLMIServer.id
+			}
+		};
+		console.log(requestBody);
+		const response = await startDatabaseMigration(
+			this.azureAccount,
+			this._subscriptionMap.get(this._targetSubscriptionId)!,
+			this._targetSQLMIServer.resourceGroup!,
+			this.migrationController?.properties.location!,
+			this._targetSQLMIServer.name,
+			this.migrationController?.name!,
+			requestBody
+		);
+
+		console.log(response);
+
+		Migrations.saveMigration(this.sourceConnectionId, response);
+
+		vscode.window.showInformationMessage('Migration has started successfully. You can view the status of the migration in the dashboard');
 	}
 }

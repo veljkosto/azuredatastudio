@@ -10,6 +10,7 @@ import { MigrationStateModel, StateChangeEvent } from '../models/stateMachine';
 import { CreateMigrationControllerDialog } from './createMigrationControllerDialog';
 import * as constants from '../models/strings';
 import * as os from 'os';
+import { WIZARD_INPUT_COMPONENT_WIDTH } from '../constants';
 
 export class IntergrationRuntimePage extends MigrationWizardPage {
 
@@ -18,9 +19,12 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 	private customSetupRadioButton!: azdata.RadioButtonComponent;
 	private startSetupButton!: azdata.ButtonComponent;
 	private cancelSetupButton!: azdata.ButtonComponent;
-	private _connectionStatus!: azdata.TextComponent;
+	private _connectionStatus!: azdata.InfoBoxComponent;
 	private createMigrationContainer!: azdata.FlexContainer;
+	private _createNewControllerButton!: azdata.ButtonComponent;
 	private _view!: azdata.ModelView;
+	private _form!: azdata.FormBuilder;
+
 
 	constructor(wizard: azdata.window.Wizard, migrationStateModel: MigrationStateModel) {
 		super(wizard, azdata.window.createWizardPage(constants.IR_PAGE_TITLE), migrationStateModel);
@@ -29,12 +33,12 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 	protected async registerContent(view: azdata.ModelView): Promise<void> {
 		this._view = view;
 
-		const createNewController = view.modelBuilder.button().withProps({
+		this._createNewControllerButton = view.modelBuilder.button().withProps({
 			label: constants.NEW,
 			width: '100px',
 		}).component();
 
-		createNewController.onDidClick((e) => {
+		this._createNewControllerButton.onDidClick((e) => {
 			this.createMigrationContainer.display = 'inline';
 		});
 
@@ -94,29 +98,25 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 			flexFlow: 'column'
 		}).component();
 
-		this._connectionStatus = view.modelBuilder.text().component();
+		this._connectionStatus = view.modelBuilder.infoBox().component();
 
 		this.createMigrationContainer.display = 'none';
 
-		const form = view.modelBuilder.formContainer()
+		this._form = view.modelBuilder.formContainer()
 			.withFormItems(
 				[
 					{
 						component: this.migrationControllerDropdownsContainer()
 					},
 					{
-						component: createNewController
+						component: this._createNewControllerButton
 					},
 					{
 						component: this.createMigrationContainer
-					},
-					{
-						component: this._connectionStatus
 					}
-
 				]
 			);
-		await view.initializeModel(form.component());
+		await view.initializeModel(this._form.component());
 	}
 
 	public async onPageEnter(): Promise<void> {
@@ -167,6 +167,7 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 
 		this.migrationControllerDropdown = this._view.modelBuilder.dropDown().withProps({
 			required: true,
+			width: WIZARD_INPUT_COMPONENT_WIDTH
 		}).component();
 
 		const flexContainer = this._view.modelBuilder.flexContainer().withItems([
@@ -189,7 +190,17 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 				}
 			];
 
-			this._connectionStatus.value = constants.CONTRLLER_READY(this.migrationStateModel.migrationController!.name, os.hostname());
+			this.migrationStateModel._nodeName = os.hostname();
+			this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
+				text: constants.CONTRLLER_READY(this.migrationStateModel.migrationController!.name, os.hostname()),
+				style: 'success'
+			});
+
+			this._form.addFormItem({
+				component: this._connectionStatus
+			});
+
+
 		}
 		else {
 			migrationContollerValues = [
@@ -198,7 +209,14 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 					name: ''
 				}
 			];
-			this._connectionStatus.value = '';
+			this._connectionStatus.updateProperties({
+				text: ''
+			});
+
+			this._form.removeFormItem({
+				component: this._connectionStatus
+			});
+
 		}
 		this.migrationControllerDropdown.values = migrationContollerValues;
 		this.migrationControllerDropdown.loading = false;

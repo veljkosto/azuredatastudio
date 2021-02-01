@@ -76,9 +76,10 @@ declare module 'azurecore' {
 		getBlobContainers(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetBlobContainersResult>;
 		getFileShares(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetFileSharesResult>;
 		getMigrationController(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<GetMigrationControllerResult>;
-		createMigrationController(account:azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?:boolean): Promise<CreateMigrationControllerResult>;
+		createMigrationController(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<CreateMigrationControllerResult>;
 		getMigrationControllerAuthKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, controllerName: string, ignoreErrors?: boolean): Promise<GetMigrationControllerAuthKeysResult>;
-
+		getStorageAccountAccessKeys(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetStorageAccountAccessKeysResult>;
+		startDatabaseMigration(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, regionName: string, managedInstance: string, migrationControllerName: string, requestBody: StartDatabaseMigrationRequest, ignoreErrors?: boolean): Promise<StartDatabaseMigrationResult>;
 		/**
 		 * Converts a region value (@see AzureRegion) into the localized Display Name
 		 * @param region The region value
@@ -100,7 +101,34 @@ declare module 'azurecore' {
 	export type GetMigrationControllerResult = { controller: azureResource.MigrationController | undefined, errors: Error[] };
 	export type CreateMigrationControllerResult = { controller: azureResource.MigrationController | undefined, errors: Error[] };
 	export type GetMigrationControllerAuthKeysResult = { keyName1: string, keyName2: string, errors: Error[] };
-
+	export type GetStorageAccountAccessKeysResult = { keyName1: string, keyName2: string, errors: Error[] };
+	export type StartDatabaseMigrationRequest = {
+		location: string;
+		properties: {
+			SourceDatabaseName: string,
+			MigrationController: string,
+			BackupConfiguration: {
+				TargetLocation: {
+					StorageAccountResourceId: string,
+					AccountKey: string,
+				}
+				SourceLocation: {
+					FileShare: {
+						Path: string,
+						Username: string,
+						Password: string,
+					}
+				},
+			},
+			SourceSqlConnection: {
+				DataSource: string,
+				Username: string,
+				Password: string
+			},
+			Scope: string
+		}
+	};
+	export type StartDatabaseMigrationResult = { status: number, databaseMigration: azureResource.DatabaseMigration, errors: Error[] };
 	export type ResourceQueryResult<T extends azureResource.AzureGraphResource> = { resources: T[], errors: Error[] };
 	export type HttpRequestResult = { response: any, errors: Error[] };
 }

@@ -104,5 +104,17 @@ declare module 'azureResource' {
 				message: string
 			}
 		}
+
+		export interface DatabaseMigration {
+			properties: {
+				name: string,
+				provisioningState: string,
+				sourceDatabaseName: string,
+				migrationOperationId: string,
+			},
+			id: string,
+			name: string,
+			type: string
+		}
 	}
 }
