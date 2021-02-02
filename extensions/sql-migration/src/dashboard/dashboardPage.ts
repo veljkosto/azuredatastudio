@@ -281,14 +281,14 @@ export class DashboardWidget {
 
 	private async openStatusDialog(migration: MigrationContext) {
 
-		const wizard = azdata.window.createModelViewDialog('Status of Migration');
+		const wizard = azdata.window.createModelViewDialog('Migration Status');
 
 		const tab = azdata.window.createTab('');
 		const status = await getMigrationStatus(migration.azureAccount, migration.subscription, migration.migration);
 		console.log(status.result);
 		tab.registerContent((view: azdata.ModelView) => {
 			const statusHeader = view.modelBuilder.text().withProps({
-				value: `Migration Status: ${status.result.properties.migrationStatus}`,
+				value: status.result.properties.migrationStatus,
 				CSSStyles: {
 					'font-size': '16px',
 					'font-weight': 'bold'
@@ -297,14 +297,41 @@ export class DashboardWidget {
 			const statusText = view.modelBuilder.text().withProps({
 				value: JSON.stringify(status.result, undefined, 2)
 			}).component();
+
+			const loading = view.modelBuilder.loadingComponent().withProps({
+				loading: false
+			}).component();
+
+			const refreshButton = view.modelBuilder.button().withProps({
+				label: 'Refresh',
+				width: '100px',
+				CSSStyles: {
+					'width': '30px'
+				}
+			}).component();
+
+			refreshButton.onDidClick(async (e) => {
+				loading.loading = true;
+				const status = await getMigrationStatus(migration.azureAccount, migration.subscription, migration.migration);
+				statusHeader.value = status.result.properties.migrationStatus;
+				statusText.value = JSON.stringify(status.result, undefined, 2);
+				loading.loading = false;
+			});
+
 			const formBuilder = view.modelBuilder.formContainer().withFormItems(
 				[
+					{
+						component: refreshButton
+					},
+					{
+						component: loading
+					},
 					{
 						component: statusHeader
 					},
 					{
 						component: statusText
-					}
+					},
 				],
 				{
 					horizontal: false
