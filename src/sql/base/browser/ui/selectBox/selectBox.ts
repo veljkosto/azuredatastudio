@@ -196,7 +196,7 @@ export class SelectBox extends vsSelectBox {
 		}
 	}
 
-	public select(index: number): void {
+	public select(index: number, fireEvent = true): void {
 		super.select(index);
 		let selectedOptionIndex = this._optionsDictionary.get(this._selectedOption);
 		if (selectedOptionIndex === index) { // Not generating an event if the same value is selected.
@@ -205,10 +205,12 @@ export class SelectBox extends vsSelectBox {
 		if (this._dialogOptions !== undefined) {
 			this._selectedOption = this._dialogOptions[index]?.value;
 		}
-		this._onDidSelect.fire({
-			selected: this._selectedOption,
-			index: index
-		});
+		if (fireEvent) {
+			this._onDidSelect.fire({
+				selected: this._selectedOption,
+				index: index
+			});
+		}
 	}
 
 

@@ -490,7 +490,7 @@ export class AttachToDropdown extends SelectBox {
 				// If there is no connection, we should choose the previous connection,
 				// which will always be the first item in the list. Either "Select Connection"
 				// or a real connection name
-				this.select(0);
+				this.select(0, false);
 				return false;
 			}
 			let connectionUri = this._connectionManagementService.getConnectionUri(connection);
