@@ -133,7 +133,7 @@ export class CreateMigrationControllerDialog {
 			this.migrationStateModel.migrationController = undefined!;
 		});
 		this._dialogObject.okButton.onClick((e) => {
-			this.irPage.populateMigrationController();
+			this.irPage.populateMigrationController(this.migrationStateModel.migrationController.id);
 		});
 	}
 

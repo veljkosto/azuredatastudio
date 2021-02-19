@@ -124,51 +124,54 @@ export class IntergrationRuntimePage extends MigrationWizardPage {
 		return flexContainer;
 	}
 
-	public async populateMigrationController(controllerStatus?: string): Promise<void> {
+	public async populateMigrationController(selectedControllerId?: string): Promise<void> {
 		this.migrationControllerDropdown.loading = true;
-		let migrationContollerValues: azdata.CategoryValue[] = [];
 
-		// TODO: Replace with this code when APIs are deployed.
-		// try{
-		// 	this.migrationControllerDropdown.values = await this.migrationStateModel.getMigrationControllerValues(this.migrationStateModel._targetSubscription, this.migrationStateModel._targetManagedInstance);
-		// 	this.migrationStateModel.migrationController = this.migrationStateModel.getMigrationController(0);
-		// } catch (e) {
+		try {
+			this.migrationControllerDropdown.values = await this.migrationStateModel.getMigrationControllerValues(this.migrationStateModel._targetSubscription, this.migrationStateModel._targetManagedInstance);
+			if (selectedControllerId) {
+				this.migrationStateModel.migrationControllers.find((controller) => {
+					return controller.id === selectedControllerId;
+				});
+			} else {
+				this.migrationStateModel.migrationController = this.migrationStateModel.getMigrationController(0);
+			}
+		} catch (e) {
 
-		// } finally {
-		// 	this.migrationControllerDropdown.loading = false;
-		// }
-
-		if (this.migrationStateModel.migrationController) {
-
-			this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
-				text: constants.CONTROLLER_READY(this.migrationStateModel.migrationController!.name, this.migrationStateModel._nodeNames.join(', ')),
-				style: 'success'
-			});
-			this._form.addFormItem({
-				component: this._connectionStatus
-			});
-			migrationContollerValues = [
-				{
-					displayName: this.migrationStateModel.migrationController.name,
-					name: ''
-				}
-			];
+		} finally {
+			this.migrationControllerDropdown.loading = false;
 		}
-		else {
-			migrationContollerValues = [
-				{
-					displayName: constants.CONTROLLER_NOT_FOUND,
-					name: ''
-				}
-			];
-			this._form.removeFormItem({
-				component: this._connectionStatus
-			});
-		}
-		this.migrationControllerDropdown.values = migrationContollerValues;
-		this.migrationControllerDropdown.loading = false;
 	}
 
+	// 	if (this.migrationStateModel.migrationController) {
+
+	// 		this._connectionStatus.updateProperties(<azdata.InfoBoxComponentProperties>{
+	// 			text: constants.CONTROLLER_READY(this.migrationStateModel.migrationController!.name, this.migrationStateModel._nodeNames.join(', ')),
+	// 			style: 'success'
+	// 		});
+	// 		this._form.addFormItem({
+	// 			component: this._connectionStatus
+	// 		});
+	// 		migrationContollerValues = [
+	// 			{
+	// 				displayName: this.migrationStateModel.migrationController.name,
+	// 				name: ''
+	// 			}
+	// 		];
+	// 	}
+	// 	else {
+	// 		migrationContollerValues = [
+	// 			{
+	// 				displayName: constants.CONTROLLER_NOT_FOUND,
+	// 				name: ''
+	// 			}
+	// 		];
+	// 		this._form.removeFormItem({
+	// 			component: this._connectionStatus
+	// 		});
+	// 	}
+	// 	this.migrationControllerDropdown.values = migrationContollerValues;
+	// 	this.migrationControllerDropdown.loading = false;
+	// }
+
 }
-
-
