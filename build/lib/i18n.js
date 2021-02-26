@@ -42,7 +42,11 @@ exports.extraLanguages = [
 exports.externalExtensionsWithTranslations = {
     'vscode-chrome-debug': 'msjsdiag.debugger-for-chrome',
     'vscode-node-debug': 'ms-vscode.node-debug',
-    'vscode-node-debug2': 'ms-vscode.node-debug2'
+    'vscode-node-debug2': 'ms-vscode.node-debug2',
+    // {{SQL CARBON EDIT}}
+    'dacpac': 'Microsoft.dacpac',
+    'schema-compare': 'Microsoft.schema-compare',
+    'notebook': 'Microsoft.notebook'
 };
 var LocalizeInfo;
 (function (LocalizeInfo) {
