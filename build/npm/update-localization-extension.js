@@ -33,7 +33,7 @@ function update(options) {
 	}
 	let locExtFolder = idOrPath;
 	if (/^\w{2}(-\w+)?$/.test(idOrPath)) {
-		locExtFolder = path.join('..', 'vscode-loc', 'i18n', `vscode-language-pack-${idOrPath}`);
+		locExtFolder = path.join('i18n', `language-pack-${idOrPath}`);
 	}
 	let locExtStat = fs.statSync(locExtFolder);
 	if (!locExtStat || !locExtStat.isDirectory) {
