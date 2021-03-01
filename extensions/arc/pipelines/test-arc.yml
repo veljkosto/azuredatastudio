@@ -1,0 +1,6 @@
+steps:
+  - script: |
+      set -e
+      ../scripts/start-kubeadm.sh
+    displayName: Start kubeadm k8
+    condition: succeeded()
