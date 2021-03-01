@@ -486,7 +486,7 @@ function processNlsFiles(opts) {
     });
 }
 exports.processNlsFiles = processNlsFiles;
-const editorProject = 'vscode-editor', workbenchProject = 'vscode-workbench', extensionsProject = 'vscode-extensions', setupProject = 'vscode-setup';
+const editorProject = 'vscode-editor', workbenchProject = 'vscode-workbench', extensionsProject = 'extensions', setupProject = 'vscode-setup';
 // {{SQL CARBON EDIT}}
 const sqlopsProject = 'sqlops-core';
 function getResource(sourceFile) {
