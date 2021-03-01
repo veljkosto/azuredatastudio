@@ -610,7 +610,7 @@ export function processNlsFiles(opts: { fileHeader: string; languages: Language[
 
 const editorProject: string = 'vscode-editor',
 	workbenchProject: string = 'vscode-workbench',
-	extensionsProject: string = 'vscode-extensions',
+	extensionsProject: string = 'extensions',
 	setupProject: string = 'vscode-setup';
 
 // {{SQL CARBON EDIT}}
