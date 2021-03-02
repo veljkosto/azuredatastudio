@@ -7,6 +7,6 @@ steps:
   - script: |
       set -e
       ./build/azure-pipelines/linux/createDrop.sh
-      ./extensions/arc/scripts/start-kubeadm.sh
+      # ./extensions/arc/scripts/start-kubeadm.sh
     displayName: Start kubeadm k8
     condition: succeeded()
