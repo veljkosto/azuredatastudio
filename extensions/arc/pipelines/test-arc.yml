@@ -1,6 +1,11 @@
 steps:
   - script: |
       set -e
+      ./extensions/arc/scripts/install-prerequisites.sh
+    displayName: Install Prerequisites
+    condition: succeeded()
+  - script: |
+      set -e
       ./extensions/arc/scripts/start-kubeadm.sh
     displayName: Start kubeadm k8
     condition: succeeded()
