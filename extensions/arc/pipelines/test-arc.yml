@@ -1,6 +1,7 @@
 steps:
   - script: |
       set -e
+      ./extensions/arc/scripts/createDrop.sh
       ./extensions/arc/scripts/install-prerequisites.sh
     displayName: Install Prerequisites
     condition: succeeded()
