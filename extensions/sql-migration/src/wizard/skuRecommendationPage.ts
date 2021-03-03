@@ -208,7 +208,7 @@ export class SKURecommendationPage extends MigrationWizardPage {
 					let dialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, 'Assessment Dialog', this);
 					await dialog.openDialog();
 				}
-			} else if (value.description.linkDisplayValue === 'Learn More') {
+			} else if (value.description.linkDisplayValue === 'Learn more') {
 				if (value.cardId === 'AzureSQLVM') {
 					vscode.env.openExternal(vscode.Uri.parse('https://docs.microsoft.com/en-us/azure/azure-sql/virtual-machines/windows/sql-server-on-azure-vm-iaas-what-is-overview'));
 				} else if (value.cardId === 'AzureSQLMI') {
