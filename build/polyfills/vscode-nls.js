@@ -33,6 +33,7 @@ function format(message, args) {
 }
 
 function localize(key, message) {
+	console.log('test statement at vscode-nls.js! key: ' + key + ' message: ' + message);
 	let args = [];
 	for (let _i = 2; _i < arguments.length; _i++) {
 		args[_i - 2] = arguments[_i];
