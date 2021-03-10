@@ -46,6 +46,7 @@ export class AzureResourceAccountTreeNode extends AzureResourceContainerTreeNode
 			if (this._isClearingCache) {
 				try {
 					for (const tenant of this.account.properties.tenants) {
+						// enumerate all the tenants but if any tenants have errors still return the ones that
 						const token = await azdata.accounts.getAccountSecurityToken(this.account, tenant.id, azdata.AzureResource.ResourceManagement);
 
 						subscriptions.push(...(await this._subscriptionService.getSubscriptions(this.account, new TokenCredentials(token.token, token.tokenType), tenant.id) || <azureResource.AzureResourceSubscription[]>[]));
