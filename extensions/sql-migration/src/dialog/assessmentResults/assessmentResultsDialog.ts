@@ -10,6 +10,7 @@ import { SqlMigrationImpactedObjectInfo } from '../../../../mssql/src/mssql';
 import { SKURecommendationPage } from '../../wizard/skuRecommendationPage';
 
 export type Issues = {
+	title: string,
 	description: string,
 	recommendation: string,
 	moreInfo: string,
@@ -96,6 +97,7 @@ export class AssessmentResultsDialog {
 		model.assessmentResults?.forEach((element) => {
 			let issues: Issues;
 			issues = {
+				title: element.checkId,
 				description: element.description,
 				recommendation: element.message,
 				moreInfo: element.helpLink,
@@ -103,8 +105,7 @@ export class AssessmentResultsDialog {
 				rowNumber: 0
 			};
 			if (element.targetName.includes(':')) {
-				let spliceIndex = element.targetName.indexOf(':');
-				let dbName = element.targetName.slice(spliceIndex + 1);
+				let dbName = element.databaseName;
 				let dbIssues = dbMap.get(element.targetName);
 				if (dbIssues) {
 					dbMap.set(dbName, dbIssues.concat([issues]));

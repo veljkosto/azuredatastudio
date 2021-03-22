@@ -525,6 +525,8 @@ export interface SqlMigrationAssessmentResultItem {
 	rulesetName: string;
 	targetType: azdata.sqlAssessment.SqlAssessmentTargetType;
 	targetName: string;
+	databaseName: string;
+	serverName: string;
 	checkId: string;
 	tags: string[];
 	displayName: string;

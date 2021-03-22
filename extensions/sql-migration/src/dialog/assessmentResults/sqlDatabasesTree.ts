@@ -170,6 +170,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 				);
 				let impactedObjects: SqlMigrationImpactedObjectInfo[] = [];
 				let issue: Issues[] = [{
+					title: 'No Issues',
 					description: 'No Issues',
 					recommendation: 'No Issues',
 					moreInfo: 'No Issues',
@@ -200,7 +201,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 				let dataValues: string[][] = [];
 				rowInfo.issues.forEach(async (issue) => {
 					dataValues.push([
-						issue.description
+						issue.title
 					]);
 
 				});
@@ -210,6 +211,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 				});
 
 			}
+			//TODO: Clear selected items/ changed text
 
 		});
 
@@ -273,16 +275,6 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 					}
 				],
 				dataValues: [
-					[
-						{
-							value: 'SQL Server 1',
-							style: styleLeft
-						},
-						{
-							value: 2,
-							style: styleRight
-						}
-					]
 				]
 			});
 
@@ -424,14 +416,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 					},
 				],
 				dataValues: [
-					[
-						{
-							value: 'Agent Job'
-						},
-						{
-							value: 'Process Monthly Usage'
-						}
-					]
+
 				]
 			}
 		);
@@ -505,7 +490,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 			}
 		}).component();
 		this._descriptionText = view.modelBuilder.text().withProperties<azdata.TextComponentProperties>({
-			value: 'It is a job step that runs a PowerShell scripts.',
+			value: '',
 			CSSStyles: {
 				'font-size': '12px'
 			}
@@ -654,16 +639,6 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 					}
 				],
 				dataValues: [
-					[
-						{
-							value: 'DB1 Assessment results'
-						}
-					],
-					[
-						{
-							value: 'DB2 Assessment results'
-						}
-					]
 				]
 			}
 		);
@@ -688,7 +663,7 @@ export class SqlDatabaseTree extends AssessmentDialogComponent {
 					]);
 				});
 
-				this._assessmentTitle.value = this._issues.description;
+				this._assessmentTitle.value = this._issues.title;
 
 				this._impactedObjectsTable.component().updateProperties({
 					dataValues: data
