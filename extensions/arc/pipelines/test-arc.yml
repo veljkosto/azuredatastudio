@@ -25,8 +25,3 @@ steps:
     inputs:
       targetType: filePath
       filePath: './extensions/arc/scripts/setup-kubernetes.sh'
-  - script: |
-      set -e
-      ./extensions/arc/scripts/start-kubeadm.sh
-    displayName: Start kubeadm k8
-    condition: succeeded()
