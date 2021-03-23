@@ -1,8 +1,23 @@
 steps:
   - script: |
       set -e
-      ./extensions/arc/scripts/install-prerequisites.sh
+      ./extensions/arc/scripts/create-environment-variables.sh
+    displayName: Create env vars
+    condition: succeeded()
+  - script: |
+      set -e
+      ./extensions/arc/scripts/setup-prerequisites.sh
     displayName: Install Prerequisites
+    condition: succeeded()
+  - script: |
+      set -e
+      ./extensions/arc/scripts/fetch-nightly-build-tag.sh
+    displayName: Fetch nightly build tag
+    condition: succeeded()
+  - script: |
+      set -e
+      ./extensions/arc/scripts/setup-kubernetes.sh
+    displayName: Install kubernetes
     condition: succeeded()
   - script: |
       set -e
