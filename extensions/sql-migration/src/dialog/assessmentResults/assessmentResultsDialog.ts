@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as azdata from 'azdata';
-import { MigrationStateModel } from '../../models/stateMachine';
+import { MigrationStateModel, MigrationTargetType } from '../../models/stateMachine';
 import { SqlDatabaseTree } from './sqlDatabasesTree';
 import { SqlMigrationImpactedObjectInfo } from '../../../../mssql/src/mssql';
 import { SKURecommendationPage } from '../../wizard/skuRecommendationPage';
@@ -15,7 +15,6 @@ export type Issues = {
 	recommendation: string,
 	moreInfo: string,
 	impactedObjects: SqlMigrationImpactedObjectInfo[],
-	rowNumber: number
 };
 export class AssessmentResultsDialog {
 
@@ -32,10 +31,9 @@ export class AssessmentResultsDialog {
 	private _tree: SqlDatabaseTree;
 
 
-	constructor(public ownerUri: string, public model: MigrationStateModel, public title: string, private skuRecommendationPage: SKURecommendationPage, migrationType: string) {
+	constructor(public ownerUri: string, public model: MigrationStateModel, public title: string, private _skuRecommendationPage: SKURecommendationPage, private _targetType: MigrationTargetType) {
 		this._model = model;
-		let assessmentData = this.parseData(this._model);
-		this._tree = new SqlDatabaseTree(this._model, assessmentData, migrationType);
+		this._tree = new SqlDatabaseTree(this._model, this._targetType);
 	}
 
 	private async initializeDialog(dialog: azdata.window.Dialog): Promise<void> {
@@ -43,8 +41,7 @@ export class AssessmentResultsDialog {
 			dialog.registerContent(async (view) => {
 				try {
 					const resultComponent = await this._tree.createComponentResult(view);
-					const treeComponent = await this._tree.createComponent(view);
-
+					const treeComponent = await this._tree.createComponent(view, this._targetType === MigrationTargetType.SQLVM ? this.model._vmDbs : this._model._miDbs);
 					const flex = view.modelBuilder.flexContainer().withLayout({
 						flexFlow: 'row',
 						height: '100%',
@@ -80,55 +77,22 @@ export class AssessmentResultsDialog {
 			const dialogSetupPromises: Thenable<void>[] = [];
 
 			dialogSetupPromises.push(this.initializeDialog(this.dialog));
+
 			azdata.window.openDialog(this.dialog);
 
 			await Promise.all(dialogSetupPromises);
+
+			await this._tree.initialize();
 		}
 	}
 
-
-	private parseData(model: MigrationStateModel): Map<string, Issues[]> {
-		// if there are multiple issues for the same DB, need to consolidate
-		// map DB name -> Assessment result items (issues)
-		// map assessment result items to description, recommendation, more info & impacted objects
-
-		let dbMap = new Map<string, Issues[]>();
-
-		model.assessmentResults?.forEach((element) => {
-			let issues: Issues;
-			issues = {
-				title: element.checkId,
-				description: element.description,
-				recommendation: element.message,
-				moreInfo: element.helpLink,
-				impactedObjects: element.impactedObjects,
-				rowNumber: 0
-			};
-			if (element.targetName.includes(':')) {
-				let dbName = element.databaseName;
-				let dbIssues = dbMap.get(element.targetName);
-				if (dbIssues) {
-					dbMap.set(dbName, dbIssues.concat([issues]));
-				} else {
-					dbMap.set(dbName, [issues]);
-				}
-			} else {
-				let dbIssues = dbMap.get(element.targetName);
-				if (dbIssues) {
-					dbMap.set(element.targetName, dbIssues.concat([issues]));
-				} else {
-					dbMap.set(element.targetName, [issues]);
-				}
-			}
-
-		});
-
-		return dbMap;
-	}
-
 	protected async execute() {
-		this.model._migrationDbs = this._tree.selectedDbs();
-		this.skuRecommendationPage.refreshDatabaseCount(this._model._migrationDbs.length);
+		if (this._targetType === MigrationTargetType.SQLVM) {
+			this._model._vmDbs = this._tree.selectedDbs();
+		} else {
+			this._model._miDbs = this._tree.selectedDbs();
+		}
+		this._skuRecommendationPage.refreshCardText();
 		this.model.refreshDatabaseBackupPage = true;
 		this._isOpen = false;
 	}
@@ -136,7 +100,6 @@ export class AssessmentResultsDialog {
 	protected async cancel() {
 		this._isOpen = false;
 	}
-
 
 	public get isOpen(): boolean {
 		return this._isOpen;
