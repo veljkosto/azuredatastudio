@@ -759,13 +759,15 @@ export interface ExtHostBackgroundTaskManagementShape {
 }
 
 export interface ExtHostWorkspaceShape {
-	$createWorkspace(folder: vscode.Uri, workspaceFile: vscode.Uri): Promise<void>;
+	$createAndEnterWorkspace(folder: vscode.Uri, workspaceFile: vscode.Uri): Promise<void>;
 	$enterWorkspace(workspaceFile: vscode.Uri): Promise<void>;
+	$saveAndEnterWorkspace(workspaceFile: vscode.Uri): Promise<void>;
 }
 
 export interface MainThreadWorkspaceShape {
-	$createWorkspace(folder: vscode.Uri, workspaceFile: vscode.Uri): Promise<void>;
+	$createAndEnterWorkspace(folder: vscode.Uri, workspaceFile: vscode.Uri): Promise<void>;
 	$enterWorkspace(workspaceFile: vscode.Uri): Promise<void>;
+	$saveAndEnterWorkspace(workspaceFile: vscode.Uri): Promise<void>;
 }
 
 export interface MainThreadBackgroundTaskManagementShape extends IDisposable {
@@ -818,6 +820,7 @@ export interface ExtHostModelViewDialogShape {
 
 export interface MainThreadModelViewDialogShape extends IDisposable {
 	$openEditor(handle: number, modelViewId: string, title: string, name?: string, options?: azdata.ModelViewEditorOptions, position?: vscode.ViewColumn): Thenable<void>;
+	$closeEditor(handle: number): Thenable<void>;
 	$openDialog(handle: number, dialogName?: string): Thenable<void>;
 	$closeDialog(handle: number): Thenable<void>;
 	$setDialogDetails(handle: number, details: IModelViewDialogDetails): Thenable<void>;
