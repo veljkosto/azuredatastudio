@@ -10,7 +10,7 @@ print_system_statistics() {
     free -h -m
     ps aux --sort=-pmem,-rss | head -n 64
     df -h
-    kubectl get pods,svc,statefulsets,secrets,crds,deployments,pvc,pv -A    
+    kubectl get pods,svc,statefulsets,secrets,crds,deployments,pvc,pv -A
 }
 
 repeat_print_system_statistics() {
@@ -20,7 +20,7 @@ repeat_print_system_statistics() {
     done
 }
 
-run_stress() {
+create_controller() {
     for (( tid=1; tid<="$TEST_DEPLOYMENT_COUNT"; tid++ ))
     do
         pushd "$ENLISTMENT_ROOT"
@@ -41,7 +41,7 @@ run_stress() {
         #
         COMMIT_ID=-$(docker inspect mssql-test | jq -r '.[0].Config.Labels["git-commit"]' | head -c 8)
 
-        export OUTPUT_DIRECTORY=${ENLISTMENT_ROOT}/projects/test/output/${tid}${COMMIT_ID}
+        export OUTPUT_DIRECTORY=${scriptPath}/../testoutput/${tid}${COMMIT_ID}
         echo "OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY}"
 
         # wait 2 seconds
@@ -51,21 +51,18 @@ run_stress() {
         # copy configs and stress test scipts to container
         #
         docker cp ${ENV_FILE} mssql-test:root/.test.env
-        docker cp build/scripts/stress/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl mssql-test:root/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl
-        docker cp build/scripts/stress/create-data-controller.sh mssql-test:root/create-data-controller.sh
-        docker cp build/scripts/stress/delete-data-controller.sh mssql-test:root/delete-data-controller.sh
-        docker cp build/scripts/stress/prepare-cleanup.sh mssql-test:root/prepare-cleanup.sh
+        docker cp ${scriptPath}/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl mssql-test:root/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl
+        docker cp ${scriptPath}/create-data-controller.sh mssql-test:root/create-data-controller.sh
+        docker cp ${scriptPath}/delete-data-controller.sh mssql-test:root/delete-data-controller.sh
+        docker cp ${scriptPath}/prepare-cleanup.sh mssql-test:root/prepare-cleanup.sh
 
-        # only need to create static storage provisioner when the cluster is kubeadm 
+        # only need to create static storage provisioner when the cluster is kubeadm
         #
-        if [ "$KUBERNETES_ENVIRONMENT" == "kubeadm" ]
-        then        
-            sudo -E build/scripts/stress/storageprovisioner/install.sh
-        fi
-        
+		sudo -E ${scriptPath}/storageprovisioner/install.sh
+
         # create data controller
-        #    
-        docker exec mssql-test /root/create-data-controller.sh & 
+        #
+        docker exec mssql-test /root/create-data-controller.sh &
         wait
 
         # print out all the pods
@@ -75,21 +72,20 @@ run_stress() {
         # note internally start-test.sh creates multiple test pods (specified by TEST_CONTAINER_COUNT_PER_DEPLOYMENT) to run
         # test against the cluster
         #
-        envsubst < build/scripts/stress/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl > /tmp/patch.json        
-        cd projects/test
+        envsubst < ${scriptPath}/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl > /tmp/patch.json
 
-        # start to print out statistics repeatly prior to the test 
+        # start to print out statistics repeatly prior to the test
         #
         repeat_print_system_statistics &
         bgProcPid=$!
 
         echo "bgProcPid = ${bgProcPid}"
-        
-        # note start-tests.sh expects CONTROL_CONFIG to be valid however it's currently set in 
-        # Makefile which cannot be used by pipeline as the agent is a VM instance in Azure and 
+
+        # note start-tests.sh expects CONTROL_CONFIG to be valid however it's currently set in
+        # Makefile which cannot be used by pipeline as the agent is a VM instance in Azure and
         # cannot build.
-        # 
-        # copy control.json from mssql-test container as it's already properly patched with azdata 
+        #
+        # copy control.json from mssql-test container as it's already properly patched with azdata
         # command as part of create-data-controller.sh above
         #
         export CONTROL_CONFIG=/tmp/control.json
@@ -98,38 +94,22 @@ run_stress() {
         echo "echoing the content of control config"
         cat ${CONTROL_CONFIG}
 
-        export ENV_FILE
-        ./start-tests.sh /tmp/patch.json arc-integrationtests.yaml "" "" ARC
-
-        # append classnames of all test results in postgres xmls under $OUTPUT_DIRECTORY/arc-integrationtests.yaml/junit/ 
-        # with current deployment iteration, for easy filtering of test results
-        # 
-        path=$OUTPUT_DIRECTORY/arc-integrationtests.yaml/junit/
-        for f in "$path"/*.xml
-        do 
-            sed -i "s/classname=\"postgres\.test_/classname=\"${tid}_postgres\.test_/g" $f
-        done
-        
-        # print out system statistics prior to each deployment
-        #
-        print_system_statistics "system statistics prior to test cleanup: ${tid}"
-        
         # collect logs & clean up test resources
         #
-        docker exec mssql-test /root/prepare-cleanup.sh 
+        docker exec mssql-test /root/prepare-cleanup.sh
 
         # delete data controller
         #
-        docker exec mssql-test /root/delete-data-controller.sh 
+        docker exec mssql-test /root/delete-data-controller.sh
 
         # clean up the PV/PVCs and uninstall static storage provisoner
         #
         kubectl get pvc --no-headers -n ${CLUSTER_NAME} | awk '{print $1}' | xargs kubectl delete pvc -n ${CLUSTER_NAME}  || true
 
         TEST_NAMESPACES=$(kubectl get ns | grep "\-ns\-" | awk '{print $1}')
-        
+
         # Iterate through random namespaces generated during the test and delete PVCs in it
-        # 
+        #
         if [ ! -z "$TEST_NAMESPACES" ]
         then
             for NS in "${TEST_NAMESPACES[@]}"
@@ -149,13 +129,8 @@ run_stress() {
         #
         mkdir -p ${OUTPUT_DIRECTORY}/debuglogs
         docker cp mssql-test:root/debuglogs ${OUTPUT_DIRECTORY}/debuglogs
-        
-        # only need to release PVs when the cluster is kubeadm
-        #
-        if [ "$KUBERNETES_ENVIRONMENT" == "kubeadm" ]
-        then        
-            sudo -E build/scripts/stress/storageprovisioner/uninstall.sh
-        fi        
+
+		sudo -E ${scriptPath}/storageprovisioner/uninstall.sh
 
         kubectl delete ns ${CLUSTER_NAME} --force --grace-period=0
 
@@ -173,4 +148,4 @@ run_stress() {
 echo "Login to source registry: " $SOURCE_DOCKER_REGISTRY
 docker login $SOURCE_DOCKER_REGISTRY -u $SOURCE_DOCKER_USERNAME -p $SOURCE_DOCKER_PASSWORD
 
-run_stress
+create_controller

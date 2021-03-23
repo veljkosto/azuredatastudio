@@ -1,0 +1,149 @@
+---
+# Note This file is helm-generated based on instructions: 
+#  https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner#getting-started 
+#
+# Source: provisioner/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arc-provisioner-config
+  namespace: default
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+data:
+  storageClassMap: |
+    local-storage:
+       hostDir: /mnt/disks
+       mountDir: /mnt/disks
+       blockCleanerCommand:
+         - "/scripts/shred.sh"
+         - "2"
+       volumeMode: Filesystem
+       fsType: ext4
+---
+# Source: provisioner/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: arc-provisioner
+  namespace: default
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+---
+# Source: provisioner/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: arc-provisioner-node-clusterrole
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+---
+# Source: provisioner/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: arc-provisioner-pv-binding
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+subjects:
+- kind: ServiceAccount
+  name: arc-provisioner
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: system:persistent-volume-provisioner
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: provisioner/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: arc-provisioner-node-binding
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+subjects:
+- kind: ServiceAccount
+  name: arc-provisioner
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: arc-provisioner-node-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: provisioner/templates/daemonset.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: arc-provisioner
+  namespace: default
+  labels:
+    helm.sh/chart: provisioner-3.0.0
+    app.kubernetes.io/name: provisioner
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: arc
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: provisioner
+      app.kubernetes.io/instance: arc
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: provisioner
+        app.kubernetes.io/instance: arc
+    spec:
+      serviceAccountName: arc-provisioner
+      containers:
+        - image: "quay.io/external_storage/local-volume-provisioner:v2.3.4"
+          name: provisioner
+          securityContext:
+            privileged: true
+          env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: MY_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: JOB_CONTAINER_IMAGE
+            value: "quay.io/external_storage/local-volume-provisioner:v2.3.4"
+          volumeMounts:
+            - mountPath: /etc/provisioner/config
+              name: provisioner-config
+              readOnly: true
+            - mountPath: /dev
+              name: provisioner-dev
+            - mountPath: /mnt/disks
+              name: fast-disks
+              mountPropagation: "HostToContainer"
+      volumes:
+        - name: provisioner-config
+          configMap:
+            name: arc-provisioner-config
+        - name: provisioner-dev
+          hostPath:
+            path: /dev
+        - name: fast-disks
+          hostPath:
+            path: /mnt/disks

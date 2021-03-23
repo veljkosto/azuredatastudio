@@ -25,3 +25,9 @@ steps:
     inputs:
       targetType: filePath
       filePath: './extensions/arc/scripts/setup-kubernetes.sh'
+  - task: Bash@3
+    displayName: 'Create Controller'
+    inputs:
+      targetType: filePath
+      filePath: './extensions/arc/scripts/create-controller.sh'
+
