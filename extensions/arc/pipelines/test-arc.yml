@@ -3,7 +3,7 @@ steps:
     displayName: 'Create environment variables'
     inputs:
       targetType: filePath
-      filePath: './build/scripts/stress/create-environment-variables.sh'
+      filePath: './extensions/arc/scripts/create-environment-variables.sh'
     env:
       SPN_CLIENT_SECRET: $(SPN_CLIENT_SECRET)
       WORKSPACE_SHARED_KEY: $(WORKSPACE_SHARED_KEY)
@@ -14,7 +14,7 @@ steps:
     displayName: 'Install Prerequisites'
     inputs:
       targetType: filePath
-      filePath: './build/scripts/stress/setup-prerequisites.sh'
+      filePath: './extensions/arc/scripts/setup-prerequisites.sh'
   - task: Bash@3
     displayName: 'Fetch Nightly Build Image Tag'
     inputs:
@@ -24,7 +24,7 @@ steps:
     displayName: 'Install Kubernetes'
     inputs:
       targetType: filePath
-      filePath: './build/scripts/stress/setup-kubernetes.sh'
+      filePath: './extensions/arc/scripts/setup-kubernetes.sh'
   - script: |
       set -e
       ./extensions/arc/scripts/start-kubeadm.sh
