@@ -87,6 +87,9 @@ class ExtensionManifestNLSReplacer extends ExtensionManifestHandler {
 	constructor(ourVersion: string, log: ILog, absoluteFolderPath: string, isBuiltin: boolean, isUnderDevelopment: boolean, nlsConfig: NlsConfiguration) {
 		super(ourVersion, log, absoluteFolderPath, isBuiltin, isUnderDevelopment);
 		this._nlsConfig = nlsConfig;
+		for (const key in this._nlsConfig.translations) {
+			console.log(`key value pair is ${key}: ${this._nlsConfig.translations[key]}`);
+		}
 	}
 
 	public replaceNLS(extensionDescription: IExtensionDescription): Promise<IExtensionDescription> {
@@ -119,7 +122,7 @@ class ExtensionManifestNLSReplacer extends ExtensionManifestHandler {
 
 		const translationId = `${extensionDescription.publisher}.${extensionDescription.name}`;
 		let translationPath = this._nlsConfig.translations[translationId];
-		console.log('translationPath is ' + translationPath);
+		console.log('translationId is ' + translationId + ' translationPath is ' + translationPath);
 		let localizedMessages: Promise<LocalizedMessages | undefined>;
 		if (translationPath) {
 			localizedMessages = pfs.readFile(translationPath, 'utf8').then<LocalizedMessages, LocalizedMessages>((content) => {
