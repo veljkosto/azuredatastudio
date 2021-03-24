@@ -248,6 +248,7 @@ class ExtensionManifestNLSReplacer extends ExtensionManifestHandler {
 				if (length > 1 && str[0] === '%' && str[length - 1] === '%') {
 					let messageKey = str.substr(1, length - 2);
 					let message = messages[messageKey];
+					console.log('message key is ' + messageKey + ' with message ' + message);
 					// If the messages come from a language pack they might miss some keys
 					// Fill them from the original messages.
 					if (message === undefined && originalMessages) {
