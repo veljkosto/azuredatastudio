@@ -119,7 +119,6 @@ class ExtensionManifestNLSReplacer extends ExtensionManifestHandler {
 
 		const translationId = `${extensionDescription.publisher}.${extensionDescription.name}`;
 		let translationPath = this._nlsConfig.translations[translationId];
-		console.log('translationId is ' + translationId + ' translationPath is ' + translationPath);
 		let localizedMessages: Promise<LocalizedMessages | undefined>;
 		if (translationPath) {
 			localizedMessages = pfs.readFile(translationPath, 'utf8').then<LocalizedMessages, LocalizedMessages>((content) => {
@@ -144,6 +143,7 @@ class ExtensionManifestNLSReplacer extends ExtensionManifestHandler {
 					return undefined;
 				}
 				return ExtensionManifestNLSReplacer.findMessageBundles(this._nlsConfig, basename).then((messageBundle) => {
+					console.log('translationId is ' + translationId + ' translationPath is ' + translationPath);
 					console.log('translationPath doesnt exists, nls config locale is ' + this._nlsConfig.locale + ' messageBundle localized is ' + messageBundle.localized);
 					if (!messageBundle.localized) {
 						return { values: undefined, default: messageBundle.original };
