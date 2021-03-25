@@ -22,6 +22,7 @@ import { IEditor } from 'vs/editor/common/editorCommon';
 import * as path from 'vs/base/common/path';
 import { URI } from 'vs/base/common/uri';
 import { escape } from 'vs/base/common/strings';
+import { IImageCalloutDialogOptions, ImageCalloutDialog } from 'sql/workbench/contrib/notebook/browser/calloutDialog/imageCalloutDialog';
 
 export const MARKDOWN_TOOLBAR_SELECTOR: string = 'markdown-toolbar-component';
 
@@ -59,7 +60,6 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 	private _taskbarContent: Array<ITaskbarContent>;
 	private _wysiwygTaskbarContent: Array<ITaskbarContent>;
 	private _previewModeTaskbarContent: Array<ITaskbarContent>;
-	private _linkCallout: LinkCalloutDialog;
 
 	@Input() public cellModel: ICellModel;
 	@Input() public output: ElementRef;
@@ -224,6 +224,7 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 		let triggerElement = event.target as HTMLElement;
 		let needsTransform = true;
 		let linkCalloutResult: ILinkCalloutDialogOptions;
+		let imageCalloutResult: IImageCalloutDialogOptions;
 
 		if (type === MarkdownButtonType.LINK_PREVIEW) {
 			linkCalloutResult = await this.createCallout(type, triggerElement);
@@ -247,6 +248,13 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 				document.execCommand('insertHTML', false, `<a href="${escape(linkUrl)}">${escape(linkCalloutResult?.insertUnescapedLinkLabel)}</a>`);
 				return;
 			}
+		} else if (type === MarkdownButtonType.IMAGE_PREVIEW) {
+			imageCalloutResult = await this.createCallout(type, triggerElement);
+			if (imageCalloutResult) { }
+			// If cell edit mode isn't WYSIWYG, use result from callout. No need for further transformation.
+			if (this.cellModel.currentMode !== CellEditModes.WYSIWYG) {
+				needsTransform = false;
+			}
 		}
 
 		const transformer = new MarkdownTextTransformer(this._notebookService, this.cellModel);
@@ -255,6 +263,19 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 		} else if (!needsTransform) {
 			if (type === MarkdownButtonType.LINK_PREVIEW) {
 				await insertFormattedMarkdown(linkCalloutResult?.insertEscapedMarkdown, this.getCellEditorControl());
+			} else if (type === MarkdownButtonType.IMAGE_PREVIEW) {
+				if (!imageCalloutResult.embedImage) {
+					await insertFormattedMarkdown(imageCalloutResult?.insertEscapedMarkdown, this.getCellEditorControl());
+				} else {
+					let base64String;
+					let reader: FileReader = new FileReader();
+					reader.onload = (e) => {
+						base64String = (e.target as FileReader).result;
+					};
+					if (base64String) { }
+					// this.cellModel.addAttachment('')
+					reader.readAsDataURL({ path: imageCalloutResult.imagePath } as File);
+				}
 			}
 		}
 	}
@@ -296,9 +317,13 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 
 		if (type === MarkdownButtonType.LINK_PREVIEW) {
 			const defaultLabel = this.getCurrentSelectionText();
-			this._linkCallout = this._instantiationService.createInstance(LinkCalloutDialog, this.insertLinkHeading, dialogPosition, dialogProperties, defaultLabel);
-			this._linkCallout.render();
-			calloutOptions = await this._linkCallout.open();
+			const linkCallout = this._instantiationService.createInstance(LinkCalloutDialog, this.insertLinkHeading, dialogPosition, dialogProperties, defaultLabel);
+			linkCallout.render();
+			calloutOptions = await linkCallout.open();
+		} else if (type === MarkdownButtonType.IMAGE_PREVIEW) {
+			const imageCallout = this._instantiationService.createInstance(ImageCalloutDialog, this.insertImageHeading, dialogPosition, dialogProperties);
+			imageCallout.render();
+			calloutOptions = await imageCallout.open();
 		}
 		return calloutOptions;
 	}
