@@ -1,3 +1,5 @@
+jobs:
+- job: Install Arc Controller
 timeoutInMinutes: 120
 steps:
   - task: Bash@3
