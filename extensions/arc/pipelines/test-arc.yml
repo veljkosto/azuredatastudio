@@ -1,3 +1,4 @@
+timeoutInMinutes: 120
 steps:
   - task: Bash@3
     displayName: 'Create environment variables'
@@ -27,6 +28,7 @@ steps:
       filePath: './extensions/arc/scripts/setup-kubernetes.sh'
   - task: Bash@3
     displayName: 'Create Controller'
+    timeoutInMinutes: 60
     inputs:
       targetType: filePath
       filePath: './extensions/arc/scripts/create-controller.sh'

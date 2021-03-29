@@ -60,6 +60,7 @@ create_controller() {
 
 	# create data controller
 	#
+	repeat_print_system_statistics &
 	docker exec mssql-test /root/create-data-controller.sh &
 	wait
 
@@ -67,14 +68,9 @@ create_controller() {
 	kubectl get pods -A
 
 	# run test by calling start-test.sh
-	# note internally start-test.sh creates multiple test pods (specified by TEST_CONTAINER_COUNT_PER_DEPLOYMENT) to run
-	# test against the cluster
 	#
 	envsubst < ${scriptPath}/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl > /tmp/patch.json
 
-	# start to print out statistics repeatly prior to the test
-	#
-	repeat_print_system_statistics &
 	bgProcPid=$!
 
 	echo "bgProcPid = ${bgProcPid}"
