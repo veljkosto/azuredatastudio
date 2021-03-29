@@ -1,37 +1,37 @@
 jobs:
 - job: Install Arc Controller
-timeoutInMinutes: 120
-steps:
-  - task: Bash@3
-    displayName: 'Create environment variables'
-    inputs:
-      targetType: filePath
-      filePath: './extensions/arc/scripts/create-environment-variables.sh'
-    env:
-      SPN_CLIENT_SECRET: $(SPN_CLIENT_SECRET)
-      WORKSPACE_SHARED_KEY: $(WORKSPACE_SHARED_KEY)
-      SOURCE_DOCKER_PASSWORD: $(SOURCE_DOCKER_PASSWORD)
-      AZDATA_PASSWORD: $(AZDATA_PASSWORD)
-      OPENSHIFT_PASSWORD: $(OPENSHIFT_PASSWORD)
-  - task: Bash@3
-    displayName: 'Install Prerequisites'
-    inputs:
-      targetType: filePath
-      filePath: './extensions/arc/scripts/setup-prerequisites.sh'
-  - task: Bash@3
-    displayName: 'Fetch Nightly Build Image Tag'
-    inputs:
-      targetType: filePath
-      filePath: './extensions/arc/scripts/fetch-nightly-build-tag.sh'
-  - task: Bash@3
-    displayName: 'Install Kubernetes'
-    inputs:
-      targetType: filePath
-      filePath: './extensions/arc/scripts/setup-kubernetes.sh'
-  - task: Bash@3
-    displayName: 'Create Controller'
-    timeoutInMinutes: 60
-    inputs:
-      targetType: filePath
-      filePath: './extensions/arc/scripts/create-controller.sh'
+  timeoutInMinutes: 120
+  steps:
+    - task: Bash@3
+      displayName: 'Create environment variables'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/create-environment-variables.sh'
+      env:
+        SPN_CLIENT_SECRET: $(SPN_CLIENT_SECRET)
+        WORKSPACE_SHARED_KEY: $(WORKSPACE_SHARED_KEY)
+        SOURCE_DOCKER_PASSWORD: $(SOURCE_DOCKER_PASSWORD)
+        AZDATA_PASSWORD: $(AZDATA_PASSWORD)
+        OPENSHIFT_PASSWORD: $(OPENSHIFT_PASSWORD)
+    - task: Bash@3
+      displayName: 'Install Prerequisites'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/setup-prerequisites.sh'
+    - task: Bash@3
+      displayName: 'Fetch Nightly Build Image Tag'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/fetch-nightly-build-tag.sh'
+    - task: Bash@3
+      displayName: 'Install Kubernetes'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/setup-kubernetes.sh'
+    - task: Bash@3
+      displayName: 'Create Controller'
+      timeoutInMinutes: 60
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/create-controller.sh'
 
