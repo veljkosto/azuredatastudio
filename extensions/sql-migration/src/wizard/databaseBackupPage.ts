@@ -586,18 +586,20 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			if (pageChangeInfo.newPage < pageChangeInfo.lastPage) {
 				return true;
 			}
-
-			const valid = await this.migrationStateModel.validateFilesShare(
-				this.migrationStateModel._databaseBackup.networkShareLocation,
-				this.migrationStateModel._databaseBackup.windowsUser,
-				this.migrationStateModel._databaseBackup.password
-			);
-			console.log(valid);
-
 			const errors: string[] = [];
 
 			switch (this.migrationStateModel._databaseBackup.networkContainerType) {
 				case NetworkContainerType.NETWORK_SHARE:
+
+					const valid = await this.migrationStateModel.validateFilesShare(
+						this.migrationStateModel._databaseBackup.networkShareLocation,
+						this.migrationStateModel._databaseBackup.windowsUser,
+						this.migrationStateModel._databaseBackup.password
+					);
+
+					if (!valid) {
+						errors.push(constants.NETWORK_SHARE_CONNECTION_ERROR);
+					}
 					if (this._networkShareContainerSubscription.value === constants.NO_SUBSCRIPTIONS_FOUND) {
 						errors.push(constants.INVALID_SUBSCRIPTION_ERROR);
 					}

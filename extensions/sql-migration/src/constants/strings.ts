@@ -106,6 +106,7 @@ export const INVALID_STORAGE_ACCOUNT_ERROR = localize('sql.migration.invalid.sto
 export const INVALID_FILESHARE_ERROR = localize('sql.migration.invalid.fileShare.error', "Please select a valid file share to proceed.");
 export const INVALID_BLOBCONTAINER_ERROR = localize('sql.migration.invalid.blobContainer.error', "Please select a valid blob container to proceed.");
 export const INVALID_NETWORK_SHARE_LOCATION = localize('sql.migration.invalid.network.share.location', "Invalid network share location format. Example: {0}", '\\\\Servername.domainname.com\\Backupfolder');
+export const NETWORK_SHARE_CONNECTION_ERROR = localize('sql.migration.network.share.connection.error', "Connection from this machine to file share path failed");
 export const INVALID_USER_ACCOUNT = localize('sql.migration.invalid.user.account', "Invalid user account format. Example: {0}", 'Domain\\username');
 export function TARGET_NAME_FOR_DATABASE(dbName: string): string {
 	return localize('sql.migration.target.name.for.database', 'Target name for database ‘{0}’', dbName);
