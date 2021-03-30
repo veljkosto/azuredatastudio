@@ -582,10 +582,17 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			this.migrationStateModel.refreshDatabaseBackupPage = false;
 		}
 		await this.getSubscriptionValues();
-		this.wizard.registerNavigationValidator((pageChangeInfo) => {
+		this.wizard.registerNavigationValidator(async (pageChangeInfo) => {
 			if (pageChangeInfo.newPage < pageChangeInfo.lastPage) {
 				return true;
 			}
+
+			const valid = await this.migrationStateModel.validateFilesShare(
+				this.migrationStateModel._databaseBackup.networkShareLocation,
+				this.migrationStateModel._databaseBackup.windowsUser,
+				this.migrationStateModel._databaseBackup.password
+			);
+			console.log(valid);
 
 			const errors: string[] = [];
 
@@ -637,13 +644,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 		try {
 			this.migrationStateModel._databaseBackup.storageKey = (await getStorageAccountAccessKeys(this.migrationStateModel._azureAccount, this.migrationStateModel._databaseBackup.subscription, this.migrationStateModel._databaseBackup.storageAccount)).keyName1;
 		} finally {
-			this.wizard.registerNavigationValidator(async (pageChangeInfo) => {
-				const valid = await this.migrationStateModel.validateFilesShare(
-					this.migrationStateModel._databaseBackup.networkShareLocation,
-					this.migrationStateModel._databaseBackup.windowsUser,
-					this.migrationStateModel._databaseBackup.password
-				);
-				console.log(valid);
+			this.wizard.registerNavigationValidator((pageChangeInfo) => {
 				return true;
 			});
 		}
