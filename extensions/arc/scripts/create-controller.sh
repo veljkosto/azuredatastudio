@@ -11,6 +11,7 @@ print_system_statistics() {
     ps aux --sort=-pmem,-rss | head -n 64
     df -h
     kubectl get pods,svc,statefulsets,secrets,crds,deployments,pvc,pv -A
+	kubectl describe pods --namespace ${CLUSTER_NAME}
 }
 
 repeat_print_system_statistics() {
