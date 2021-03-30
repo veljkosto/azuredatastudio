@@ -154,6 +154,10 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		this._stateChangeEventEmitter.fire({ oldState, newState: this.currentState });
 	}
 
+	public async validateFilesShare(path: string, username: string, password: string): Promise<boolean> {
+		return (await this.migrationService.validateFileShare(path, username, password))?.success!;
+	}
+
 	public async getServerAssessments(): Promise<ServerAssessement> {
 		const excludeDbs: string[] = [
 			'master',

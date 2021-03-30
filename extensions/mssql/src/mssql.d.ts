@@ -443,7 +443,7 @@ export interface ICmsService {
 	/**
 	 * Connects to or creates a Central management Server
 	 */
-	createCmsServer(name: string, description:string, connectiondetails: azdata.ConnectionInfo, ownerUri: string): Thenable<ListRegisteredServersResult>;
+	createCmsServer(name: string, description: string, connectiondetails: azdata.ConnectionInfo, ownerUri: string): Thenable<ListRegisteredServersResult>;
 
 	/**
 	 * gets all Registered Servers inside a CMS on a particular level
@@ -453,22 +453,22 @@ export interface ICmsService {
 	/**
 	 * Adds a Registered Server inside a CMS on a particular level
 	 */
-	addRegisteredServer (ownerUri: string, relativePath: string, registeredServerName: string, registeredServerDescription:string, connectionDetails:azdata.ConnectionInfo): Thenable<boolean>;
+	addRegisteredServer(ownerUri: string, relativePath: string, registeredServerName: string, registeredServerDescription: string, connectionDetails: azdata.ConnectionInfo): Thenable<boolean>;
 
 	/**
 	 * Removes a Registered Server inside a CMS on a particular level
 	 */
-	removeRegisteredServer (ownerUri: string, relativePath: string, registeredServerName: string): Thenable<boolean>;
+	removeRegisteredServer(ownerUri: string, relativePath: string, registeredServerName: string): Thenable<boolean>;
 
 	/**
 	 * Adds a Server Group inside a CMS on a particular level
 	 */
-	addServerGroup (ownerUri: string, relativePath: string, groupName: string, groupDescription:string): Thenable<boolean>;
+	addServerGroup(ownerUri: string, relativePath: string, groupName: string, groupDescription: string): Thenable<boolean>;
 
 	/**
 	 * Removes a Server Group inside a CMS on a particular level
 	 */
-	removeServerGroup (ownerUri: string, relativePath: string, groupName: string): Thenable<boolean>;
+	removeServerGroup(ownerUri: string, relativePath: string, groupName: string): Thenable<boolean>;
 }
 /**
  * CMS Result interfaces as passed back to Extensions
@@ -546,4 +546,8 @@ export interface SqlMigrationAssessmentResult extends azdata.ResultStatus {
 
 export interface ISqlMigrationService {
 	getAssessments(ownerUri: string): Promise<SqlMigrationAssessmentResult | undefined>;
+	validateFileShare(path: string, username: string, password: string): Promise<SqlMigrationValidateFileShareResult | undefined>;
+}
+
+export interface SqlMigrationValidateFileShareResult extends azdata.ResultStatus {
 }

@@ -546,7 +546,13 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 
 	public async onPageLeave(): Promise<void> {
 		this.migrationStateModel._databaseBackup.storageKey = (await getStorageAccountAccessKeys(this.migrationStateModel._azureAccount, this.migrationStateModel._databaseBackup.subscription, this.migrationStateModel._databaseBackup.storageAccount)).keyName1;
-		this.wizard.registerNavigationValidator((pageChangeInfo) => {
+		this.wizard.registerNavigationValidator(async (pageChangeInfo) => {
+			const valid = await this.migrationStateModel.validateFilesShare(
+				this.migrationStateModel._databaseBackup.networkShareLocation,
+				this.migrationStateModel._databaseBackup.windowsUser,
+				this.migrationStateModel._databaseBackup.password
+			);
+			console.log(valid);
 			return true;
 		});
 	}

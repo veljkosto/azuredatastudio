@@ -1027,4 +1027,18 @@ export namespace GetSqlMigrationAssessmentItemsRequest {
 	export const type = new RequestType<SqlAssessmentParams, SqlAssessmentResult, void, void>('migration/getassessments');
 }
 
+export interface SqlMigrationValidateFileShareParams {
+	path: string;
+	username: string;
+	password: string;
+}
+
+export interface SqlMigrationValidateFileShareResult extends azdata.ResultStatus {
+
+}
+
+export namespace SqlMigrationValidateFileShareRequest {
+	export const type = new RequestType<SqlMigrationValidateFileShareParams, SqlMigrationValidateFileShareResult, void, void>('migration/validateFileShare');
+}
+
 // ------------------------------- <Sql Migration> -----------------------------

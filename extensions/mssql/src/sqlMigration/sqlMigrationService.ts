@@ -29,6 +29,18 @@ export class SqlMigrationService implements mssql.ISqlMigrationService {
 		context.registerService(constants.SqlMigrationService, this);
 	}
 
+	async validateFileShare(path: string, username: string, password: string): Promise<mssql.SqlMigrationValidateFileShareResult | undefined> {
+		let params: contracts.SqlMigrationValidateFileShareParams = { path: path, username: username, password: password };
+		try {
+			return this.client.sendRequest(contracts.SqlMigrationValidateFileShareRequest.type, params);
+		}
+		catch (e) {
+			this.client.logFailedRequest(contracts.GetSqlMigrationAssessmentItemsRequest.type, e);
+		}
+
+		return undefined;
+	}
+
 	async getAssessments(ownerUri: string): Promise<mssql.SqlMigrationAssessmentResult | undefined> {
 		let params: contracts.SqlMigrationAssessmentParams = { ownerUri: ownerUri };
 		try {
