@@ -207,6 +207,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<azurec
 			ignoreErrors: boolean): Promise<azurecore.GetFileSharesResult> {
 			return azureResourceUtils.getFileShares(account, subscription, storageAccount, ignoreErrors);
 		},
+		createResourceGroup(account: azdata.Account,
+			subscription: azureResource.AzureResourceSubscription,
+			resourceGroupName: string,
+			requestBody: azureResource.CreateResourceGroupRequestBody,
+			ignoreErrors?: boolean
+		): Promise<azurecore.CreateResourceGroupResult> {
+			return azureResourceUtils.createResourceGroup(account, subscription, resourceGroupName, requestBody, ignoreErrors);
+		},
 		makeAzureRestRequest(account: azdata.Account,
 			subscription: azureResource.AzureResourceSubscription,
 			path: string,

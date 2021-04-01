@@ -253,6 +253,7 @@ declare module 'azurecore' {
 		getStorageAccounts(account: azdata.Account, subscriptions: azureResource.AzureResourceSubscription[], ignoreErrors?: boolean): Promise<GetStorageAccountResult>;
 		getBlobContainers(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetBlobContainersResult>;
 		getFileShares(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, storageAccount: azureResource.AzureGraphResource, ignoreErrors?: boolean): Promise<GetFileSharesResult>;
+		createResourceGroup(account: azdata.Account, subscription: azureResource.AzureResourceSubscription, resourceGroupName: string, requestBody: azureResource.CreateResourceGroupRequestBody, ignoreErrors?: boolean): Promise<CreateResourceGroupResult>;
 		/**
 		 * Makes Azure REST requests to create, retrieve, update or delete access to azure service's resources.
 		 * For reference to different service URLs, See https://docs.microsoft.com/rest/api/?view=Azure
@@ -287,4 +288,5 @@ declare module 'azurecore' {
 	export type GetFileSharesResult = { fileShares: azureResource.FileShare[], errors: Error[] };
 	export type ResourceQueryResult<T extends azureResource.AzureGraphResource> = { resources: T[], errors: Error[] };
 	export type AzureRestResponse = { response: any, errors: Error[] };
+	export type CreateResourceGroupResult = { resourceGroup: azureResource.AzureResourceResourceGroup, status: number, errors: Error[]};
 }

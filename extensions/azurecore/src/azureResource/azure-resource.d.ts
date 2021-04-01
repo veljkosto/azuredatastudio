@@ -69,6 +69,10 @@ declare module 'azureResource' {
 		}
 
 		export interface AzureResourceResourceGroup extends AzureResource {
+			location: string;
+			properties?: {
+				provisioningState: string
+			}
 		}
 
 		export interface AzureLocation {
@@ -116,5 +120,13 @@ declare module 'azureResource' {
 		export interface BlobContainer extends AzureResource { }
 
 		export interface FileShare extends AzureResource { }
+
+		export interface CreateResourceGroupRequestBody {
+			location: string;
+			managedBy?: string;
+			properties?: {
+				provisioningState: string;
+			}
+		}
 	}
 }
