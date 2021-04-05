@@ -59,9 +59,15 @@ create_controller() {
 	#
 	sudo -E ${scriptPath}/storageprovisioner/install.sh
 
-	# create data controller
+	# start to print out statistics repeatedly prior to the deployment
 	#
 	repeat_print_system_statistics &
+	bgProcPid=$!
+
+	echo "bgProcPid = ${bgProcPid}"
+
+	# create data controller
+	#
 	docker exec mssql-test /root/create-data-controller.sh &
 	wait
 
@@ -71,10 +77,6 @@ create_controller() {
 	# run test by calling start-test.sh
 	#
 	envsubst < ${scriptPath}/patch.${KUBERNETES_ENVIRONMENT}.json.tmpl > /tmp/patch.json
-
-	bgProcPid=$!
-
-	echo "bgProcPid = ${bgProcPid}"
 
 	# note start-tests.sh expects CONTROL_CONFIG to be valid however it's currently set in
 	# Makefile which cannot be used by pipeline as the agent is a VM instance in Azure and

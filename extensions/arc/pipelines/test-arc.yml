@@ -34,4 +34,10 @@ jobs:
       inputs:
         targetType: filePath
         filePath: './extensions/arc/scripts/create-controller.sh'
+    - task: Bash@3
+      displayName: 'Run tests'
+      timeoutInMinutes: 60
+      inputs:
+        targetType: filePath
+        filePath: './scripts/test-integration-arc.sh'
 

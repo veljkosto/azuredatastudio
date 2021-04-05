@@ -18,7 +18,7 @@ IMAGES=(
     arc-monitor-telegraf
     arc-server-controller
     arc-service-proxy
-    mssql-test   
+    mssql-test
 )
 
 echo ""
@@ -26,7 +26,7 @@ echo "##########################################################################
 echo "Login to source registry: " $SOURCE_DOCKER_REGISTRY
 docker login $SOURCE_DOCKER_REGISTRY -u $SOURCE_DOCKER_USERNAME -p $SOURCE_DOCKER_PASSWORD
 
-echo "Starting to pull docker images..." 
+echo "Starting to pull docker images..."
 echo "Pulling images from repository: " $SOURCE_DOCKER_REGISTRY"/"$SOURCE_DOCKER_REPOSITORY
 for image in "${IMAGES[@]}";
 do
