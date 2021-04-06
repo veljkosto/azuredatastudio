@@ -1191,9 +1191,6 @@ function createI18nFile(originalFilePath: string, messages: any): File {
 
 function updateI18nFile(existingTranslationFilePath: string, originalFilePath: string, messages: any): File {
 	let currFilePath = path.join(existingTranslationFilePath + '.i18n.json');
-	fs.stat(currFilePath, function (err, stat) {
-		console.log('error is ' + err + ' stat is ' + stat);
-	});
 	let currentContent = fs.readFileSync(currFilePath);
 	let result = Object.create(null);
 	for (let key of Object.keys(messages)) {
@@ -1275,7 +1272,7 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, externalE
 				if (errors.length > 0) {
 					throw errors;
 				}
-				const translatedMainFile = updateI18nFile(existingTranslationFolder + 'main', './main', mainPack);
+				const translatedMainFile = updateI18nFile(existingTranslationFolder + '\\main', './main', mainPack);
 				resultingTranslationPaths.push({ id: 'vscode', resourceName: 'main.i18n.json' });
 
 				this.queue(translatedMainFile);

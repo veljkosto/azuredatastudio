@@ -26,7 +26,7 @@ function update(options) {
 	}
 	let locExtFolder = idOrPath;
 	if (/^\w{2}(-\w+)?$/.test(idOrPath)) {
-		locExtFolder = path.join('.', 'i18n', `ads-language-pack-${idOrPath}`);
+		locExtFolder = path.join('.', 'i18n', `vscode-language-pack-${idOrPath}`);
 	}
 	let locExtStat = fs.statSync(locExtFolder);
 	if (!locExtStat || !locExtStat.isDirectory) {
@@ -54,16 +54,11 @@ function update(options) {
 		if (languageId === "zh-tw") {
 			languageId = "zh-hant";
 		}
-		if (fs.existsSync(translationDataFolder) && fs.existsSync(path.join(translationDataFolder, 'main.i18n.json'))) {
-			console.log('Clearing  \'' + translationDataFolder + '\'...');
-			rimraf.sync(translationDataFolder);
-		}
-
 
 		console.log(`Importing translations for ${languageId} form '${location}' to '${translationDataFolder}' ...`);
 		let translationPaths = [];
 		gulp.src(path.join(location, languageId, '**', '*.xlf'))
-			.pipe(i18n.prepareI18nPackFiles(i18n.externalExtensionsWithTranslations, translationPaths, languageId === 'ps'))
+			.pipe(i18n.modifyI18nPackFiles(translationDataFolder, i18n.externalExtensionsWithTranslations, translationPaths, languageId === 'ps'))
 			.on('error', (error) => {
 				console.log(`Error occurred while importing translations:`);
 				translationPaths = undefined;
