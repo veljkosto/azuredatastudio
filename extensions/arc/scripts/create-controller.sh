@@ -71,6 +71,8 @@ create_controller() {
 	docker exec mssql-test /root/create-data-controller.sh &
 	wait
 
+	echo "Done creating controller"
+
 	# print out all the pods
 	kubectl get pods -A
 
