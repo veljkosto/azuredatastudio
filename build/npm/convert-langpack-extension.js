@@ -46,7 +46,6 @@ function update(options) {
 		if (!localization.languageId || !localization.languageName || !localization.localizedLanguageName) {
 			throw new Error('Each localization contribution must define "languageId", "languageName" and "localizedLanguageName" properties.');
 		}
-		let transifex = false;
 		let languageId = localization.transifexId || localization.languageId;
 		let translationDataFolder = path.join(locExtFolder, 'translations');
 		if (languageId === "zh-cn") {
