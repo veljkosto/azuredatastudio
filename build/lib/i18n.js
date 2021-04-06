@@ -1038,8 +1038,11 @@ function createI18nFile(originalFilePath, messages) {
         contents: Buffer.from(content, 'utf8')
     });
 }
-function updateI18nFile(originalFilePath, messages) {
-    let currFilePath = path.join(originalFilePath + '.i18n.json');
+function updateI18nFile(existingTranslationFilePath, originalFilePath, messages) {
+    let currFilePath = path.join(existingTranslationFilePath + '.i18n.json');
+    fs.stat(currFilePath, function (err, stat) {
+        console.log('error is ' + err + ' stat is ' + stat);
+    });
     let currentContent = fs.readFileSync(currFilePath);
     let result = Object.create(null);
     for (let key of Object.keys(messages)) {
@@ -1053,7 +1056,7 @@ function updateI18nFile(originalFilePath, messages) {
     console.log('new buffer contains this string ' + newContent);
     let combinedContent = Buffer.concat([currentContent, Buffer.from(newContent, 'utf8')]);
     return new File({
-        path: currFilePath,
+        path: path.join(originalFilePath + '.i18n.json'),
         contents: combinedContent,
     });
 }
@@ -1063,7 +1066,7 @@ function pullI18nPackFiles(apiHostname, username, password, language, resultingT
         .pipe(prepareI18nPackFiles(exports.externalExtensionsWithTranslations, resultingTranslationPaths, language.id === 'ps'));
 }
 exports.pullI18nPackFiles = pullI18nPackFiles;
-function modifyI18nPackFiles(externalExtensions, resultingTranslationPaths, pseudo = false) {
+function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resultingTranslationPaths, pseudo = false) {
     let parsePromises = [];
     let mainPack = { version: i18nPackVersion, contents: {} };
     let extensionsPacks = {};
@@ -1105,7 +1108,7 @@ function modifyI18nPackFiles(externalExtensions, resultingTranslationPaths, pseu
             if (errors.length > 0) {
                 throw errors;
             }
-            const translatedMainFile = updateI18nFile('./main', mainPack);
+            const translatedMainFile = updateI18nFile(existingTranslationFolder + 'main', './main', mainPack);
             resultingTranslationPaths.push({ id: 'vscode', resourceName: 'main.i18n.json' });
             this.queue(translatedMainFile);
             for (let extension in extensionsPacks) {
