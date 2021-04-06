@@ -34,6 +34,7 @@
     "7z": "7z",
     "update-grammars": "node build/npm/update-all-grammars.js",
     "update-localization-extension": "node build/npm/update-localization-extension.js",
+    "convert-langpack-extension": "node build/npm/convert-langpack--extension.js",
     "smoketest": "cd test/smoke && node test/index.js",
     "download-builtin-extensions": "node build/lib/builtInExtensions.js",
     "monaco-compile-check": "tsc -p src/tsconfig.monaco.json --noEmit",

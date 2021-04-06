@@ -1189,6 +1189,25 @@ function createI18nFile(originalFilePath: string, messages: any): File {
 	});
 }
 
+function updateI18nFile(originalFilePath: string, messages: any): File {
+	let currFilePath = path.join(originalFilePath + '.i18n.json');
+	let currentContent = fs.readFileSync(currFilePath);
+	let result = Object.create(null);
+	for (let key of Object.keys(messages)) {
+		result[key] = messages[key];
+	}
+	let newContent = JSON.stringify(result, null, '\t');
+	if (process.platform === 'win32') {
+		newContent = newContent.replace(/\n/g, '\r\n');
+	}
+	let combinedContent = Buffer.concat([currentContent, Buffer.from(newContent, 'utf8')]);
+	return new File({
+		path: currFilePath,
+
+		contents: combinedContent,
+	})
+}
+
 interface I18nPack {
 	version: string;
 	contents: {
@@ -1206,6 +1225,73 @@ export interface TranslationPath {
 export function pullI18nPackFiles(apiHostname: string, username: string, password: string, language: Language, resultingTranslationPaths: TranslationPath[]): NodeJS.ReadableStream {
 	return pullCoreAndExtensionsXlfFiles(apiHostname, username, password, language, externalExtensionsWithTranslations)
 		.pipe(prepareI18nPackFiles(externalExtensionsWithTranslations, resultingTranslationPaths, language.id === 'ps'));
+}
+
+export function modifyI18nPackFiles(externalExtensions: Map<string>, resultingTranslationPaths: TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
+	let parsePromises: Promise<ParsedXLF[]>[] = [];
+	let mainPack: I18nPack = { version: i18nPackVersion, contents: {} };
+	let extensionsPacks: Map<I18nPack> = {};
+	let errors: any[] = [];
+	return through(function (this: ThroughStream, xlf: File) {
+		let project = path.basename(path.dirname(xlf.relative));
+		let resource = path.basename(xlf.relative, '.xlf');
+		let contents = xlf.contents.toString();
+		let parsePromise = pseudo ? XLF.parsePseudo(contents) : XLF.parse(contents);
+		parsePromises.push(parsePromise);
+		parsePromise.then(
+			resolvedFiles => {
+				resolvedFiles.forEach(file => {
+					const path = file.originalFilePath;
+					const firstSlash = path.indexOf('/');
+
+					if (project === extensionsProject) {
+						let extPack = extensionsPacks[resource];
+						if (!extPack) {
+							extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
+						}
+						const externalId = externalExtensions[resource];
+						if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent
+							const secondSlash = path.indexOf('/', firstSlash + 1);
+							extPack.contents[path.substr(secondSlash + 1)] = file.messages;
+						} else {
+							extPack.contents[path] = file.messages;
+						}
+					} else {
+						mainPack.contents[path.substr(firstSlash + 1)] = file.messages;
+					}
+				});
+			}
+		).catch(reason => {
+			errors.push(reason);
+		});
+	}, function () {
+		Promise.all(parsePromises)
+			.then(() => {
+				if (errors.length > 0) {
+					throw errors;
+				}
+				const translatedMainFile = updateI18nFile('./main', mainPack);
+				resultingTranslationPaths.push({ id: 'vscode', resourceName: 'main.i18n.json' });
+
+				this.queue(translatedMainFile);
+				for (let extension in extensionsPacks) {
+					const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
+					this.queue(translatedExtFile);
+
+					const externalExtensionId = externalExtensions[extension];
+					if (externalExtensionId) {
+						resultingTranslationPaths.push({ id: externalExtensionId, resourceName: `extensions/${extension}.i18n.json` });
+					} else {
+						resultingTranslationPaths.push({ id: `vscode.${extension}`, resourceName: `extensions/${extension}.i18n.json` });
+					}
+
+				}
+				this.queue(null);
+			})
+			.catch((reason) => {
+				this.emit('error', reason);
+			});
+	});
 }
 
 export function prepareI18nPackFiles(externalExtensions: Map<string>, resultingTranslationPaths: TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
