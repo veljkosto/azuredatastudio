@@ -1200,6 +1200,8 @@ function updateI18nFile(originalFilePath: string, messages: any): File {
 	if (process.platform === 'win32') {
 		newContent = newContent.replace(/\n/g, '\r\n');
 	}
+	console.log('current buffer contains this string ' + currentContent.toString());
+	console.log('new buffer contains this string ' + newContent);
 	let combinedContent = Buffer.concat([currentContent, Buffer.from(newContent, 'utf8')]);
 	return new File({
 		path: currFilePath,
