@@ -69,7 +69,7 @@ create_controller() {
 	# create data controller
 	#
 	docker exec mssql-test /root/create-data-controller.sh &
-	wait
+	wait $!
 
 	echo "Done creating controller"
 
