@@ -143,17 +143,21 @@ steps:
   - powershell: |
       . build/azure-pipelines/win32/exec.ps1
       $ErrorActionPreference = "Stop"
-      exec { yarn electron x64 }
-      exec { .\scripts\test.bat --build --tfs "Unit Tests" }
-    displayName: Run unit tests (Electron)
+      $AppRoot = "$(agent.builddirectory)\azuredatastudio-win32-x64"
+      $AppProductJson = Get-Content -Raw -Path "$AppRoot\resources\app\product.json" | ConvertFrom-Json
+      $AppNameShort = $AppProductJson.nameShort
+      exec { $env:INTEGRATION_TEST_ELECTRON_PATH = "$AppRoot\$AppNameShort.exe"; .\scripts\test.bat }
+    displayName: Run unit tests
     condition: and(succeeded(), eq(variables['RUN_TESTS'], 'true'))
 
   - powershell: |
       . build/azure-pipelines/win32/exec.ps1
       $ErrorActionPreference = "Stop"
-      exec { yarn electron x64 }
-      exec { .\scripts\test-extensions-unit.bat --build --tfs "Unit Tests" }
-    displayName: Run extension unit tests (Electron)
+      $AppRoot = "$(agent.builddirectory)\azuredatastudio-win32-x64"
+      $AppProductJson = Get-Content -Raw -Path "$AppRoot\resources\app\product.json" | ConvertFrom-Json
+      $AppNameShort = $AppProductJson.nameShort
+      exec { $env:INTEGRATION_TEST_ELECTRON_PATH = "$AppRoot\$AppNameShort.exe"; .\scripts\test-extensions-unit.bat }
+    displayName: Run stable extension unit tests
     condition: and(succeeded(), eq(variables['RUN_TESTS'], 'true'))
 
   - powershell: |
