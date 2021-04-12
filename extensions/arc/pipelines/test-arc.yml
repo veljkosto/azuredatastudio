@@ -2,6 +2,9 @@ jobs:
 - job: CreateController
   timeoutInMinutes: 120
   steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: "12.13.0"
     - task: Bash@3
       displayName: 'Create environment variables'
       inputs:
@@ -40,4 +43,10 @@ jobs:
       inputs:
         targetType: filePath
         filePath: './scripts/test-integration-arc.sh'
+    - task: Bash@3
+      displayName: 'Delete Controller'
+      timeoutInMinutes: 30
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/delete-controller.sh'
 
