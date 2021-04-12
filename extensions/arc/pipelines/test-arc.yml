@@ -1,5 +1,5 @@
 jobs:
-- job: CreateController
+- job: ArcIntegrationTests
   timeoutInMinutes: 120
   steps:
     - task: NodeTool@0
