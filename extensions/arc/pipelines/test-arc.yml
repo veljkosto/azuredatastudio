@@ -5,6 +5,9 @@ jobs:
     - task: NodeTool@0
       inputs:
         versionSpec: "12.13.0"
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+      inputs:
+        versionSpec: "1.x"
     - task: Bash@3
       displayName: 'Create environment variables'
       inputs:
