@@ -1194,7 +1194,7 @@ function updateMainI18nFile(existingTranslationFilePath: string, originalFilePat
 	let currentContent = fs.readFileSync(currFilePath);
 	let currentContentObject = JSON.parse(currentContent.toString());
 	let result = Object.create(null);
-	messages.contents = messages.contents.merge(currentContentObject.contents);
+	messages.contents = {...currentContentObject.contents, ...messages.contents};
 	result[''] = [
 		'--------------------------------------------------------------------------------------------',
 		'Copyright (c) Microsoft Corporation. All rights reserved.',
