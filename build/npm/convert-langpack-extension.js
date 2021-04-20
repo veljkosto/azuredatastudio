@@ -74,16 +74,19 @@ function update(options) {
 			.on('end', function () {
 				if (translationPaths !== undefined) {
 					//TODO: Remove i18n files from list of files to remove (from VScode)
-					for (let curr of localization.translations){
+					for (let curr of localization.translations) {
 						try {
 							fs.statSync(path.join(translationDataFolder, curr.path.replace('./translations', '')));
 						}
 						catch {
-							localization.translations.pop(curr);
+							let index = localization.translations.indexOf(curr);
+							if (index > -1) {
+								localization.translations.splice(index, 1);
+							}
 						}
 					}
 					for (let tp of translationPaths) {
-						localization.translations.push({ id: tp.id, path: `./translations/${tp.resourceName}`});
+						localization.translations.push({ id: tp.id, path: `./translations/${tp.resourceName}` });
 					}
 					fs.writeFileSync(path.join(locExtFolder, 'package.json'), JSON.stringify(packageJSON, null, '\t'));
 				}
