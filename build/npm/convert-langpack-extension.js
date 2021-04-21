@@ -18,10 +18,10 @@ let minimist = require('minimist');
 const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../excludedExtensions/nonADSExtensions.json'), 'utf8'));
 const nonADSExtensions = nonADSJson.nonADSExtensions;
 const textFields = {
-	"nameText" : 'ads',
-	"displayNameText" : 'Azure Data Studio',
-	"publisherText" : 'Microsoft',
-	"licenseText" : 'SEE SOURCE EULA LICENSE IN LICENSE.txt'
+	"nameText": 'ads',
+	"displayNameText": 'Azure Data Studio',
+	"publisherText": 'Microsoft',
+	"licenseText": 'SEE SOURCE EULA LICENSE IN LICENSE.txt'
 }
 
 function update(options) {
@@ -71,7 +71,7 @@ function update(options) {
 		}
 
 		if (fs.existsSync(translationDataFolder)) {
-			for (let extensionName in nonADSExtensions){
+			for (let extensionName in nonADSExtensions) {
 				let filePath = path.join(translationDataFolder, 'extensions', nonADSExtensions[extensionName] + '.i18n.json')
 				console.log('Clearing  \'' + filePath + '\' as it does not exist in ADS');
 				rimraf.sync(filePath);
