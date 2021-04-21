@@ -15,6 +15,15 @@ let vfs = require("vinyl-fs");
 let rimraf = require('rimraf');
 let minimist = require('minimist');
 
+const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../excludedExtensions/nonADSExtensions.json'), 'utf8'));
+const nonADSExtensions = nonADSJson.nonADSExtensions;
+const textFields = {
+	"nameText" : 'ads',
+	"displayNameText" : 'Azure Data Studio',
+	"publisherText" : 'Microsoft',
+	"licenseText" : 'SEE SOURCE EULA LICENSE IN LICENSE.txt'
+}
+
 function update(options) {
 	let idOrPath = options._;
 	if (!idOrPath) {
@@ -33,6 +42,12 @@ function update(options) {
 		throw new Error('No directory found at ' + idOrPath);
 	}
 	let packageJSON = JSON.parse(fs.readFileSync(path.join(locExtFolder, 'package.json')).toString());
+	//processing extension fields, version must be changed manually.
+	packageJSON['name'] = packageJSON['name'].replace('vscode', textFields.nameText);
+	packageJSON['displayName'] = packageJSON['displayName'].replace('Visual Studio Code', textFields.displayNameText);
+	packageJSON['publisher'] = textFields.publisherText;
+	packageJSON['license'] = textFields.licenseText;
+
 	let contributes = packageJSON['contributes'];
 	if (!contributes) {
 		throw new Error('The extension must define a "localizations" contribution in the "package.json"');
@@ -55,6 +70,15 @@ function update(options) {
 			languageId = "zh-hant";
 		}
 
+		if (fs.existsSync(translationDataFolder)) {
+			for (let extensionName in nonADSExtensions){
+				let filePath = path.join(translationDataFolder, 'extensions', nonADSExtensions[extensionName] + '.i18n.json')
+				console.log('Clearing  \'' + filePath + '\' as it does not exist in ADS');
+				rimraf.sync(filePath);
+			}
+		}
+
+
 		console.log(`Importing translations for ${languageId} form '${location}' to '${translationDataFolder}' ...`);
 		let translationPaths = [];
 		gulp.src(path.join(location, languageId, '**', '*.xlf'))
@@ -73,16 +97,20 @@ function update(options) {
 			.pipe(vfs.dest(translationDataFolder))
 			.on('end', function () {
 				if (translationPaths !== undefined) {
-					//TODO: Remove i18n files from list of files to remove (from VScode)
+					let nonExistantExtensions = [];
 					for (let curr of localization.translations) {
 						try {
 							fs.statSync(path.join(translationDataFolder, curr.path.replace('./translations', '')));
 						}
 						catch {
-							let index = localization.translations.indexOf(curr);
-							if (index > -1) {
-								localization.translations.splice(index, 1);
-							}
+							console.log('Non existent extension ' + curr.path + ' detected, removing from manifest');
+							nonExistantExtensions.push(curr);
+						}
+					}
+					for (let nonExt of nonExistantExtensions) {
+						let index = localization.translations.indexOf(nonExt);
+						if (index > -1) {
+							localization.translations.splice(index, 1);
 						}
 					}
 					for (let tp of translationPaths) {

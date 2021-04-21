@@ -1,0 +1,12 @@
+{
+	"nonADSExtensions": [
+		"clojure",
+		"coffeescript",
+		"cpp",
+		"csharp",
+		"css-language-features",
+		"css",
+		"debug-auto-launch",
+		"debug-server-ready"
+	]
+}
