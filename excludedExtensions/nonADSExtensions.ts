@@ -13,5 +13,4 @@ export const excludedExtensions = [
 	'css',
 	'debug-auto-launch',
 	'debug-server-ready',
-	'docker',
 ];
