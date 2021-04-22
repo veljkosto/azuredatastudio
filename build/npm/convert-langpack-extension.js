@@ -24,6 +24,23 @@ const textFields = {
 	"licenseText": 'SEE SOURCE EULA LICENSE IN LICENSE.txt'
 }
 
+//Extensions for ADS
+export const currentADSExtensions = {
+	"admin-tool-ext-win": 'Microsoft.admin-tool-ext-win',
+	"agent": 'Microsoft.agent',
+	"azurecore": 'Microsoft.azurecore',
+	"big-data-cluster": 'Microsoft.big-data-cluster',
+	"cms": 'Microsoft.cms',
+	"dacpac": 'Microsoft.dacpac',
+	"import": 'Microsoft.import',
+	"mssql": 'Microsoft.mssql',
+	"notebook": 'Microsoft.notebook',
+	"profiler": 'Microsoft.profiler',
+	"resource-deployment": 'Microsoft.resource-deployment',
+	"schema-compare": 'Microsoft.schema-compare',
+	"Microsoft.sqlservernotebook": 'Microsoft.sqlservernotebook'
+};
+
 function update(options) {
 	let idOrPath = options._;
 	if (!idOrPath) {
@@ -82,7 +99,7 @@ function update(options) {
 		console.log(`Importing translations for ${languageId} form '${location}' to '${translationDataFolder}' ...`);
 		let translationPaths = [];
 		gulp.src(path.join(location, languageId, '**', '*.xlf'))
-			.pipe(locFunc.modifyI18nPackFiles(translationDataFolder, i18n.externalExtensionsWithTranslations, translationPaths, languageId === 'ps'))
+			.pipe(locFunc.modifyI18nPackFiles(translationDataFolder, currentADSExtensions, translationPaths, languageId === 'ps'))
 			.on('error', (error) => {
 				console.log(`Error occurred while importing translations:`);
 				translationPaths = undefined;
@@ -100,6 +117,11 @@ function update(options) {
 					let nonExistantExtensions = [];
 					for (let curr of localization.translations) {
 						try {
+							console.log('id is ' + curr.id);
+							if (curr.id === 'vscode.theme-seti') {
+								//handle edge case where 'theme-seti' has a different id.
+								curr.id = 'vscode.vscode-theme-seti';
+							}
 							fs.statSync(path.join(translationDataFolder, curr.path.replace('./translations', '')));
 						}
 						catch {
