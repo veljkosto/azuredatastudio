@@ -6,7 +6,7 @@
 'use strict';
 
 let i18n = require("../lib/i18n");
-
+let locFunc = require("../lib/locFunc");
 let fs = require("fs");
 let path = require("path");
 
@@ -82,7 +82,7 @@ function update(options) {
 		console.log(`Importing translations for ${languageId} form '${location}' to '${translationDataFolder}' ...`);
 		let translationPaths = [];
 		gulp.src(path.join(location, languageId, '**', '*.xlf'))
-			.pipe(i18n.modifyI18nPackFiles(translationDataFolder, i18n.externalExtensionsWithTranslations, translationPaths, languageId === 'ps'))
+			.pipe(locFunc.modifyI18nPackFiles(translationDataFolder, i18n.externalExtensionsWithTranslations, translationPaths, languageId === 'ps'))
 			.on('error', (error) => {
 				console.log(`Error occurred while importing translations:`);
 				translationPaths = undefined;
