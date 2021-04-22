@@ -117,7 +117,6 @@ function update(options) {
 					let nonExistantExtensions = [];
 					for (let curr of localization.translations) {
 						try {
-							console.log('id is ' + curr.id);
 							if (curr.id === 'vscode.theme-seti') {
 								//handle edge case where 'theme-seti' has a different id.
 								curr.id = 'vscode.vscode-theme-seti';
