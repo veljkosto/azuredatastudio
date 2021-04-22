@@ -604,7 +604,7 @@ export function processNlsFiles(opts: { fileHeader: string; languages: Language[
 	});
 }
 
-export const editorProject: string = 'vscode-editor',
+const editorProject: string = 'vscode-editor',
 	workbenchProject: string = 'vscode-workbench',
 	extensionsProject: string = 'vscode-extensions',
 	setupProject: string = 'vscode-setup';
@@ -1196,7 +1196,7 @@ interface I18nPack {
 	};
 }
 
-export const i18nPackVersion = '1.0.0';
+const i18nPackVersion = '1.0.0';
 
 export interface TranslationPath {
 	id: string;

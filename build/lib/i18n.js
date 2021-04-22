@@ -4,7 +4,7 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.prepareIslFiles = exports.prepareI18nPackFiles = exports.pullI18nPackFiles = exports.i18nPackVersion = exports.prepareI18nFiles = exports.pullSetupXlfFiles = exports.pullCoreAndExtensionsXlfFiles = exports.findObsoleteResources = exports.pushXlfFiles = exports.createXlfFilesForIsl = exports.createXlfFilesForExtensions = exports.createXlfFilesForCoreBundle = exports.getResource = exports.setupProject = exports.extensionsProject = exports.workbenchProject = exports.editorProject = exports.processNlsFiles = exports.Limiter = exports.XLF = exports.Line = exports.externalExtensionsWithTranslations = exports.extraLanguages = exports.defaultLanguages = void 0;
+exports.prepareIslFiles = exports.prepareI18nPackFiles = exports.pullI18nPackFiles = exports.prepareI18nFiles = exports.pullSetupXlfFiles = exports.pullCoreAndExtensionsXlfFiles = exports.findObsoleteResources = exports.pushXlfFiles = exports.createXlfFilesForIsl = exports.createXlfFilesForExtensions = exports.createXlfFilesForCoreBundle = exports.getResource = exports.processNlsFiles = exports.Limiter = exports.XLF = exports.Line = exports.externalExtensionsWithTranslations = exports.extraLanguages = exports.defaultLanguages = void 0;
 const path = require("path");
 const fs = require("fs");
 const event_stream_1 = require("event-stream");
@@ -482,36 +482,36 @@ function processNlsFiles(opts) {
     });
 }
 exports.processNlsFiles = processNlsFiles;
-exports.editorProject = 'vscode-editor', exports.workbenchProject = 'vscode-workbench', exports.extensionsProject = 'vscode-extensions', exports.setupProject = 'vscode-setup';
+const editorProject = 'vscode-editor', workbenchProject = 'vscode-workbench', extensionsProject = 'vscode-extensions', setupProject = 'vscode-setup';
 // {{SQL CARBON EDIT}}
 const sqlopsProject = 'sqlops-core';
 function getResource(sourceFile) {
     let resource;
     if (/^vs\/platform/.test(sourceFile)) {
-        return { name: 'vs/platform', project: exports.editorProject };
+        return { name: 'vs/platform', project: editorProject };
     }
     else if (/^vs\/editor\/contrib/.test(sourceFile)) {
-        return { name: 'vs/editor/contrib', project: exports.editorProject };
+        return { name: 'vs/editor/contrib', project: editorProject };
     }
     else if (/^vs\/editor/.test(sourceFile)) {
-        return { name: 'vs/editor', project: exports.editorProject };
+        return { name: 'vs/editor', project: editorProject };
     }
     else if (/^vs\/base/.test(sourceFile)) {
-        return { name: 'vs/base', project: exports.editorProject };
+        return { name: 'vs/base', project: editorProject };
     }
     else if (/^vs\/code/.test(sourceFile)) {
-        return { name: 'vs/code', project: exports.workbenchProject };
+        return { name: 'vs/code', project: workbenchProject };
     }
     else if (/^vs\/workbench\/contrib/.test(sourceFile)) {
         resource = sourceFile.split('/', 4).join('/');
-        return { name: resource, project: exports.workbenchProject };
+        return { name: resource, project: workbenchProject };
     }
     else if (/^vs\/workbench\/services/.test(sourceFile)) {
         resource = sourceFile.split('/', 4).join('/');
-        return { name: resource, project: exports.workbenchProject };
+        return { name: resource, project: workbenchProject };
     }
     else if (/^vs\/workbench/.test(sourceFile)) {
-        return { name: 'vs/workbench', project: exports.workbenchProject };
+        return { name: 'vs/workbench', project: workbenchProject };
     }
     // {{SQL CARBON EDIT}}
     else if (/^sql/.test(sourceFile)) {
@@ -586,7 +586,7 @@ function createXlfFilesForExtensions() {
         let _xlf;
         function getXlf() {
             if (!_xlf) {
-                _xlf = new XLF(exports.extensionsProject);
+                _xlf = new XLF(extensionsProject);
             }
             return _xlf;
         }
@@ -627,7 +627,7 @@ function createXlfFilesForExtensions() {
         }, function () {
             if (_xlf) {
                 let xlfFile = new File({
-                    path: path.join(exports.extensionsProject, extensionName + '.xlf'),
+                    path: path.join(extensionsProject, extensionName + '.xlf'),
                     contents: Buffer.from(_xlf.toString(), 'utf8')
                 });
                 folderStream.queue(xlfFile);
@@ -652,11 +652,11 @@ function createXlfFilesForIsl() {
     return event_stream_1.through(function (file) {
         let projectName, resourceFile;
         if (path.basename(file.path) === 'Default.isl') {
-            projectName = exports.setupProject;
+            projectName = setupProject;
             resourceFile = 'setup_default.xlf';
         }
         else {
-            projectName = exports.workbenchProject;
+            projectName = workbenchProject;
             resourceFile = 'setup_messages.xlf';
         }
         let xlf = new XLF(projectName), keys = [], messages = [];
@@ -764,7 +764,7 @@ function getAllResources(project, apiHostname, username, password) {
 }
 function findObsoleteResources(apiHostname, username, password) {
     let resourcesByProject = Object.create(null);
-    resourcesByProject[exports.extensionsProject] = [].concat(exports.externalExtensionsWithTranslations); // clone
+    resourcesByProject[extensionsProject] = [].concat(exports.externalExtensionsWithTranslations); // clone
     return event_stream_1.through(function (file) {
         const project = path.dirname(file.relative);
         const fileName = path.basename(file.path);
@@ -779,7 +779,7 @@ function findObsoleteResources(apiHostname, username, password) {
         const json = JSON.parse(fs.readFileSync('./build/lib/i18n.resources.json', 'utf8'));
         let i18Resources = [...json.editor, ...json.workbench].map((r) => r.project + '/' + r.name.replace(/\//g, '_'));
         let extractedResources = [];
-        for (let project of [exports.workbenchProject, exports.editorProject]) {
+        for (let project of [workbenchProject, editorProject]) {
             for (let resource of resourcesByProject[project]) {
                 if (resource !== 'setup_messages') {
                     extractedResources.push(project + '/' + resource);
@@ -919,11 +919,11 @@ function pullCoreAndExtensionsXlfFiles(apiHostname, username, password, language
         glob.sync('.build/extensions/**/*.nls.json').forEach(extension => extensionsToLocalize[extension.split('/')[2]] = true);
         glob.sync('.build/extensions/*/node_modules/vscode-nls').forEach(extension => extensionsToLocalize[extension.split('/')[2]] = true);
         Object.keys(extensionsToLocalize).forEach(extension => {
-            _coreAndExtensionResources.push({ name: extension, project: exports.extensionsProject });
+            _coreAndExtensionResources.push({ name: extension, project: extensionsProject });
         });
         if (externalExtensions) {
             for (let resourceName in externalExtensions) {
-                _coreAndExtensionResources.push({ name: resourceName, project: exports.extensionsProject });
+                _coreAndExtensionResources.push({ name: resourceName, project: extensionsProject });
             }
         }
     }
@@ -931,9 +931,9 @@ function pullCoreAndExtensionsXlfFiles(apiHostname, username, password, language
 }
 exports.pullCoreAndExtensionsXlfFiles = pullCoreAndExtensionsXlfFiles;
 function pullSetupXlfFiles(apiHostname, username, password, language, includeDefault) {
-    let setupResources = [{ name: 'setup_messages', project: exports.workbenchProject }];
+    let setupResources = [{ name: 'setup_messages', project: workbenchProject }];
     if (includeDefault) {
-        setupResources.push({ name: 'setup_default', project: exports.setupProject });
+        setupResources.push({ name: 'setup_default', project: setupProject });
     }
     return pullXlfFiles(apiHostname, username, password, language, setupResources);
 }
@@ -1038,7 +1038,7 @@ function createI18nFile(originalFilePath, messages) {
         contents: Buffer.from(content, 'utf8')
     });
 }
-exports.i18nPackVersion = '1.0.0';
+const i18nPackVersion = '1.0.0';
 function pullI18nPackFiles(apiHostname, username, password, language, resultingTranslationPaths) {
     return pullCoreAndExtensionsXlfFiles(apiHostname, username, password, language, exports.externalExtensionsWithTranslations)
         .pipe(prepareI18nPackFiles(exports.externalExtensionsWithTranslations, resultingTranslationPaths, language.id === 'ps'));
@@ -1046,7 +1046,7 @@ function pullI18nPackFiles(apiHostname, username, password, language, resultingT
 exports.pullI18nPackFiles = pullI18nPackFiles;
 function prepareI18nPackFiles(externalExtensions, resultingTranslationPaths, pseudo = false) {
     let parsePromises = [];
-    let mainPack = { version: exports.i18nPackVersion, contents: {} };
+    let mainPack = { version: i18nPackVersion, contents: {} };
     let extensionsPacks = {};
     let errors = [];
     return event_stream_1.through(function (xlf) {
@@ -1059,10 +1059,10 @@ function prepareI18nPackFiles(externalExtensions, resultingTranslationPaths, pse
             resolvedFiles.forEach(file => {
                 const path = file.originalFilePath;
                 const firstSlash = path.indexOf('/');
-                if (project === exports.extensionsProject) {
+                if (project === extensionsProject) {
                     let extPack = extensionsPacks[resource];
                     if (!extPack) {
-                        extPack = extensionsPacks[resource] = { version: exports.i18nPackVersion, contents: {} };
+                        extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
                     }
                     const externalId = externalExtensions[resource];
                     if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent

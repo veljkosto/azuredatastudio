@@ -56,9 +56,11 @@ function updateMainI18nFile(existingTranslationFilePath, originalFilePath, messa
         contents: Buffer.from(content, 'utf8'),
     });
 }
+const extensionsProject = 'vscode-extensions';
+const i18nPackVersion = '1.0.0';
 function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resultingTranslationPaths, pseudo = false) {
     let parsePromises = [];
-    let mainPack = { version: i18n.i18nPackVersion, contents: {} };
+    let mainPack = { version: i18nPackVersion, contents: {} };
     let extensionsPacks = {};
     let errors = [];
     return event_stream_1.through(function (xlf) {
@@ -71,10 +73,10 @@ function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resu
             resolvedFiles.forEach(file => {
                 const path = file.originalFilePath;
                 const firstSlash = path.indexOf('/');
-                if (project === i18n.extensionsProject) {
+                if (project === extensionsProject) {
                     let extPack = extensionsPacks[resource];
                     if (!extPack) {
-                        extPack = extensionsPacks[resource] = { version: i18n.i18nPackVersion, contents: {} };
+                        extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
                     }
                     const externalId = externalExtensions[resource];
                     if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent

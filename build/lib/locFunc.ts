@@ -79,9 +79,13 @@ interface I18nPack {
 	};
 }
 
+const extensionsProject: string = 'vscode-extensions';
+
+const i18nPackVersion = '1.0.0';
+
 export function modifyI18nPackFiles(existingTranslationFolder: string, externalExtensions: Map<string>, resultingTranslationPaths: i18n.TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
 	let parsePromises: Promise<ParsedXLF[]>[] = [];
-	let mainPack: I18nPack = { version: i18n.i18nPackVersion, contents: {} };
+	let mainPack: I18nPack = { version: i18nPackVersion, contents: {} };
 	let extensionsPacks: Map<I18nPack> = {};
 	let errors: any[] = [];
 	return through(function (this: ThroughStream, xlf: File) {
@@ -96,10 +100,10 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, externalE
 					const path = file.originalFilePath;
 					const firstSlash = path.indexOf('/');
 
-					if (project === i18n.extensionsProject) {
+					if (project === extensionsProject) {
 						let extPack = extensionsPacks[resource];
 						if (!extPack) {
-							extPack = extensionsPacks[resource] = { version: i18n.i18nPackVersion, contents: {} };
+							extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
 						}
 						const externalId = externalExtensions[resource];
 						if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent
