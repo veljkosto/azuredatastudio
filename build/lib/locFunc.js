@@ -101,7 +101,6 @@ function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resu
                 throw errors;
             }
             const translatedMainFile = updateMainI18nFile(existingTranslationFolder + '\\main', './main', mainPack);
-            resultingTranslationPaths.push({ id: 'vscode', resourceName: 'main.i18n.json' });
             this.queue(translatedMainFile);
             for (let extension in extensionsPacks) {
                 const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);

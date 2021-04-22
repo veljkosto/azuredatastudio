@@ -25,7 +25,7 @@ const textFields = {
 }
 
 //Extensions for ADS
-export const currentADSExtensions = {
+const currentADSExtensions = {
 	"admin-tool-ext-win": 'Microsoft.admin-tool-ext-win',
 	"agent": 'Microsoft.agent',
 	"azurecore": 'Microsoft.azurecore',
@@ -135,7 +135,19 @@ function update(options) {
 						}
 					}
 					for (let tp of translationPaths) {
-						localization.translations.push({ id: tp.id, path: `./translations/${tp.resourceName}` });
+						let finalPath = `./translations/${tp.resourceName}`;
+						let isFound = false;
+						for(let i = 0; i < localization.translations.length; i++){
+							console.log('path is ' + localization.translations[i].path);
+							if(localization.translations[i].path === finalPath){
+								localization.translations[i].id = tp.id;
+								isFound = true;
+								break;
+							}
+						}
+						if(!isFound){
+							localization.translations.push({ id: tp.id, path: finalPath });
+						}
 					}
 					fs.writeFileSync(path.join(locExtFolder, 'package.json'), JSON.stringify(packageJSON, null, '\t'));
 				}
