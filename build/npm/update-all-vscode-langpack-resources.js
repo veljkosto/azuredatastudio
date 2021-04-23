@@ -26,7 +26,7 @@ const allLangPackFolders = fs.readdirSync('i18n');
 const langpacks = allLangPackFolders.filter(e => {
 	try {
 		let packageJSON = JSON.parse(fs.readFileSync(path.join('i18n', e, 'package.json')).toString());
-		return packageJSON && packageJSON.scripts && packageJSON.scripts['update-grammar'];
+		return packageJSON && packageJSON.scripts && packageJSON.scripts['update-vscode-langpack-resources'];
 	} catch (e) {
 		return false;
 	}
