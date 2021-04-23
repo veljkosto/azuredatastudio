@@ -10,9 +10,9 @@ const path = require('path');
 /**
  * @param {string} location
  */
-function updateGrammar(location) {
+function updateVscode(location) {
 	const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-	const result = cp.spawnSync(npm, ['run', 'update-grammar'], {
+	const result = cp.spawnSync(npm, ['run', 'update-vscode-langpack-resources'], {
 		cwd: location,
 		stdio: 'inherit'
 	});
@@ -32,15 +32,6 @@ const langpacks = allLangPackFolders.filter(e => {
 	}
 });
 
-console.log(`Updating ${extensions.length} grammars...`);
+console.log(`Updating ${langpacks.length} grammars...`);
 
-extensions.forEach(extension => updateGrammar(`extensions/${extension}`));
-
-// run integration tests
-
-if (process.platform === 'win32') {
-	cp.spawn('.\\scripts\\test-integration.bat', [], { env: process.env, stdio: 'inherit' });
-} else {
-	cp.spawn('/bin/bash', ['./scripts/test-integration.sh'], { env: process.env, stdio: 'inherit' });
-}
-
+langpacks.forEach(langpack => updateVscode(`i18n/${langpack}`));
