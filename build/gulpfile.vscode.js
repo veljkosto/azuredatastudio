@@ -29,6 +29,7 @@ const packageJson = require('../package.json');
 const product = require('../product.json');
 const crypto = require('crypto');
 const i18n = require('./lib/i18n');
+const locFunc = require('./lib/locFunc');
 const deps = require('./dependencies');
 const { config } = require('./lib/electron');
 const createAsar = require('./lib/asar').createAsar;
@@ -435,6 +436,18 @@ gulp.task(task.define(
 				gulp.src(pathToSetup).pipe(i18n.createXlfFilesForIsl()),
 				gulp.src(pathToExtensions).pipe(i18n.createXlfFilesForExtensions())
 			).pipe(vfs.dest('../vscode-translations-export'));
+		}
+	)
+));
+
+gulp.task(task.define(
+	'export-xlfs',
+	task.series(
+		function () {
+			const pathToExtensions = '.build/extensions/*';
+			return es.merge(
+				gulp.src(pathToExtensions).pipe(locFunc.createXlfFilesForExtensions())
+			).pipe(vfs.dest('../export-xlfs'));
 		}
 	)
 ));

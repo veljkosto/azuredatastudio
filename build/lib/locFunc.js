@@ -166,7 +166,7 @@ function createXlfFilesForExtensions() {
             }
             return _xlf;
         }
-        gulp.src([`.build/extensions/${extensionName}/package.nls.json`, `.build/extensions/${extensionName}/**/nls.metadata.json`], { allowEmpty: true }).pipe(event_stream_1.through(function (file) {
+        gulp.src([`extensions/${extensionName}/package.nls.json`], { allowEmpty: true }).pipe(event_stream_1.through(function (file) {
             if (file.isBuffer()) {
                 const buffer = file.contents;
                 const basename = path.basename(file.path);
