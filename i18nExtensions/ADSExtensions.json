@@ -1,0 +1,19 @@
+{
+	"ADSExtensions" :
+		{
+			"admin-tool-ext-win": "Microsoft.admin-tool-ext-win",
+			"agent": "Microsoft.agent",
+			"azurecore": "Microsoft.azurecore",
+			"big-data-cluster": "Microsoft.big-data-cluster",
+			"cms": "Microsoft.cms",
+			"dacpac": "Microsoft.dacpac",
+			"import": "Microsoft.import",
+			"mssql": "Microsoft.mssql",
+			"notebook": "Microsoft.notebook",
+			"profiler": "Microsoft.profiler",
+			"resource-deployment": "Microsoft.resource-deployment",
+			"schema-compare": "Microsoft.schema-compare",
+			"Microsoft.sqlservernotebook": "Microsoft.sqlservernotebook"
+		}
+
+}

@@ -15,7 +15,7 @@ let vfs = require("vinyl-fs");
 let rimraf = require('rimraf');
 let minimist = require('minimist');
 
-const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../excludedExtensions/nonADSExtensions.json'), 'utf8'));
+const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/nonADSExtensions.json'), 'utf8'));
 const nonADSExtensions = nonADSJson.nonADSExtensions;
 const textFields = {
 	"nameText": 'ads',
@@ -25,21 +25,8 @@ const textFields = {
 }
 
 //Extensions for ADS
-const currentADSExtensions = {
-	"admin-tool-ext-win": 'Microsoft.admin-tool-ext-win',
-	"agent": 'Microsoft.agent',
-	"azurecore": 'Microsoft.azurecore',
-	"big-data-cluster": 'Microsoft.big-data-cluster',
-	"cms": 'Microsoft.cms',
-	"dacpac": 'Microsoft.dacpac',
-	"import": 'Microsoft.import',
-	"mssql": 'Microsoft.mssql',
-	"notebook": 'Microsoft.notebook',
-	"profiler": 'Microsoft.profiler',
-	"resource-deployment": 'Microsoft.resource-deployment',
-	"schema-compare": 'Microsoft.schema-compare',
-	"Microsoft.sqlservernotebook": 'Microsoft.sqlservernotebook'
-};
+const currentADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/ADSExtensions.json'), 'utf8'));
+const currentADSExtensions = currentADSJson.ADSExtensions;
 
 function update(options) {
 	let idOrPath = options._;
