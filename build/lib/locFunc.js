@@ -4,9 +4,11 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.modifyI18nPackFiles = void 0;
+exports.createXlfFilesForExtensions = exports.modifyI18nPackFiles = void 0;
 const path = require("path");
 const fs = require("fs");
+const Is = require("is");
+const gulp = require("gulp");
 const event_stream_1 = require("event-stream");
 const File = require("vinyl");
 const i18n = require("./i18n");
@@ -121,3 +123,106 @@ function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resu
     });
 }
 exports.modifyI18nPackFiles = modifyI18nPackFiles;
+var LocalizeInfo;
+(function (LocalizeInfo) {
+    function is(value) {
+        let candidate = value;
+        return Is.defined(candidate) && Is.string(candidate.key) && (Is.undef(candidate.comment) || (Is.array(candidate.comment) && candidate.comment.every(element => Is.string(element))));
+    }
+    LocalizeInfo.is = is;
+})(LocalizeInfo || (LocalizeInfo = {}));
+var PackageJsonFormat;
+(function (PackageJsonFormat) {
+    function is(value) {
+        if (Is.undef(value) || !Is.object(value)) {
+            return false;
+        }
+        return Object.keys(value).every(key => {
+            let element = value[key];
+            return Is.string(element) || (Is.object(element) && Is.defined(element.message) && Is.defined(element.comment));
+        });
+    }
+    PackageJsonFormat.is = is;
+})(PackageJsonFormat || (PackageJsonFormat = {}));
+function createXlfFilesForExtensions() {
+    let counter = 0;
+    let folderStreamEnded = false;
+    let folderStreamEndEmitted = false;
+    return event_stream_1.through(function (extensionFolder) {
+        const folderStream = this;
+        const stat = fs.statSync(extensionFolder.path);
+        if (!stat.isDirectory()) {
+            return;
+        }
+        let extensionName = path.basename(extensionFolder.path);
+        if (extensionName === 'node_modules') {
+            return;
+        }
+        counter++;
+        let _xlf;
+        function getXlf() {
+            if (!_xlf) {
+                _xlf = new i18n.XLF(extensionsProject);
+            }
+            return _xlf;
+        }
+        gulp.src([`.build/extensions/${extensionName}/package.nls.json`, `.build/extensions/${extensionName}/**/nls.metadata.json`], { allowEmpty: true }).pipe(event_stream_1.through(function (file) {
+            if (file.isBuffer()) {
+                const buffer = file.contents;
+                const basename = path.basename(file.path);
+                if (basename === 'package.nls.json') {
+                    const json = JSON.parse(buffer.toString('utf8'));
+                    const keys = Object.keys(json);
+                    const messages = keys.map((key) => {
+                        const value = json[key];
+                        if (Is.string(value)) {
+                            return value;
+                        }
+                        else if (value) {
+                            return value.message;
+                        }
+                        else {
+                            return `Unknown message for key: ${key}`;
+                        }
+                    });
+                    getXlf().addFile(`extensions/${extensionName}/package`, keys, messages);
+                }
+                else if (basename === 'nls.metadata.json') {
+                    const json = JSON.parse(buffer.toString('utf8'));
+                    const relPath = path.relative(`.build/extensions/${extensionName}`, path.dirname(file.path));
+                    console.log('relative path is ' + relPath);
+                    for (let file in json) {
+                        console.log('file is called ' + file);
+                        const fileContent = json[file];
+                        getXlf().addFile(`extensions/${extensionName}/${relPath}/${file}`, fileContent.keys, fileContent.messages);
+                    }
+                }
+                else {
+                    this.emit('error', new Error(`${file.path} is not a valid extension nls file`));
+                    return;
+                }
+            }
+        }, function () {
+            if (_xlf) {
+                let xlfFile = new File({
+                    path: path.join(extensionsProject, extensionName + '.xlf'),
+                    contents: Buffer.from(_xlf.toString(), 'utf8')
+                });
+                folderStream.queue(xlfFile);
+            }
+            this.queue(null);
+            counter--;
+            if (counter === 0 && folderStreamEnded && !folderStreamEndEmitted) {
+                folderStreamEndEmitted = true;
+                folderStream.queue(null);
+            }
+        }));
+    }, function () {
+        folderStreamEnded = true;
+        if (counter === 0) {
+            folderStreamEndEmitted = true;
+            this.queue(null);
+        }
+    });
+}
+exports.createXlfFilesForExtensions = createXlfFilesForExtensions;

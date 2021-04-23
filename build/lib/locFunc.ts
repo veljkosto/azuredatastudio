@@ -234,7 +234,9 @@ export function createXlfFilesForExtensions(): ThroughStream {
 				} else if (basename === 'nls.metadata.json') {
 					const json: BundledExtensionFormat = JSON.parse(buffer.toString('utf8'));
 					const relPath = path.relative(`.build/extensions/${extensionName}`, path.dirname(file.path));
+					console.log('relative path is ' + relPath);
 					for (let file in json) {
+						console.log('file is called ' + file);
 						const fileContent = json[file];
 						getXlf().addFile(`extensions/${extensionName}/${relPath}/${file}`, fileContent.keys, fileContent.messages);
 					}
