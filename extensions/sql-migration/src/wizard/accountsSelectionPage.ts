@@ -22,6 +22,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 	}
 
 	protected async registerContent(view: azdata.ModelView): Promise<void> {
+		this.wizard.customButtons[0].enabled = false;
 		const form = view.modelBuilder.formContainer()
 			.withFormItems(
 				[

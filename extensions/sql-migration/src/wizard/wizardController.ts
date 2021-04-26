@@ -17,6 +17,7 @@ import { SummaryPage } from './summaryPage';
 import { MigrationModePage } from './migrationModePage';
 import { SqlSourceConfigurationPage } from './sqlSourceConfigurationPage';
 
+
 export const WIZARD_INPUT_COMPONENT_WIDTH = '600px';
 export class WizardController {
 	constructor(private readonly extensionContext: vscode.ExtensionContext) {
@@ -37,6 +38,13 @@ export class WizardController {
 		const wizard = azdata.window.createWizard(loc.WIZARD_TITLE(serverName), 'MigrationWizard', 'wide');
 		wizard.generateScriptButton.enabled = false;
 		wizard.generateScriptButton.hidden = true;
+		const saveAndCloseButton = azdata.window.createButton(loc.SAVE_AND_CLOSE);
+		saveAndCloseButton.onClick(() => {
+			stateModel.saveAndClose();
+			//TODO: save the assessments
+			wizard.close();
+		});
+		wizard.customButtons = [saveAndCloseButton];
 		const skuRecommendationPage = new SKURecommendationPage(wizard, stateModel);
 		const migrationModePage = new MigrationModePage(wizard, stateModel);
 		const azureAccountsPage = new AccountsSelectionPage(wizard, stateModel);

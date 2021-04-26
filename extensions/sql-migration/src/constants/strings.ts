@@ -351,6 +351,7 @@ export function SEC(sec: number): string {
 }
 
 //Source Credentials page.
+export const SAVE_AND_CLOSE = localize('sql.migration.save.close', "Save and Close");
 export const SOURCE_CONFIGURATION = localize('sql.migration.source.configuration', "Source Configuration");
 export const SOURCE_CREDENTIALS = localize('sql.migration.source.credentials', "Source Credentials");
 export const ENTER_YOUR_SQL_CREDS = localize('sql.migration.enter.your.sql.cred', "Enter the credential for source SQL Server instance. This credential will be used while migrating database(s) to Azure SQL.");

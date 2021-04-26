@@ -552,6 +552,7 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			});
 		}
 		this._rbgLoader.loading = false;
+		this.wizard.customButtons[0].enabled = true;
 	}
 
 	private createAssessmentProgress(): azdata.FlexContainer {

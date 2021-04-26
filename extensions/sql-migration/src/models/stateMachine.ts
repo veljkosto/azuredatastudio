@@ -708,6 +708,11 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			vscode.commands.executeCommand('sqlmigration.refreshMigrationTiles');
 		}
 	}
+
+	public saveAndClose() {
+		console.log('save and close');
+		console.log(this._assessmentResults);
+	}
 }
 
 export interface ServerAssessement {
