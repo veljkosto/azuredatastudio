@@ -10,17 +10,18 @@ jobs:
         sudo chmod +x /etc/init.d/xvfb
         sudo update-rc.d xvfb defaults
         sudo service xvfb start
+      displayName: Set up Linux environment
     - task: NodeTool@0
       inputs:
         versionSpec: "12.13.0"
     - script: |
         yarn config set network-timeout 300000
         yarn --frozen-lockfile
-      name: Install Dependencies
+      displayName: Install Dependencies
     - script: yarn electron x64
-      name: Download Electron
+      displayName: Download Electron
     - script: yarn compile
-      name: Compile Sources
+      displayName: Compile Sources
     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
       inputs:
         versionSpec: "1.x"
