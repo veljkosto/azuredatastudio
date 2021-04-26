@@ -14,6 +14,9 @@ jobs:
     - task: NodeTool@0
       inputs:
         versionSpec: "12.13.0"
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+      inputs:
+        versionSpec: "1.x"
     - script: |
         yarn config set network-timeout 300000
         yarn --frozen-lockfile
@@ -22,9 +25,6 @@ jobs:
       displayName: Download Electron
     - script: yarn compile
       displayName: Compile Sources
-    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
-      inputs:
-        versionSpec: "1.x"
     - task: Bash@3
       displayName: 'Create environment variables'
       inputs:
