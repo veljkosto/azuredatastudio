@@ -5,9 +5,7 @@ jobs:
     - script: |
         set -e
         sudo apt-get update
-        sudo apt-get install -y libxkbfile-dev pkg-config libsecret-1-dev libxss1 dbus xvfb libgtk-3-0 libkrb5-dev \
-            git apt-transport-https ca-certificates curl gnupg-agent software-properties-common \
-            libnss3 libasound2 make gcc libx11-dev fakeroot rpm libgconf-2-4 libunwind8 g++-4.8
+        sudo apt-get install -y libxkbfile-dev pkg-config libsecret-1-dev libxss1 dbus xvfb libgtk-3-0 libkrb5-dev # {{SQL CARBON EDIT}} add kerberos dep
         sudo cp build/azure-pipelines/linux/xvfb.init /etc/init.d/xvfb
         sudo chmod +x /etc/init.d/xvfb
         sudo update-rc.d xvfb defaults
@@ -15,6 +13,14 @@ jobs:
     - task: NodeTool@0
       inputs:
         versionSpec: "12.13.0"
+    - script: |
+        yarn config set network-timeout 300000
+        yarn --frozen-lockfile
+      name: Install Dependencies
+    - script: yarn electron x64
+      name: Download Electron
+    - script: yarn compile
+      name: Compile Sources
     - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
       inputs:
         versionSpec: "1.x"
