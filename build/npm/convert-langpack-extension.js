@@ -14,9 +14,6 @@ let vfs = require("vinyl-fs");
 let rimraf = require('rimraf');
 let minimist = require('minimist');
 
-const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/nonADSExtensions.json'), 'utf8'));
-const nonADSExtensions = nonADSJson.nonADSExtensions;
-
 const textFields = {
 	"nameText": 'ads',
 	"displayNameText": 'Azure Data Studio',
@@ -27,6 +24,7 @@ const textFields = {
 //Extensions for ADS
 const currentADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/ADSExtensions.json'), 'utf8'));
 const currentADSExtensions = currentADSJson.ADSExtensions;
+const vscodeExtensions = currentADSJson.VSCODEExtensions;
 
 function update(options) {
 	let idOrPath = options._;
@@ -77,12 +75,11 @@ function update(options) {
 		if (fs.existsSync(translationDataFolder)) {
 			let totalExtensions = fs.readdirSync(path.join(translationDataFolder,'extensions'));
 			for(let extensionTag in totalExtensions){
-				console.log('extensions in folder include ' + totalExtensions[extensionTag]);
-			}
-			for (let extensionName in nonADSExtensions) {
-				let filePath = path.join(translationDataFolder, 'extensions', nonADSExtensions[extensionName] + '.i18n.json')
-				console.log('Clearing  \'' + filePath + '\' as it does not exist in ADS');
-				rimraf.sync(filePath);
+				let extensionName = totalExtensions[extensionTag].replace('.i18n.json','');
+				if(!(currentADSExtensions[extensionName] !== undefined || vscodeExtensions.indexOf(extensionName) !== -1)){
+					let filePath = path.join(translationDataFolder, 'extensions', extensionName + '.i18n.json')
+					rimraf.sync(filePath);
+				}
 			}
 		}
 
@@ -115,7 +112,6 @@ function update(options) {
 							fs.statSync(path.join(translationDataFolder, curr.path.replace('./translations', '')));
 						}
 						catch {
-							console.log('Non existent extension ' + curr.path + ' detected, removing from manifest');
 							nonExistantExtensions.push(curr);
 						}
 					}
@@ -129,7 +125,6 @@ function update(options) {
 						let finalPath = `./translations/${tp.resourceName}`;
 						let isFound = false;
 						for (let i = 0; i < localization.translations.length; i++) {
-							console.log('path is ' + localization.translations[i].path);
 							if (localization.translations[i].path === finalPath) {
 								localization.translations[i].id = tp.id;
 								isFound = true;
