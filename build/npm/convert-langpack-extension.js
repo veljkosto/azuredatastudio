@@ -5,7 +5,6 @@
 
 'use strict';
 
-let i18n = require("../lib/i18n");
 let locFunc = require("../lib/locFunc");
 let fs = require("fs");
 let path = require("path");
@@ -17,6 +16,7 @@ let minimist = require('minimist');
 
 const nonADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/nonADSExtensions.json'), 'utf8'));
 const nonADSExtensions = nonADSJson.nonADSExtensions;
+
 const textFields = {
 	"nameText": 'ads',
 	"displayNameText": 'Azure Data Studio',
@@ -75,6 +75,10 @@ function update(options) {
 		}
 
 		if (fs.existsSync(translationDataFolder)) {
+			let totalExtensions = fs.readdirSync(path.join(translationDataFolder,'extensions'));
+			for(let extensionTag in totalExtensions){
+				console.log('extensions in folder include ' + totalExtensions[extensionTag]);
+			}
 			for (let extensionName in nonADSExtensions) {
 				let filePath = path.join(translationDataFolder, 'extensions', nonADSExtensions[extensionName] + '.i18n.json')
 				console.log('Clearing  \'' + filePath + '\' as it does not exist in ADS');
@@ -124,15 +128,15 @@ function update(options) {
 					for (let tp of translationPaths) {
 						let finalPath = `./translations/${tp.resourceName}`;
 						let isFound = false;
-						for(let i = 0; i < localization.translations.length; i++){
+						for (let i = 0; i < localization.translations.length; i++) {
 							console.log('path is ' + localization.translations[i].path);
-							if(localization.translations[i].path === finalPath){
+							if (localization.translations[i].path === finalPath) {
 								localization.translations[i].id = tp.id;
 								isFound = true;
 								break;
 							}
 						}
-						if(!isFound){
+						if (!isFound) {
 							localization.translations.push({ id: tp.id, path: finalPath });
 						}
 					}

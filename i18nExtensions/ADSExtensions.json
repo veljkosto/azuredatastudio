@@ -1,19 +1,26 @@
 {
-	"ADSExtensions" :
-		{
-			"admin-tool-ext-win": "Microsoft.admin-tool-ext-win",
-			"agent": "Microsoft.agent",
-			"azurecore": "Microsoft.azurecore",
-			"big-data-cluster": "Microsoft.big-data-cluster",
-			"cms": "Microsoft.cms",
-			"dacpac": "Microsoft.dacpac",
-			"import": "Microsoft.import",
-			"mssql": "Microsoft.mssql",
-			"notebook": "Microsoft.notebook",
-			"profiler": "Microsoft.profiler",
-			"resource-deployment": "Microsoft.resource-deployment",
-			"schema-compare": "Microsoft.schema-compare",
-			"Microsoft.sqlservernotebook": "Microsoft.sqlservernotebook"
-		}
-
+	"ADSExtensions": {
+		"admin-tool-ext-win": "Microsoft.admin-tool-ext-win",
+		"agent": "Microsoft.agent",
+		"arc": "Microsoft.arc",
+		"asde-deployment": "Microsoft.asde-deployment",
+		"azdata": "Microsoft.azdata",
+		"azurecore": "Microsoft.azurecore",
+		"azurehybridtoolkit": "Microsoft.azurehybridtoolkit",
+		"big-data-cluster": "Microsoft.big-data-cluster",
+		"cms": "Microsoft.cms",
+		"dacpac": "Microsoft.dacpac",
+		"data-workspace": "Microsoft.data-workspace",
+		"import": "Microsoft.import",
+		"mssql": "Microsoft.mssql",
+		"notebook": "Microsoft.notebook",
+		"profiler": "Microsoft.profiler",
+		"resource-deployment": "Microsoft.resource-deployment",
+		"schema-compare": "Microsoft.schema-compare",
+		"Microsoft.sqlservernotebook": "Microsoft.sqlservernotebook"
+	},
+	"VSCODEExtensions": [
+		"bat",
+		"configuration-editing"
+	]
 }
