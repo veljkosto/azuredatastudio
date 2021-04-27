@@ -59,10 +59,13 @@ function updateExtensionPackageJSON(input: Stream, update: (data: any) => any): 
 		.pipe(packageJsonFilter.restore);
 }
 
-function fromLocal(extensionPath: string, forWeb: boolean): Stream {
+// {{SQL CARBON EDIT}} - Needed in locFunc
+export function fromLocal(extensionPath: string, forWeb: boolean): Stream {
+	console.log('extension path is ' + extensionPath);
 	const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
 
 	const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
+	console.log('isWebPacked is ' + isWebPacked);
 	let input = isWebPacked
 		? fromLocalWebpack(extensionPath, webpackConfigFileName)
 		: fromLocalNormal(extensionPath);
@@ -72,6 +75,7 @@ function fromLocal(extensionPath: string, forWeb: boolean): Stream {
 			delete data.scripts;
 			delete data.dependencies;
 			delete data.devDependencies;
+			console.log('data main is ' + data.main);
 			if (data.main) {
 				data.main = data.main.replace('/out/', /dist/);
 			}
@@ -84,6 +88,7 @@ function fromLocal(extensionPath: string, forWeb: boolean): Stream {
 
 
 function fromLocalWebpack(extensionPath: string, webpackConfigFileName: string): Stream {
+	console.log('Extension path that is local webpack is ' + extensionPath);
 	const result = es.through();
 
 	const packagedDependencies: string[] = [];
@@ -173,6 +178,7 @@ function fromLocalWebpack(extensionPath: string, webpackConfigFileName: string):
 }
 
 function fromLocalNormal(extensionPath: string): Stream {
+	console.log('Extension path that is local webpack is ' + extensionPath);
 	const result = es.through();
 
 	vsce.listFiles({ cwd: extensionPath, packageManager: vsce.PackageManager.Yarn })

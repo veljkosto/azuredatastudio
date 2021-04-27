@@ -4,16 +4,21 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createXlfFilesForExtensions = exports.modifyI18nPackFiles = void 0;
+exports.createXlfFilesForExtensions = exports.packageADSExtensionsStream = exports.modifyI18nPackFiles = void 0;
 const path = require("path");
 const fs = require("fs");
 const Is = require("is");
 const gulp = require("gulp");
+const glob = require("glob");
+const rename = require("gulp-rename");
+const es = require("event-stream");
 const event_stream_1 = require("event-stream");
 const File = require("vinyl");
 const i18n = require("./i18n");
+const ext = require("./extensions");
 const extensionsProject = 'extensions';
 const i18nPackVersion = '1.0.0';
+const root = path.dirname(path.dirname(__dirname));
 function createI18nFile(originalFilePath, messages) {
     let result = Object.create(null);
     result[''] = [
@@ -144,9 +149,24 @@ var PackageJsonFormat;
     }
     PackageJsonFormat.is = is;
 })(PackageJsonFormat || (PackageJsonFormat = {}));
-function createXlfFilesForExtensions() {
+function packageADSExtensionsStream() {
     const currentADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/ADSExtensions.json'), 'utf8'));
-    const vscodeExtensions = currentADSJson.VSCODEExtensions;
+    const ADSExtensions = currentADSJson.ADSExtensions;
+    const extenalExtensionDescriptions = glob.sync('extensions/*/package.json')
+        .map(manifestPath => {
+        const extensionPath = path.dirname(path.join(root, manifestPath));
+        const extensionName = path.basename(extensionPath);
+        return { name: extensionName, path: extensionPath };
+    })
+        .filter(({ name }) => ADSExtensions[name] !== undefined);
+    const builtExtensions = extenalExtensionDescriptions.map(extension => {
+        return ext.fromLocal(extension.path, false)
+            .pipe(rename(p => p.dirname = `extensions/${extension.name}/${p.dirname}`));
+    });
+    return es.merge(builtExtensions);
+}
+exports.packageADSExtensionsStream = packageADSExtensionsStream;
+function createXlfFilesForExtensions() {
     let counter = 0;
     let folderStreamEnded = false;
     let folderStreamEndEmitted = false;
@@ -157,12 +177,6 @@ function createXlfFilesForExtensions() {
             return;
         }
         let extensionName = path.basename(extensionFolder.path);
-        if (extensionName === 'node_modules') {
-            return;
-        }
-        if (vscodeExtensions.indexOf(extensionName) !== -1) {
-            return;
-        }
         counter++;
         let _xlf;
         function getXlf() {
@@ -194,11 +208,8 @@ function createXlfFilesForExtensions() {
                 }
                 else if (basename === 'nls.metadata.json') {
                     const json = JSON.parse(buffer.toString('utf8'));
-                    const relPath = path.relative(`.build/extensions/${extensionName}`, path.dirname(file.path));
-                    console.log('relative path is ' + relPath);
-                    console.log('extension name is ' + extensionName);
+                    const relPath = path.relative(`.locbuild/extensions/${extensionName}`, path.dirname(file.path));
                     for (let file in json) {
-                        console.log('file is called ' + file);
                         const fileContent = json[file];
                         getXlf().addFile(`extensions/${extensionName}/${relPath}/${file}`, fileContent.keys, fileContent.messages);
                     }
