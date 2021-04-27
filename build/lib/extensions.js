@@ -82,6 +82,7 @@ function fromLocal(extensionPath, forWeb) {
 }
 exports.fromLocal = fromLocal;
 function fromLocalWebpack(extensionPath, webpackConfigFileName) {
+    console.log('Extension path that is local webpack is ' + extensionPath);
     const result = es.through();
     const packagedDependencies = [];
     const packageJsonConfig = require(path.join(extensionPath, 'package.json'));
@@ -153,6 +154,7 @@ function fromLocalWebpack(extensionPath, webpackConfigFileName) {
     return result.pipe(stats_1.createStatsStream(path.basename(extensionPath)));
 }
 function fromLocalNormal(extensionPath) {
+    console.log('Extension path that is local webpack is ' + extensionPath);
     const result = es.through();
     vsce.listFiles({ cwd: extensionPath, packageManager: vsce.PackageManager.Yarn })
         .then(fileNames => {
@@ -254,8 +256,7 @@ function isWebExtension(manifest) {
     }
     return (!Boolean(manifest.main) || Boolean(manifest.browser));
 }
-// {{SQL CARBON EDIT}} - Need to support automatic localization, which requires externalExtension added for localization boolean.
-function packageLocalExtensionsStream(forWeb, forLoc = false) {
+function packageLocalExtensionsStream(forWeb) {
     const localExtensionsDescriptions = (glob.sync('extensions/*/package.json')
         .map(manifestPath => {
         const absoluteManifestPath = path.join(root, manifestPath);
@@ -265,7 +266,7 @@ function packageLocalExtensionsStream(forWeb, forLoc = false) {
     })
         .filter(({ name }) => excludedExtensions.indexOf(name) === -1)
         .filter(({ name }) => builtInExtensions.every(b => b.name !== name))
-        .filter(({ name }) => forLoc ? true : (externalExtensions.indexOf(name) === -1)) // {{SQL CARBON EDIT}} Remove external Extensions with separate package, unless for localization.
+        .filter(({ name }) => externalExtensions.indexOf(name) === -1) // {{SQL CARBON EDIT}} Remove external Extensions with separate package
     );
     const localExtensionsStream = minifyExtensionResources(es.merge(...localExtensionsDescriptions.map(extension => {
         return fromLocal(extension.path, forWeb)
