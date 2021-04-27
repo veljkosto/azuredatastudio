@@ -12,6 +12,8 @@ const gulp = require("gulp");
 const event_stream_1 = require("event-stream");
 const File = require("vinyl");
 const i18n = require("./i18n");
+const extensionsProject = 'extensions';
+const i18nPackVersion = '1.0.0';
 function createI18nFile(originalFilePath, messages) {
     let result = Object.create(null);
     result[''] = [
@@ -58,8 +60,6 @@ function updateMainI18nFile(existingTranslationFilePath, originalFilePath, messa
         contents: Buffer.from(content, 'utf8'),
     });
 }
-const extensionsProject = 'vscode-extensions';
-const i18nPackVersion = '1.0.0';
 function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resultingTranslationPaths, pseudo = false) {
     let parsePromises = [];
     let mainPack = { version: i18nPackVersion, contents: {} };
@@ -145,6 +145,8 @@ var PackageJsonFormat;
     PackageJsonFormat.is = is;
 })(PackageJsonFormat || (PackageJsonFormat = {}));
 function createXlfFilesForExtensions() {
+    const currentADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/ADSExtensions.json'), 'utf8'));
+    const vscodeExtensions = currentADSJson.VSCODEExtensions;
     let counter = 0;
     let folderStreamEnded = false;
     let folderStreamEndEmitted = false;
@@ -158,6 +160,9 @@ function createXlfFilesForExtensions() {
         if (extensionName === 'node_modules') {
             return;
         }
+        if (vscodeExtensions.indexOf(extensionName) !== -1) {
+            return;
+        }
         counter++;
         let _xlf;
         function getXlf() {
@@ -166,7 +171,7 @@ function createXlfFilesForExtensions() {
             }
             return _xlf;
         }
-        gulp.src([`extensions/${extensionName}/package.nls.json`], { allowEmpty: true }).pipe(event_stream_1.through(function (file) {
+        gulp.src([`.locbuild/builtInExtensions/${extensionName}/package.nls.json`, `.locbuild/extensions/${extensionName}/package.nls.json`, `.locbuild/extensions/${extensionName}/**/nls.metadata.json`], { allowEmpty: true }).pipe(event_stream_1.through(function (file) {
             if (file.isBuffer()) {
                 const buffer = file.contents;
                 const basename = path.basename(file.path);
@@ -191,6 +196,7 @@ function createXlfFilesForExtensions() {
                     const json = JSON.parse(buffer.toString('utf8'));
                     const relPath = path.relative(`.build/extensions/${extensionName}`, path.dirname(file.path));
                     console.log('relative path is ' + relPath);
+                    console.log('extension name is ' + extensionName);
                     for (let file in json) {
                         console.log('file is called ' + file);
                         const fileContent = json[file];

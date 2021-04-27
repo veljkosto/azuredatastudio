@@ -34,7 +34,7 @@ const deps = require('./dependencies');
 const { config } = require('./lib/electron');
 const createAsar = require('./lib/asar').createAsar;
 const { compileBuildTask } = require('./gulpfile.compile');
-const { compileExtensionsBuildTask } = require('./gulpfile.extensions');
+const { compileExtensionsBuildTask, compileLocalizationExtensionsBuildTask } = require('./gulpfile.extensions'); // {{SQL CARBON EDIT}} Must handle localization code.
 
 const productionDependencies = deps.getProductionDependencies(path.dirname(__dirname));
 
@@ -440,14 +440,15 @@ gulp.task(task.define(
 	)
 ));
 
+// {{SQL CARBON EDIT}} Localization gulp task, based on above task.
 gulp.task(task.define(
 	'export-xlfs',
 	task.series(
 		compileBuildTask,
-		compileExtensionsBuildTask,
+		compileLocalizationExtensionsBuildTask,
 		optimizeVSCodeTask,
 		function () {
-			const pathToExtensions = ['.build/extensions/*', 'extensions/*'];
+			const pathToExtensions = ['.locbuild/builtInExtensions/*', '.locbuild/extensions/*'];
 			return es.merge(
 				gulp.src(pathToExtensions).pipe(locFunc.createXlfFilesForExtensions())
 			).pipe(vfs.dest('../export-xlfs'));

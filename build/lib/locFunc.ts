@@ -23,6 +23,16 @@ interface ParsedXLF {
 	language: string;
 }
 
+interface I18nPack {
+	version: string;
+	contents: {
+		[path: string]: Map<string>;
+	};
+}
+
+const extensionsProject: string = 'extensions';
+const i18nPackVersion = '1.0.0';
+
 function createI18nFile(originalFilePath: string, messages: any): File {
 	let result = Object.create(null);
 	result[''] = [
@@ -51,7 +61,7 @@ function updateMainI18nFile(existingTranslationFilePath: string, originalFilePat
 	let currentContent = fs.readFileSync(currFilePath);
 	let currentContentObject = JSON.parse(currentContent.toString());
 	let result = Object.create(null);
-	messages.contents = {...currentContentObject.contents, ...messages.contents};
+	messages.contents = { ...currentContentObject.contents, ...messages.contents };
 	result[''] = [
 		'--------------------------------------------------------------------------------------------',
 		'Copyright (c) Microsoft Corporation. All rights reserved.',
@@ -73,17 +83,6 @@ function updateMainI18nFile(existingTranslationFilePath: string, originalFilePat
 		contents: Buffer.from(content, 'utf8'),
 	})
 }
-
-interface I18nPack {
-	version: string;
-	contents: {
-		[path: string]: Map<string>;
-	};
-}
-
-const extensionsProject: string = 'vscode-extensions';
-
-const i18nPackVersion = '1.0.0';
 
 export function modifyI18nPackFiles(existingTranslationFolder: string, externalExtensions: Map<string>, resultingTranslationPaths: i18n.TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
 	let parsePromises: Promise<ParsedXLF[]>[] = [];
@@ -192,8 +191,9 @@ module PackageJsonFormat {
 }
 
 export function createXlfFilesForExtensions(): ThroughStream {
+	const currentADSJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../i18nExtensions/ADSExtensions.json'), 'utf8'));
+	const vscodeExtensions = currentADSJson.VSCODEExtensions;
 	let counter: number = 0;
-	let processedExtensions = [];
 	let folderStreamEnded: boolean = false;
 	let folderStreamEndEmitted: boolean = false;
 	return through(function (this: ThroughStream, extensionFolder: File) {
@@ -206,6 +206,9 @@ export function createXlfFilesForExtensions(): ThroughStream {
 		if (extensionName === 'node_modules') {
 			return;
 		}
+		if (vscodeExtensions.indexOf(extensionName) !== -1) {
+			return;
+		}
 		counter++;
 		let _xlf: i18n.XLF;
 		function getXlf() {
@@ -214,7 +217,7 @@ export function createXlfFilesForExtensions(): ThroughStream {
 			}
 			return _xlf;
 		}
-		gulp.src([`extensions/${extensionName}/package.nls.json`], { allowEmpty: true }).pipe(through(function (file: File) {
+		gulp.src([`.locbuild/builtInExtensions/${extensionName}/package.nls.json`, `.locbuild/extensions/${extensionName}/package.nls.json`, `.locbuild/extensions/${extensionName}/**/nls.metadata.json`], { allowEmpty: true }).pipe(through(function (file: File) {
 			if (file.isBuffer()) {
 				const buffer: Buffer = file.contents as Buffer;
 				const basename = path.basename(file.path);
@@ -236,6 +239,7 @@ export function createXlfFilesForExtensions(): ThroughStream {
 					const json: BundledExtensionFormat = JSON.parse(buffer.toString('utf8'));
 					const relPath = path.relative(`.build/extensions/${extensionName}`, path.dirname(file.path));
 					console.log('relative path is ' + relPath);
+					console.log('extension name is ' + extensionName);
 					for (let file in json) {
 						console.log('file is called ' + file);
 						const fileContent = json[file];

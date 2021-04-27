@@ -178,6 +178,16 @@ const compileExtensionsBuildTask = task.define('compile-extensions-build', task.
 gulp.task(compileExtensionsBuildTask);
 exports.compileExtensionsBuildTask = compileExtensionsBuildTask;
 
+// {{SQL CARBON EDIT}} Need to handle localization unlike above.
+const compileLocalizationExtensionsBuildTask = task.define('compile-localization-extensions-build', task.series(
+	cleanExtensionsBuildTask,
+	task.define('bundle-localization-extensions-build', () => ext.packageLocalExtensionsStream(false, true).pipe(gulp.dest('.locbuild'))),
+	task.define('bundle-localization-marketplace-extensions-build', () => ext.packageMarketplaceExtensionsStream(false).pipe(gulp.dest('.locbuild'))),
+));
+
+gulp.task(compileLocalizationExtensionsBuildTask);
+exports.compileLocalizationExtensionsBuildTask = compileLocalizationExtensionsBuildTask;
+
 const compileWebExtensionsTask = task.define('compile-web', () => buildWebExtensions(false));
 gulp.task(compileWebExtensionsTask);
 exports.compileWebExtensionsTask = compileWebExtensionsTask;

@@ -249,7 +249,8 @@ function isWebExtension(manifest) {
     }
     return (!Boolean(manifest.main) || Boolean(manifest.browser));
 }
-function packageLocalExtensionsStream(forWeb) {
+// {{SQL CARBON EDIT}} - Need to support automatic localization, which requires externalExtension added for localization boolean.
+function packageLocalExtensionsStream(forWeb, forLoc = false) {
     const localExtensionsDescriptions = (glob.sync('extensions/*/package.json')
         .map(manifestPath => {
         const absoluteManifestPath = path.join(root, manifestPath);
@@ -259,7 +260,7 @@ function packageLocalExtensionsStream(forWeb) {
     })
         .filter(({ name }) => excludedExtensions.indexOf(name) === -1)
         .filter(({ name }) => builtInExtensions.every(b => b.name !== name))
-        .filter(({ name }) => externalExtensions.indexOf(name) === -1) // {{SQL CARBON EDIT}} Remove external Extensions with separate package
+        .filter(({ name }) => forLoc ? true : (externalExtensions.indexOf(name) === -1)) // {{SQL CARBON EDIT}} Remove external Extensions with separate package, unless for localization.
     );
     const localExtensionsStream = minifyExtensionResources(es.merge(...localExtensionsDescriptions.map(extension => {
         return fromLocal(extension.path, forWeb)
