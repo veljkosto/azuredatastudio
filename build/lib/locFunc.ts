@@ -193,6 +193,7 @@ module PackageJsonFormat {
 
 export function createXlfFilesForExtensions(): ThroughStream {
 	let counter: number = 0;
+	let processedExtensions = [];
 	let folderStreamEnded: boolean = false;
 	let folderStreamEndEmitted: boolean = false;
 	return through(function (this: ThroughStream, extensionFolder: File) {

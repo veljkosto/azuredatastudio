@@ -443,8 +443,11 @@ gulp.task(task.define(
 gulp.task(task.define(
 	'export-xlfs',
 	task.series(
+		compileBuildTask,
+		compileExtensionsBuildTask,
+		optimizeVSCodeTask,
 		function () {
-			const pathToExtensions = '.build/extensions/*';
+			const pathToExtensions = ['.build/extensions/*', 'extensions/*'];
 			return es.merge(
 				gulp.src(pathToExtensions).pipe(locFunc.createXlfFilesForExtensions())
 			).pipe(vfs.dest('../export-xlfs'));
