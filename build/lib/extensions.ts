@@ -47,6 +47,7 @@ function minifyExtensionResources(input: Stream): Stream {
 }
 
 function updateExtensionPackageJSON(input: Stream, update: (data: any) => any): Stream {
+	console.log('test commit');
 	const packageJsonFilter = filter('extensions/*/package.json', { restore: true });
 	return input
 		.pipe(packageJsonFilter)
