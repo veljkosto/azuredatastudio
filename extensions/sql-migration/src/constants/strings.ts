@@ -287,8 +287,8 @@ export const BACKUP_START_TIME = localize('sql.migration.backup.start.time', "Ba
 export const FIRST_LSN = localize('sql.migration.first.lsn', "First LSN");
 export const LAST_LSN = localize('sql.migration.last.LSN', "Last LSN");
 export const CANNOT_START_CUTOVER_ERROR = localize('sql.migration.cannot.start.cutover.error', "Cannot start the cutover process until all the migrations are done. Click refresh to fetch the latest file status");
-export const AZURE_SQL_DATABASE_MANAGED_INSTANCE = localize('sql.migration.azure.sql.database.managed.instance', "Azure SQL Database Managed Instance");
-export const AZURE_SQL_DATABASE_VIRTUAL_MACHINE = localize('sql.migration.azure.sql.database.virtual.machine', "Azure SQL Database Virtual Machine");
+export const AZURE_SQL_DATABASE_MANAGED_INSTANCE = localize('sql.migration.azure.sql.database.managed.instance', "Azure SQL Managed Instance");
+export const AZURE_SQL_DATABASE_VIRTUAL_MACHINE = localize('sql.migration.azure.sql.database.virtual.machine', "SQL Server on Azure Virtual Machine");
 export const CANCEL_MIGRATION = localize('sql.migration.cancel.migration', "Cancel migration");
 export function ACTIVE_BACKUP_FILES_ITEMS(fileCount: number) {
 	if (fileCount === 1) {
