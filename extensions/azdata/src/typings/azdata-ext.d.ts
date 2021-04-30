@@ -114,6 +114,21 @@ declare module 'azdata-ext' {
 		}
 	}
 
+	export interface StorageVolume {
+		className?: string, // "local-storage"
+		size: string // "5Gi"
+	}
+
+	export interface SchedulingOptions {
+		memory?: string // "10Gi"
+		cpu?: string // "4"
+	}
+
+	export interface ServiceSpec {
+		type: string, // "NodePort"
+		port?: number // 5432
+	}
+
 	export interface SqlMiShowResult {
 		apiVersion: string, // "sql.arcdata.microsoft.com/v1alpha1"
 		kind: string, // "sqlmanagedinstance"
@@ -127,25 +142,23 @@ declare module 'azdata-ext' {
 			uid: string // "cea737aa-3f82-4f6a-9bed-2b51c2c33dff"
 		},
 		spec: {
-			limits?: {
-				memory?: string // "10Gi"
-				vcores?: string // "4"
-			},
-			requests?: {
-				memory?: string // "10Gi"
-				vcores?: string // "4"
+			scheduling?: {
+				default?: {
+					resources?: {
+						limits?: SchedulingOptions,
+						requests?: SchedulingOptions
+					}
+				}
 			}
-			service: {
-				type: string // "NodePort"
+			services: {
+				primary: ServiceSpec
 			}
 			storage: {
 				data: {
-					className: string, // "local-storage"
-					size: string // "5Gi"
+					volumes: StorageVolume[]
 				},
 				logs: {
-					className: string, // "local-storage"
-					size: string // "5Gi"
+					volumes: StorageVolume[]
 				}
 			}
 		},
@@ -154,13 +167,13 @@ declare module 'azdata-ext' {
 			state: string, // "Ready",
 			logSearchDashboard: string, // https://127.0.0.1:30777/kibana/app/kibana#/discover?_a=(query:(language:kuery,query:'custom_resource_name:miaa1'))
 			metricsDashboard: string, // https://127.0.0.1:30777/grafana/d/40q72HnGk/sql-managed-instance-metrics?var-hostname=miaa1-0
-			externalEndpoint?: string // "10.91.86.39:32718"
+			primaryEndpoint?: string // "10.91.86.39:32718"
 		}
 	}
 
 	export interface PostgresServerShowResult {
 		apiVersion: string, // "arcdata.microsoft.com/v1alpha1"
-		kind: string, // "postgresql-12"
+		kind: string, // "postgresql"
 		metadata: {
 			creationTimestamp: string, // "2020-08-19T20:25:11Z"
 			generation: number, // 1
@@ -177,47 +190,52 @@ declare module 'azdata-ext' {
 				}[],
 				settings: {
 					default: { [key: string]: string } // { "max_connections": "101", "work_mem": "4MB" }
-				}
+				},
+				version: string // "12"
 			},
 			scale: {
 				shards: number, // 1 (shards was renamed to workers, kept here for backwards compatibility)
 				workers: number // 1
 			},
-			scheduling: {
+			scheduling: { // If no roles are specified, settings will apply to all nodes of the PostgreSQL Hyperscale server group.
 				default: {
 					resources: {
-						requests: {
-							cpu: string, // "1.5"
-							memory: string // "256Mi"
-						},
-						limits: {
-							cpu: string, // "1.5"
-							memory: string // "256Mi"
+						requests: SchedulingOptions,
+						limits: SchedulingOptions
+					}
+				},
+				roles: {
+					coordinator: {
+						resources: {
+							requests: SchedulingOptions,
+							limits: SchedulingOptions
+						}
+					},
+					worker: {
+						resources: {
+							requests: SchedulingOptions,
+							limits: SchedulingOptions
 						}
 					}
 				}
 			},
-			service: {
-				type: string, // "NodePort"
-				port: number // 5432
+			services: {
+				primary: ServiceSpec
 			},
 			storage: {
 				data: {
-					className: string, // "local-storage"
-					size: string // "5Gi"
+					volumes: StorageVolume[]
 				},
 				logs: {
-					className: string, // "local-storage"
-					size: string // "5Gi"
+					volumes: StorageVolume[]
 				},
 				backups: {
-					className: string, // "local-storage"
-					size: string // "5Gi"
+					volumes: StorageVolume[]
 				}
 			}
 		},
 		status: {
-			externalEndpoint: string, // "10.130.12.136:26630"
+			primaryEndpoint: string, // "10.130.12.136:26630"
 			readyPods: string, // "1/1",
 			state: string, // "Ready"
 			logSearchDashboard: string, // https://127.0.0.1:30777/kibana/app/kibana#/discover?_a=(query:(language:kuery,query:'custom_resource_name:pg1'))
@@ -244,25 +262,27 @@ declare module 'azdata-ext' {
 		code?: number
 	}
 
-	export interface AzdataSession extends vscode.Disposable { }
-
+	export interface EndpointOrNamespace {
+		endpoint?: string,
+		namespace?: string
+	}
 	export interface IAzdataApi {
 		arc: {
 			dc: {
-				create(namespace: string, name: string, connectivityMode: string, resourceGroup: string, location: string, subscription: string, profileName?: string, storageClass?: string, additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<void>>,
+				create(namespace: string, name: string, connectivityMode: string, resourceGroup: string, location: string, subscription: string, profileName?: string, storageClass?: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<void>>,
 				endpoint: {
-					list(additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<DcEndpointListResult[]>>
+					list(additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<DcEndpointListResult[]>>
 				},
 				config: {
-					list(additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<DcConfigListResult[]>>,
-					show(additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<DcConfigShowResult>>
+					list(additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<DcConfigListResult[]>>,
+					show(additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<DcConfigShowResult>>
 				}
 			},
 			postgres: {
 				server: {
-					delete(name: string, additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<void>>,
-					list(additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<PostgresServerListResult[]>>,
-					show(name: string, additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<PostgresServerShowResult>>,
+					delete(name: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<void>>,
+					list(additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<PostgresServerListResult[]>>,
+					show(name: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<PostgresServerShowResult>>,
 					edit(
 						name: string,
 						args: {
@@ -278,17 +298,16 @@ declare module 'azdata-ext' {
 							replaceEngineSettings?: boolean,
 							workers?: number
 						},
-						engineVersion?: string,
 						additionalEnvVars?: AdditionalEnvVars,
-						session?: AzdataSession
+						azdataContext?: string
 					): Promise<AzdataOutput<void>>
 				}
 			},
 			sql: {
 				mi: {
-					delete(name: string, additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<void>>,
-					list(additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<SqlMiListResult[]>>,
-					show(name: string, additionalEnvVars?: AdditionalEnvVars, session?: AzdataSession): Promise<AzdataOutput<SqlMiShowResult>>,
+					delete(name: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<void>>,
+					list(additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<SqlMiListResult[]>>,
+					show(name: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<SqlMiShowResult>>,
 					edit(
 						name: string,
 						args: {
@@ -299,22 +318,13 @@ declare module 'azdata-ext' {
 							noWait?: boolean,
 						},
 						additionalEnvVars?: AdditionalEnvVars,
-						session?: AzdataSession
+						azdataContext?: string
 					): Promise<AzdataOutput<void>>
 				}
 			}
 		},
 		getPath(): Promise<string>,
-		login(endpoint: string, username: string, password: string, additionalEnvVars?: AdditionalEnvVars): Promise<AzdataOutput<void>>,
-		/**
-		 * Acquires a session for the specified controller, which will log in to the specified controller and then block all other commands
-		 * that are not part of the original session from executing until the session is released (disposed).
-		 * @param endpoint
-		 * @param username
-		 * @param password
-		 * @param additionalEnvVars
-		 */
-		acquireSession(endpoint: string, username: string, password: string, additionalEnvVars?: AdditionalEnvVars): Promise<AzdataSession>,
+		login(endpointOrNamespace: EndpointOrNamespace, username: string, password: string, additionalEnvVars?: AdditionalEnvVars, azdataContext?: string): Promise<AzdataOutput<void>>,
 		/**
 		 * The semVersion corresponding to this installation of azdata. version() method should have been run
 		 * before fetching this value to ensure that correct value is returned. This is almost always correct unless

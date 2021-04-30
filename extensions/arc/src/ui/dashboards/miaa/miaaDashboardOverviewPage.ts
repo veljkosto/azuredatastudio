@@ -244,12 +244,7 @@ export class MiaaDashboardOverviewPage extends DashboardPage {
 								cancellable: false
 							},
 							async (_progress, _token) => {
-								const session = await this._controllerModel.acquireAzdataSession();
-								try {
-									return await this._azdataApi.azdata.arc.sql.mi.delete(this._miaaModel.info.name, this._controllerModel.azdataAdditionalEnvVars, session);
-								} finally {
-									session.dispose();
-								}
+								return await this._azdataApi.azdata.arc.sql.mi.delete(this._miaaModel.info.name, this._controllerModel.azdataAdditionalEnvVars, this._controllerModel.controllerContext);
 							}
 						);
 						await this._controllerModel.refreshTreeNode();
@@ -355,10 +350,10 @@ export class MiaaDashboardOverviewPage extends DashboardPage {
 	private handleMiaaConfigUpdated(): void {
 		if (this._miaaModel.config) {
 			this._instanceProperties.status = this._miaaModel.config.status.state || '-';
-			this._instanceProperties.externalEndpoint = this._miaaModel.config.status.externalEndpoint || loc.notConfigured;
-			this._instanceProperties.vCores = this._miaaModel.config.spec.limits?.vcores?.toString() || '';
-			this._databasesMessage.value = !this._miaaModel.config.status.externalEndpoint ? loc.noExternalEndpoint : '';
-			if (!this._miaaModel.config.status.externalEndpoint) {
+			this._instanceProperties.externalEndpoint = this._miaaModel.config.status.primaryEndpoint || loc.notConfigured;
+			this._instanceProperties.vCores = this._miaaModel.config.spec.scheduling?.default?.resources?.limits?.cpu?.toString() || '';
+			this._databasesMessage.value = !this._miaaModel.config.status.primaryEndpoint ? loc.noExternalEndpoint : '';
+			if (!this._miaaModel.config.status.primaryEndpoint) {
 				this._databasesContainer.removeItem(this._connectToServerLoading);
 			}
 		}
@@ -381,7 +376,7 @@ export class MiaaDashboardOverviewPage extends DashboardPage {
 		} else {
 			// If we don't have an endpoint then there's no point in showing the connect button - but the logic
 			// to display text informing the user of this is already handled by the handleMiaaConfigUpdated
-			if (this._miaaModel?.config?.status.externalEndpoint) {
+			if (this._miaaModel?.config?.status.primaryEndpoint) {
 				this._connectToServerLoading.loading = false;
 				this._connectToServerButton.enabled = true;
 			}

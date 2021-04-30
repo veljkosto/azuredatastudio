@@ -91,9 +91,14 @@ export class SchemaCompareMainWindow {
 		let sourceDacpac = context as string;
 		if (profile) {
 			let ownerUri = await azdata.connection.getUriForConnection((profile.id));
+			let usr = profile.userName;
+			if (!usr) {
+				usr = loc.defaultText;
+			}
+
 			this.sourceEndpointInfo = {
 				endpointType: mssql.SchemaCompareEndpointType.Database,
-				serverDisplayName: `${profile.serverName} ${profile.userName}`,
+				serverDisplayName: profile.connectionName ? profile.connectionName : profile.serverName,
 				serverName: profile.serverName,
 				databaseName: profile.databaseName,
 				ownerUri: ownerUri,
@@ -894,7 +899,7 @@ export class SchemaCompareMainWindow {
 
 		this.selectSourceButton.onDidClick(async () => {
 			TelemetryReporter.sendActionEvent(TelemetryViews.SchemaCompareMainWindow, 'SchemaCompareSelectSource');
-			this.schemaCompareDialog = new SchemaCompareDialog(this);
+			this.schemaCompareDialog = new SchemaCompareDialog(this, undefined, this.extensionContext);
 			this.promise = this.schemaCompareDialog.openDialog();
 			await this.promise;
 		});
@@ -908,7 +913,7 @@ export class SchemaCompareMainWindow {
 
 		this.selectTargetButton.onDidClick(async () => {
 			TelemetryReporter.sendActionEvent(TelemetryViews.SchemaCompareMainWindow, 'SchemaCompareSelectTarget');
-			this.schemaCompareDialog = new SchemaCompareDialog(this);
+			this.schemaCompareDialog = new SchemaCompareDialog(this, undefined, this.extensionContext);
 			this.promise = await this.schemaCompareDialog.openDialog();
 			await this.promise;
 		});

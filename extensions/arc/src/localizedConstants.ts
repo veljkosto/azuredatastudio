@@ -68,7 +68,6 @@ export const feedback = localize('arc.feedback', "Feedback");
 export const selectConnectionString = localize('arc.selectConnectionString', "Select from available client connection strings below.");
 export const addingWorkerNodes = localize('arc.addingWorkerNodes', "adding worker nodes");
 export const workerNodesDescription = localize('arc.workerNodesDescription', "Expand your server group and scale your database by adding worker nodes.");
-export const postgresConfigurationInformation = localize('arc.postgres.configurationInformation', "You can configure the number of CPU cores and storage size that will apply to both worker nodes and coordinator node. Each worker node will have the same configuration. Adjust the number of CPU cores and memory settings for your server group. To reset the requests and/or limits, pass in empty value.");
 export const workerNodesConfigurationInformation = localize('arc.workerNodesConfigurationInformation', "You can configure the number of CPU cores and storage size that will apply to all worker nodes. Adjust the number of CPU cores and memory settings for your server group. To reset the requests and/or limits, pass in empty value.");
 export const coordinatorNodeConfigurationInformation = localize('arc.coordinatorNodeConfigurationInformation', "You can configure the number of CPU cores and storage size that will apply to the coordinator node. Adjust the number of CPU cores and memory settings for your server group. To reset the requests and/or limits, pass in empty value.");
 export const workerNodesInformation = localize('arc.workerNodeInformation', "In preview it is not possible to reduce the number of worker nodes. Please refer to documentation linked above for more information.");
@@ -97,13 +96,18 @@ export function connectToMSSql(name: string): string { return localize('arc.conn
 export function connectToPGSql(name: string): string { return localize('arc.connectToPGSql', "Connect to PostgreSQL Hyperscale - Azure Arc ({0})", name); }
 export const passwordToController = localize('arc.passwordToController', "Provide Password to Controller");
 export const controllerUrl = localize('arc.controllerUrl', "Controller URL");
+export const controllerUrlPlaceholder = localize('arc.controllerUrlPlaceholder', "https://<IP or hostname>:<port>");
+export const controllerUrlDescription = localize('arc.controllerUrlDescription', "The Controller URL is necessary if there are multiple clusters with the same namespace - this should generally not be necessary.");
 export const serverEndpoint = localize('arc.serverEndpoint', "Server Endpoint");
 export const controllerName = localize('arc.controllerName', "Name");
+export const controllerNameDescription = localize('arc.controllerNameDescription', "The name to display in the tree view, this is not applied to the controller itself.");
 export const controllerKubeConfig = localize('arc.controllerKubeConfig', "Kube Config File Path");
 export const controllerClusterContext = localize('arc.controllerClusterContext', "Cluster Context");
 export const defaultControllerName = localize('arc.defaultControllerName', "arc-dc");
 export const postgresProviderName = localize('arc.postgresProviderName', "PGSQL");
 export const miaaProviderName = localize('arc.miaaProviderName', "MSSQL");
+export const controllerUsername = localize('arc.controllerUsername', "Controller Username");
+export const controllerPassword = localize('arc.controllerPassword', "Controller Password");
 export const username = localize('arc.username', "Username");
 export const password = localize('arc.password', "Password");
 export const rememberPassword = localize('arc.rememberPassword', "Remember Password");

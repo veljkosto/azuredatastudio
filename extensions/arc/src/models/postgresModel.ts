@@ -53,16 +53,13 @@ export class PostgresModel extends ResourceModel {
 
 	/** Returns the major version of Postgres */
 	public get engineVersion(): string | undefined {
-		const kind = this._config?.kind;
-		return kind
-			? kind.substring(kind.lastIndexOf('-') + 1)
-			: undefined;
+		return this._config?.spec.engine.version;
 	}
 
 	/** Returns the IP address and port of Postgres */
 	public get endpoint(): { ip: string, port: string } | undefined {
-		return this._config?.status.externalEndpoint
-			? parseIpAndPort(this._config.status.externalEndpoint)
+		return this._config?.status.primaryEndpoint
+			? parseIpAndPort(this._config.status.primaryEndpoint)
 			: undefined;
 	}
 
@@ -76,9 +73,9 @@ export class PostgresModel extends ResourceModel {
 		const ramLimit = this._config.spec.scheduling?.default?.resources?.limits?.memory;
 		const cpuRequest = this._config.spec.scheduling?.default?.resources?.requests?.cpu;
 		const ramRequest = this._config.spec.scheduling?.default?.resources?.requests?.memory;
-		const dataStorage = this._config.spec.storage?.data?.size;
-		const logStorage = this._config.spec.storage?.logs?.size;
-		const backupsStorage = this._config.spec.storage?.backups?.size;
+		const dataStorage = this._config.spec.storage?.data?.volumes?.[0]?.size;
+		const logStorage = this._config.spec.storage?.logs?.volumes?.[0]?.size;
+		const backupsStorage = this._config.spec.storage?.backups?.volumes?.[0]?.size;
 
 		// scale.shards was renamed to scale.workers. Check both for backwards compatibility.
 		const scale = this._config.spec.scale;
@@ -121,10 +118,8 @@ export class PostgresModel extends ResourceModel {
 			return this._refreshPromise.promise;
 		}
 		this._refreshPromise = new Deferred();
-		let session: azdataExt.AzdataSession | undefined = undefined;
 		try {
-			session = await this.controllerModel.acquireAzdataSession();
-			this._config = (await this._azdataApi.azdata.arc.postgres.server.show(this.info.name, this.controllerModel.azdataAdditionalEnvVars, session)).result;
+			this._config = (await this._azdataApi.azdata.arc.postgres.server.show(this.info.name, this.controllerModel.azdataAdditionalEnvVars, this.controllerModel.controllerContext)).result;
 			this.configLastUpdated = new Date();
 			this._onConfigUpdated.fire(this._config);
 			this._refreshPromise.resolve();
@@ -132,7 +127,6 @@ export class PostgresModel extends ResourceModel {
 			this._refreshPromise.reject(err);
 			throw err;
 		} finally {
-			session?.dispose();
 			this._refreshPromise = undefined;
 		}
 	}
@@ -190,7 +184,7 @@ export class PostgresModel extends ResourceModel {
 	}
 
 	protected createConnectionProfile(): azdata.IConnectionProfile {
-		const ipAndPort = parseIpAndPort(this.config?.status.externalEndpoint || '');
+		const ipAndPort = parseIpAndPort(this.config?.status.primaryEndpoint || '');
 		return {
 			serverName: `${ipAndPort.ip},${ipAndPort.port}`,
 			databaseName: '',

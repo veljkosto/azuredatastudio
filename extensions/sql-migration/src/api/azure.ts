@@ -127,6 +127,7 @@ export async function getSqlMigrationService(account: azdata.Account, subscripti
 	if (response.errors.length > 0) {
 		throw new Error(response.errors.toString());
 	}
+	response.response.data.properties.resourceGroup = getResourceGroupFromId(response.response.data.id);
 	return response.response.data;
 }
 
@@ -138,6 +139,9 @@ export async function getSqlMigrationServices(account: azdata.Account, subscript
 		throw new Error(response.errors.toString());
 	}
 	sortResourceArrayByName(response.response.data.value);
+	response.response.data.value.forEach((sms: SqlMigrationService) => {
+		sms.properties.resourceGroup = getResourceGroupFromId(sms.id);
+	});
 	return response.response.data.value;
 }
 
@@ -187,7 +191,6 @@ export async function getSqlMigrationServiceMonitoringData(account: azdata.Accou
 	if (response.errors.length > 0) {
 		throw new Error(response.errors.toString());
 	}
-	console.log(response);
 	return response.response.data;
 }
 
@@ -198,7 +201,9 @@ export async function startDatabaseMigration(account: azdata.Account, subscripti
 	if (response.errors.length > 0) {
 		throw new Error(response.errors.toString());
 	}
+	const asyncUrl = response.response.headers['azure-asyncoperation'];
 	return {
+		asyncUrl: asyncUrl,
 		status: response.response.status,
 		databaseMigration: response.response.data
 	};
@@ -221,6 +226,15 @@ export async function getMigrationStatus(account: azdata.Account, subscription: 
 	const api = await getAzureCoreAPI();
 	const path = `${migration.id}?$expand=MigrationStatusDetails&api-version=2020-09-01-preview`;
 	const response = await api.makeAzureRestRequest(account, subscription, path, azurecore.HttpRequestMethod.GET, undefined, true);
+	if (response.errors.length > 0) {
+		throw new Error(response.errors.toString());
+	}
+	return response.response.data;
+}
+
+export async function getMigrationAsyncOperationDetails(account: azdata.Account, subscription: Subscription, url: string): Promise<AzureAsyncOperationResource> {
+	const api = await getAzureCoreAPI();
+	const response = await api.makeAzureRestRequest(account, subscription, url.replace('https://management.azure.com/', ''), azurecore.HttpRequestMethod.GET, undefined, true);
 	if (response.errors.length > 0) {
 		throw new Error(response.errors.toString());
 	}
@@ -275,6 +289,10 @@ function sortResourceArrayByName(resourceArray: SortableAzureResources[]): void 
 		}
 		return 0;
 	});
+}
+
+function getResourceGroupFromId(id: string): string {
+	return id.replace(RegExp('^(.*?)/resourceGroups/'), '').replace(RegExp('/providers/.*'), '').toLowerCase();
 }
 
 export interface SqlMigrationServiceProperties {
@@ -332,19 +350,8 @@ export interface StartDatabaseMigrationRequest {
 			targetLocation: {
 				storageAccountResourceId: string,
 				accountKey: string,
-			}
-			sourceLocation: {
-				fileShare?: {
-					path: string,
-					username: string,
-					password: string,
-				},
-				azureBlob?: {
-					storageAccountResourceId: string,
-					accountKey: string,
-					blobContainerName: string
-				}
 			},
+			sourceLocation: SourceLocation
 		},
 		sourceSqlConnection: {
 			authentication: string,
@@ -359,6 +366,7 @@ export interface StartDatabaseMigrationRequest {
 export interface StartDatabaseMigrationResponse {
 	status: number,
 	databaseMigration: DatabaseMigration
+	asyncUrl: string
 }
 
 export interface DatabaseMigration {
@@ -435,8 +443,8 @@ export interface BackupSetInfo {
 }
 
 export interface SourceLocation {
-	fileShare: DatabaseMigrationFileShare;
-	azureBlob: DatabaseMigrationAzureBlob;
+	fileShare?: DatabaseMigrationFileShare;
+	azureBlob?: DatabaseMigrationAzureBlob;
 }
 
 export interface TargetLocation {
@@ -459,4 +467,13 @@ export interface DatabaseMigrationAzureBlob {
 	storageAccountResourceId: string;
 	accountKey: string;
 	blobContainerName: string;
+}
+
+export interface AzureAsyncOperationResource {
+	name: string,
+	status: string,
+	startTime: string,
+	endTime: string,
+	percentComplete: number,
+	error: ErrorInfo
 }

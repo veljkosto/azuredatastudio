@@ -29,6 +29,7 @@ export enum TelemetryView {
 	AgentJobSteps = 'AgentJobSteps',
 	AgentNotebookHistory = 'AgentNotebookHistory',
 	AgentNotebooks = 'AgentNotebooks',
+	ConnectionDialog = 'ConnectionDialog',
 	Shell = 'Shell',
 	ExtensionRecommendationDialog = 'ExtensionRecommendationDialog',
 	ResultsPanel = 'ResultsPanel',
@@ -43,6 +44,7 @@ export enum TelemetryError {
 export enum TelemetryAction {
 	AddServerGroup = 'AddServerGroup',
 	adsCommandExecuted = 'adsCommandExecuted',
+	ConnectToServer = 'ConnectToServer',
 	BackupCreated = 'BackupCreated',
 	DashboardNavigated = 'DashboardNavigated',
 	DatabaseConnected = 'DatabaseConnected',
@@ -73,12 +75,23 @@ export enum TelemetryAction {
 	RunQuery = 'RunQuery',
 	RunQueryStatement = 'RunQueryStatement',
 	RunQueryString = 'RunQueryString',
+	ShowChart = 'ShowChart',
 	StopAgentJob = 'StopAgentJob',
-	WizardPagesNavigation = 'WizardPagesNavigation'
+	WizardPagesNavigation = 'WizardPagesNavigation',
+	SearchStarted = 'SearchStarted',
+	SearchCompleted = 'SearchCompleted'
 }
 
 export enum NbTelemetryAction {
 	RunCell = 'RunCell',
-	RunAll = 'RunNotebook'
+	RunAll = 'RunNotebook',
+	AddCell = 'AddCell',
+	KernelChanged = 'KernelChanged',
+	NewNotebookFromConnections = 'NewNotebookWithConnectionProfile'
+}
+
+export enum TelemetryPropertyName {
+	ChartMaxRowCountExceeded = 'chartMaxRowCountExceeded',
+	ConnectionSource = 'connectionSource'
 }
 

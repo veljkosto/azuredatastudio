@@ -21,13 +21,12 @@ import { IWorkbenchLayoutService } from 'vs/workbench/services/layout/browser/la
 import { Registry } from 'vs/platform/registry/common/platform';
 import { IMenuService, MenuId } from 'vs/platform/actions/common/actions';
 import { IContextKeyService, IContextKey } from 'vs/platform/contextkey/common/contextkey';
-import { ShowViewletAction, Viewlet } from 'vs/workbench/browser/viewlet';
-import { IEditorGroupsService } from 'vs/workbench/services/editor/common/editorGroupsService';
-import { IViewletService } from 'vs/workbench/services/viewlet/browser/viewlet';
-import { ViewPaneContainer, ViewPane } from 'vs/workbench/browser/parts/views/viewPaneContainer';
+import { Viewlet } from 'vs/workbench/browser/viewlet';
+import { ViewPane } from 'vs/workbench/browser/parts/views/viewPane';
+import { ViewPaneContainer } from 'vs/workbench/browser/parts/views/viewPaneContainer';
 import { SyncDescriptor } from 'vs/platform/instantiation/common/descriptors';
 import { NotebookSearchWidget, INotebookExplorerSearchOptions } from 'sql/workbench/contrib/notebook/browser/notebookExplorer/notebookSearchWidget';
-import * as Constants from 'sql/workbench/contrib/notebook/common/constants';
+import * as Constants from 'sql/workbench/common/constants';
 import { IChangeEvent } from 'vs/workbench/contrib/search/common/searchModel';
 import { Delayer } from 'vs/base/common/async';
 import { ITextQuery, IPatternInfo } from 'vs/workbench/services/search/common/search';
@@ -39,24 +38,11 @@ import { NotebookSearchView } from 'sql/workbench/contrib/notebook/browser/noteb
 import * as path from 'vs/base/common/path';
 import { URI } from 'vs/base/common/uri';
 import { TreeViewPane } from 'vs/workbench/browser/parts/views/treeView';
+import * as TelemetryKeys from 'sql/platform/telemetry/common/telemetryKeys';
+import { IAdsTelemetryService } from 'sql/platform/telemetry/common/telemetry';
+import { KeyCode, KeyMod } from 'vs/base/common/keyCodes';
 
 export const VIEWLET_ID = 'workbench.view.notebooks';
-
-// Viewlet Action
-export class OpenNotebookExplorerViewletAction extends ShowViewletAction {
-	public static ID = VIEWLET_ID;
-	public static LABEL = localize('showNotebookExplorer', "Show Notebooks");
-
-	constructor(
-		id: string,
-		label: string,
-		@IViewletService viewletService: IViewletService,
-		@IEditorGroupsService editorGroupService: IEditorGroupsService,
-		@IWorkbenchLayoutService layoutService: IWorkbenchLayoutService
-	) {
-		super(id, label, VIEWLET_ID, viewletService, editorGroupService, layoutService);
-	}
-}
 
 export class NotebookExplorerViewletViewsContribution implements IWorkbenchContribution {
 
@@ -124,7 +110,8 @@ export class NotebookExplorerViewPaneContainer extends ViewPaneContainer {
 		@IMenuService private menuService: IMenuService,
 		@IContextKeyService private contextKeyService: IContextKeyService,
 		@IViewDescriptorService viewDescriptorService: IViewDescriptorService,
-		@IFileService private readonly fileService: IFileService
+		@IFileService private readonly fileService: IFileService,
+		@IAdsTelemetryService private _telemetryService: IAdsTelemetryService
 	) {
 		super(VIEWLET_ID, { mergeViewWithContainerWhenSingleView: true }, instantiationService, configurationService, layoutService, contextMenuService, telemetryService, extensionService, themeService, storageService, contextService, viewDescriptorService);
 		this.inputBoxFocused = Constants.InputBoxFocusedKey.bindTo(this.contextKeyService);
@@ -255,6 +242,9 @@ export class NotebookExplorerViewPaneContainer extends ViewPaneContainer {
 			onQueryValidationError(err);
 			return;
 		}
+		this._telemetryService.createActionEvent(TelemetryKeys.TelemetryView.Notebook, TelemetryKeys.TelemetryAction.SearchStarted)
+			.withAdditionalProperties({ triggeredOnType: triggeredOnType })
+			.send();
 
 		this.validateQuery(query).then(() => {
 			if (this.views.length > 1) {
@@ -444,8 +434,13 @@ export const notebookIconId = 'book';
 
 export const NOTEBOOK_VIEW_CONTAINER = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry).registerViewContainer({
 	id: VIEWLET_ID,
-	name: localize('notebookExplorer.name', "Notebooks"),
+	title: localize('notebookExplorer.name', "Notebooks"),
 	ctorDescriptor: new SyncDescriptor(NotebookExplorerViewPaneContainer),
+	openCommandActionDescriptor: {
+		id: VIEWLET_ID,
+		keybindings: { primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KEY_B },
+		order: 0
+	},
 	icon: { id: notebookIconId },
 	order: 6,
 	storageId: `${VIEWLET_ID}.state`

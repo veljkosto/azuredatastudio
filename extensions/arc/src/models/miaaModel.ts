@@ -71,11 +71,9 @@ export class MiaaModel extends ResourceModel {
 			return this._refreshPromise.promise;
 		}
 		this._refreshPromise = new Deferred();
-		let session: azdataExt.AzdataSession | undefined = undefined;
 		try {
-			session = await this.controllerModel.acquireAzdataSession();
 			try {
-				const result = await this._azdataApi.azdata.arc.sql.mi.show(this.info.name, this.controllerModel.azdataAdditionalEnvVars, session);
+				const result = await this._azdataApi.azdata.arc.sql.mi.show(this.info.name, this.controllerModel.azdataAdditionalEnvVars, this.controllerModel.controllerContext);
 				this._config = result.result;
 				this.configLastUpdated = new Date();
 				this._onConfigUpdated.fire(this._config);
@@ -90,7 +88,7 @@ export class MiaaModel extends ResourceModel {
 			}
 
 			// If we have an external endpoint configured then fetch the databases now
-			if (this._config.status.externalEndpoint) {
+			if (this._config.status.primaryEndpoint) {
 				this.getDatabases(false).catch(_err => {
 					// If an error occurs still fire the event so callers can know to
 					// update (e.g. so dashboards don't show the loading icon forever)
@@ -109,7 +107,6 @@ export class MiaaModel extends ResourceModel {
 			this._refreshPromise.reject(err);
 			throw err;
 		} finally {
-			session?.dispose();
 			this._refreshPromise = undefined;
 		}
 	}
@@ -144,7 +141,7 @@ export class MiaaModel extends ResourceModel {
 	}
 
 	protected createConnectionProfile(): azdata.IConnectionProfile {
-		const ipAndPort = parseIpAndPort(this.config?.status.externalEndpoint || '');
+		const ipAndPort = parseIpAndPort(this.config?.status.primaryEndpoint || '');
 		return {
 			serverName: `${ipAndPort.ip},${ipAndPort.port}`,
 			databaseName: '',

@@ -217,21 +217,13 @@ export class PostgresOverviewPage extends DashboardPage {
 				try {
 					const password = await promptAndConfirmPassword(input => !input ? loc.enterANonEmptyPassword : '');
 					if (password) {
-						const session = await this._postgresModel.controllerModel.acquireAzdataSession();
-						try {
-							await this._azdataApi.azdata.arc.postgres.server.edit(
-								this._postgresModel.info.name,
-								{
-									adminPassword: true,
-									noWait: true
-								},
-								this._postgresModel.engineVersion,
-								Object.assign({ 'AZDATA_PASSWORD': password }, this._controllerModel.azdataAdditionalEnvVars),
-								session
-							);
-						} finally {
-							session.dispose();
-						}
+						await this._azdataApi.azdata.arc.postgres.server.edit(
+							this._postgresModel.info.name,
+							{
+								adminPassword: true,
+								noWait: true
+							},
+							Object.assign({ 'AZDATA_PASSWORD': password }, this._controllerModel.azdataAdditionalEnvVars));
 						vscode.window.showInformationMessage(loc.passwordReset);
 					}
 				} catch (error) {
@@ -259,13 +251,7 @@ export class PostgresOverviewPage extends DashboardPage {
 								cancellable: false
 							},
 							async (_progress, _token) => {
-								const session = await this._postgresModel.controllerModel.acquireAzdataSession();
-								try {
-									return await this._azdataApi.azdata.arc.postgres.server.delete(this._postgresModel.info.name, this._controllerModel.azdataAdditionalEnvVars, session);
-								} finally {
-									session.dispose();
-								}
-
+								return await this._azdataApi.azdata.arc.postgres.server.delete(this._postgresModel.info.name, this._controllerModel.azdataAdditionalEnvVars, this._controllerModel.controllerContext);
 							}
 						);
 						await this._controllerModel.refreshTreeNode();
@@ -347,7 +333,7 @@ export class PostgresOverviewPage extends DashboardPage {
 			{ displayName: loc.region, value: azure?.location || '-' },
 			{ displayName: loc.namespace, value: this._postgresModel.config?.metadata.namespace || '-' },
 			{ displayName: loc.subscriptionId, value: azure?.subscription || '-' },
-			{ displayName: loc.externalEndpoint, value: this._postgresModel.config?.status.externalEndpoint || '-' },
+			{ displayName: loc.externalEndpoint, value: this._postgresModel.config?.status.primaryEndpoint || '-' },
 			{ displayName: loc.status, value: status ? `${status.state} (${status.readyPods} ${loc.podsReady})` : '-' },
 			{ displayName: loc.postgresAdminUsername, value: 'postgres' },
 			{ displayName: loc.postgresVersion, value: this._postgresModel.engineVersion ?? '-' },
