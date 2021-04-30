@@ -18,7 +18,8 @@ const textFields = {
 	"nameText": 'ads',
 	"displayNameText": 'Azure Data Studio',
 	"publisherText": 'Microsoft',
-	"licenseText": 'SEE SOURCE EULA LICENSE IN LICENSE.txt'
+	"licenseText": 'SEE SOURCE EULA LICENSE IN LICENSE.txt',
+	"updateText": 'cd ../vscode && npm run update-localization-extension '
 }
 
 //Extensions for ADS
@@ -49,6 +50,7 @@ function update(options) {
 	packageJSON['displayName'] = packageJSON['displayName'].replace('Visual Studio Code', textFields.displayNameText);
 	packageJSON['publisher'] = textFields.publisherText;
 	packageJSON['license'] = textFields.licenseText;
+	packageJSON['scripts']['update'] = textFields.updateText + idOrPath;
 
 	let contributes = packageJSON['contributes'];
 	if (!contributes) {
