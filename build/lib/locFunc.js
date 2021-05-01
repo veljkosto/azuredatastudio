@@ -65,7 +65,7 @@ function updateMainI18nFile(existingTranslationFilePath, originalFilePath, messa
         contents: Buffer.from(content, 'utf8'),
     });
 }
-function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resultingTranslationPaths, pseudo = false) {
+function modifyI18nPackFiles(existingTranslationFolder, adsExtensions, resultingTranslationPaths, pseudo = false) {
     let parsePromises = [];
     let mainPack = { version: i18nPackVersion, contents: {} };
     let extensionsPacks = {};
@@ -85,8 +85,8 @@ function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resu
                     if (!extPack) {
                         extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
                     }
-                    const externalId = externalExtensions[resource];
-                    if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent
+                    const adsId = adsExtensions[resource];
+                    if (adsId) { // internal ADS extension: remove 'extensions/extensionId/' segnent
                         const secondSlash = path.indexOf('/', firstSlash + 1);
                         extPack.contents[path.substr(secondSlash + 1)] = file.messages;
                     }
@@ -110,6 +110,7 @@ function modifyI18nPackFiles(existingTranslationFolder, externalExtensions, resu
             const translatedMainFile = updateMainI18nFile(existingTranslationFolder + '\\main', './main', mainPack);
             this.queue(translatedMainFile);
             for (let extension in extensionsPacks) {
+                console.log('extension is ' + extension);
                 const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
                 this.queue(translatedExtFile);
                 const externalExtensionId = externalExtensions[extension];

@@ -88,7 +88,7 @@ function updateMainI18nFile(existingTranslationFilePath: string, originalFilePat
 	})
 }
 
-export function modifyI18nPackFiles(existingTranslationFolder: string, externalExtensions: Map<string>, resultingTranslationPaths: i18n.TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
+export function modifyI18nPackFiles(existingTranslationFolder: string, adsExtensions: Map<string>, resultingTranslationPaths: i18n.TranslationPath[], pseudo = false): NodeJS.ReadWriteStream {
 	let parsePromises: Promise<ParsedXLF[]>[] = [];
 	let mainPack: I18nPack = { version: i18nPackVersion, contents: {} };
 	let extensionsPacks: Map<I18nPack> = {};
@@ -110,8 +110,8 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, externalE
 						if (!extPack) {
 							extPack = extensionsPacks[resource] = { version: i18nPackVersion, contents: {} };
 						}
-						const externalId = externalExtensions[resource];
-						if (!externalId) { // internal extension: remove 'extensions/extensionId/' segnent
+						const adsId = adsExtensions[resource];
+						if (adsId) { // internal ADS extension: remove 'extensions/extensionId/' segnent
 							const secondSlash = path.indexOf('/', firstSlash + 1);
 							extPack.contents[path.substr(secondSlash + 1)] = file.messages;
 						} else {
@@ -135,6 +135,7 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, externalE
 
 				this.queue(translatedMainFile);
 				for (let extension in extensionsPacks) {
+					console.log('extension is ' + extension);
 					const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
 					this.queue(translatedExtFile);
 
