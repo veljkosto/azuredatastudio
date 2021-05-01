@@ -51,6 +51,7 @@ function update(options) {
 	packageJSON['publisher'] = textFields.publisherText;
 	packageJSON['license'] = textFields.licenseText;
 	packageJSON['scripts']['update'] = textFields.updateText + idOrPath;
+	packageJSON['version'] = incrementVersion(packageJSON['version']);
 
 	let contributes = packageJSON['contributes'];
 	if (!contributes) {
@@ -75,10 +76,10 @@ function update(options) {
 		}
 
 		if (fs.existsSync(translationDataFolder)) {
-			let totalExtensions = fs.readdirSync(path.join(translationDataFolder,'extensions'));
-			for(let extensionTag in totalExtensions){
-				let extensionName = totalExtensions[extensionTag].replace('.i18n.json','');
-				if(!(currentADSExtensions[extensionName] !== undefined || vscodeExtensions.indexOf(extensionName) !== -1)){
+			let totalExtensions = fs.readdirSync(path.join(translationDataFolder, 'extensions'));
+			for (let extensionTag in totalExtensions) {
+				let extensionName = totalExtensions[extensionTag].replace('.i18n.json', '');
+				if (!(currentADSExtensions[extensionName] !== undefined || vscodeExtensions.indexOf(extensionName) !== -1)) {
 					let filePath = path.join(translationDataFolder, 'extensions', extensionName + '.i18n.json')
 					rimraf.sync(filePath);
 				}
@@ -143,6 +144,27 @@ function update(options) {
 
 	});
 }
+
+function incrementVersion(version) {
+	let firstDot = version.indexOf('.');
+	let secondDot = version.indexOf('.', firstDot + 1);
+	let firstNumber = parseInt(version.substr(0, firstDot));
+	let secondNumber = parseInt(version.substr(firstDot + 1, (secondDot - firstDot) - 1));
+	let thirdNumber = parseInt(version.substr(secondDot + 1))
+	if (thirdNumber === 9) {
+		if (secondNumber === 99) {
+			version = (firstNumber + 1) + ".0.0";
+		}
+		else {
+			version = firstNumber + "." + (secondNumber + 1) + ".0";
+		}
+	}
+	else {
+		version = firstNumber + "." + secondNumber + "." + (thirdNumber + 1);
+	}
+	return version;
+}
+
 if (path.basename(process.argv[1]) === 'convert-langpack-extension.js') {
 	var options = minimist(process.argv.slice(2), {
 		string: 'location'
