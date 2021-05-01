@@ -135,7 +135,6 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, adsExtens
 
 				this.queue(translatedMainFile);
 				for (let extension in extensionsPacks) {
-					console.log('extension is ' + extension);
 					const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
 					this.queue(translatedExtFile);
 

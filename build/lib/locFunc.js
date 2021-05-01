@@ -110,7 +110,6 @@ function modifyI18nPackFiles(existingTranslationFolder, adsExtensions, resulting
             const translatedMainFile = updateMainI18nFile(existingTranslationFolder + '\\main', './main', mainPack);
             this.queue(translatedMainFile);
             for (let extension in extensionsPacks) {
-                console.log('extension is ' + extension);
                 const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
                 this.queue(translatedExtFile);
                 const adsExtensionId = adsExtensions[extension];
