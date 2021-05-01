@@ -139,9 +139,9 @@ export function modifyI18nPackFiles(existingTranslationFolder: string, adsExtens
 					const translatedExtFile = createI18nFile(`extensions/${extension}`, extensionsPacks[extension]);
 					this.queue(translatedExtFile);
 
-					const externalExtensionId = externalExtensions[extension];
-					if (externalExtensionId) {
-						resultingTranslationPaths.push({ id: externalExtensionId, resourceName: `extensions/${extension}.i18n.json` });
+					const adsExtensionId = adsExtensions[extension];
+					if (adsExtensionId) {
+						resultingTranslationPaths.push({ id: adsExtensionId, resourceName: `extensions/${extension}.i18n.json` });
 					} else {
 						resultingTranslationPaths.push({ id: `vscode.${extension}`, resourceName: `extensions/${extension}.i18n.json` });
 					}
