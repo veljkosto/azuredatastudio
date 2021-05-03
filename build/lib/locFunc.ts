@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as Is from 'is';
 import * as gulp from 'gulp';
 import * as glob from 'glob';
+import { Stream } from 'stream';
 import rename = require('gulp-rename');
 import * as es from 'event-stream';
 
@@ -206,12 +207,34 @@ export function packageADSExtensionsStream(): NodeJS.ReadWriteStream {
 		.filter(({ name }) => ADSExtensions[name] !== undefined);
 
 	const builtExtensions = extenalExtensionDescriptions.map(extension => {
-		return ext.fromLocal(extension.path, false)
+		return fromLocal(extension.path, false)
 			.pipe(rename(p => p.dirname = `extensions/${extension.name}/${p.dirname}`));
 	});
 
 	return es.merge(builtExtensions);
 }
+
+function fromLocal(extensionPath: string, forWeb: boolean): Stream {
+	const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
+
+	const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
+	let input = ext.fromLocalNormal(extensionPath);
+
+	if (isWebPacked) {
+		input = ext.updateExtensionPackageJSON(input, (data: any) => {
+			delete data.scripts;
+			delete data.dependencies;
+			delete data.devDependencies;
+			if (data.main) {
+				data.main = data.main.replace('/out/', /dist/);
+			}
+			return data;
+		});
+	}
+
+	return input;
+}
+
 
 export function createXlfFilesForExtensions(): ThroughStream {
 	let counter: number = 0;

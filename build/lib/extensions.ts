@@ -41,7 +41,8 @@ function minifyExtensionResources(input: Stream): Stream {
 		.pipe(jsonFilter.restore);
 }
 
-function updateExtensionPackageJSON(input: Stream, update: (data: any) => any): Stream {
+// {{SQL CARBON EDIT}} - Needed in locFunc
+export function updateExtensionPackageJSON(input: Stream, update: (data: any) => any): Stream {
 	const packageJsonFilter = filter('extensions/*/package.json', { restore: true });
 	return input
 		.pipe(packageJsonFilter)
@@ -54,8 +55,7 @@ function updateExtensionPackageJSON(input: Stream, update: (data: any) => any): 
 		.pipe(packageJsonFilter.restore);
 }
 
-// {{SQL CARBON EDIT}} - Needed in locFunc
-export function fromLocal(extensionPath: string, forWeb: boolean): Stream {
+function fromLocal(extensionPath: string, forWeb: boolean): Stream {
 	const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
 
 	const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
@@ -77,7 +77,6 @@ export function fromLocal(extensionPath: string, forWeb: boolean): Stream {
 
 	return input;
 }
-
 
 function fromLocalWebpack(extensionPath: string, webpackConfigFileName: string): Stream {
 	const result = es.through();
@@ -172,7 +171,8 @@ function fromLocalWebpack(extensionPath: string, webpackConfigFileName: string):
 	return result.pipe(createStatsStream(path.basename(extensionPath)));
 }
 
-function fromLocalNormal(extensionPath: string): Stream {
+// {{SQL CARBON EDIT}} - Needed in locFunc
+export function fromLocalNormal(extensionPath: string): Stream {
 	const result = es.through();
 
 	const vsce = require('vsce') as typeof import('vsce');
