@@ -4,7 +4,7 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.translatePackageJSON = exports.packageRebuildExtensionsStream = exports.cleanRebuildExtensions = exports.packageExternalExtensionsStream = exports.scanBuiltinExtensions = exports.packageMarketplaceExtensionsStream = exports.packageLocalExtensionsStream = exports.fromMarketplace = exports.fromLocal = void 0;
+exports.translatePackageJSON = exports.packageRebuildExtensionsStream = exports.cleanRebuildExtensions = exports.packageExternalExtensionsStream = exports.scanBuiltinExtensions = exports.packageMarketplaceExtensionsStream = exports.packageLocalExtensionsStream = exports.fromMarketplace = exports.fromLocalNormal = exports.fromLocalWebpack = exports.updateExtensionPackageJSON = void 0;
 const es = require("event-stream");
 const fs = require("fs");
 const glob = require("glob");
@@ -16,6 +16,7 @@ const util2 = require("./util");
 const vzip = require('gulp-vinyl-zip');
 const filter = require("gulp-filter");
 const rename = require("gulp-rename");
+const remote = require("gulp-remote-retry-src");
 const fancyLog = require("fancy-log");
 const ansiColors = require("ansi-colors");
 const buffer = require('gulp-buffer');
@@ -40,6 +41,7 @@ function minifyExtensionResources(input) {
     }))
         .pipe(jsonFilter.restore);
 }
+// {{SQL CARBON EDIT}} - Needed in locFunc
 function updateExtensionPackageJSON(input, update) {
     const packageJsonFilter = filter('extensions/*/package.json', { restore: true });
     return input
@@ -52,7 +54,7 @@ function updateExtensionPackageJSON(input, update) {
     }))
         .pipe(packageJsonFilter.restore);
 }
-// {{SQL CARBON EDIT}} - Needed in locFunc
+exports.updateExtensionPackageJSON = updateExtensionPackageJSON;
 function fromLocal(extensionPath, forWeb) {
     const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
     const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
@@ -72,7 +74,7 @@ function fromLocal(extensionPath, forWeb) {
     }
     return input;
 }
-exports.fromLocal = fromLocal;
+// {{SQL CARBON EDIT}} - Needed in locFunc
 function fromLocalWebpack(extensionPath, webpackConfigFileName) {
     const result = es.through();
     const packagedDependencies = [];
@@ -147,6 +149,8 @@ function fromLocalWebpack(extensionPath, webpackConfigFileName) {
     });
     return result.pipe(stats_1.createStatsStream(path.basename(extensionPath)));
 }
+exports.fromLocalWebpack = fromLocalWebpack;
+// {{SQL CARBON EDIT}} - Needed in locFunc
 function fromLocalNormal(extensionPath) {
     const result = es.through();
     const vsce = require('vsce');
@@ -165,13 +169,13 @@ function fromLocalNormal(extensionPath) {
         .catch(err => result.emit('error', err));
     return result.pipe(stats_1.createStatsStream(path.basename(extensionPath)));
 }
+exports.fromLocalNormal = fromLocalNormal;
 const baseHeaders = {
     'X-Market-Client-Id': 'VSCode Build',
     'User-Agent': 'VSCode Build',
     'X-Market-User-Id': '291C1CD0-051A-4123-9B4B-30D60EF52EE2',
 };
 function fromMarketplace(extensionName, version, metadata) {
-    const remote = require('gulp-remote-retry-src');
     const json = require('gulp-json-editor');
     const [, name] = extensionName.split('.');
     const url = `https://sqlopsextensions.blob.core.windows.net/extensions/${name}/${name}-${version}.vsix`;

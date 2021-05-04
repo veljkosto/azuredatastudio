@@ -218,8 +218,10 @@ function fromLocal(extensionPath: string, forWeb: boolean): Stream {
 	const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
 
 	const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
-	let input = ext.fromLocalNormal(extensionPath);
-
+	//let input = ext.fromLocalNormal(extensionPath);
+	let input = isWebPacked
+		? ext.fromLocalWebpack(extensionPath, webpackConfigFileName)
+		: ext.fromLocalNormal(extensionPath);
 	if (isWebPacked) {
 		input = ext.updateExtensionPackageJSON(input, (data: any) => {
 			delete data.scripts;

@@ -185,7 +185,7 @@ exports.compileExtensionsBuildTask = compileExtensionsBuildTask;
 const compileLocalizationExtensionsBuildTask = task.define('compile-localization-extensions-build', task.series(
 	task.define('clean-localization-build', util.rimraf('.locbuild')),
 	task.define('bundle-marketplace-extensions-build', () => ext.packageMarketplaceExtensionsStream(false).pipe(gulp.dest('.locbuild'))),
-	task.define('external-extensions-build', () => loc.packageADSExtensionsStream().pipe(gulp.dest('.locbuild'))),
+	task.define('ads-extensions-build', () => loc.packageADSExtensionsStream().pipe(gulp.dest('.locbuild'))),
 ));
 
 gulp.task(compileLocalizationExtensionsBuildTask);

@@ -160,12 +160,32 @@ function packageADSExtensionsStream() {
     })
         .filter(({ name }) => ADSExtensions[name] !== undefined);
     const builtExtensions = extenalExtensionDescriptions.map(extension => {
-        return ext.fromLocal(extension.path, false)
+        return fromLocal(extension.path, false)
             .pipe(rename(p => p.dirname = `extensions/${extension.name}/${p.dirname}`));
     });
     return es.merge(builtExtensions);
 }
 exports.packageADSExtensionsStream = packageADSExtensionsStream;
+function fromLocal(extensionPath, forWeb) {
+    const webpackConfigFileName = forWeb ? 'extension-browser.webpack.config.js' : 'extension.webpack.config.js';
+    const isWebPacked = fs.existsSync(path.join(extensionPath, webpackConfigFileName));
+    //let input = ext.fromLocalNormal(extensionPath);
+    let input = isWebPacked
+        ? ext.fromLocalWebpack(extensionPath, webpackConfigFileName)
+        : ext.fromLocalNormal(extensionPath);
+    if (isWebPacked) {
+        input = ext.updateExtensionPackageJSON(input, (data) => {
+            delete data.scripts;
+            delete data.dependencies;
+            delete data.devDependencies;
+            if (data.main) {
+                data.main = data.main.replace('/out/', /dist/);
+            }
+            return data;
+        });
+    }
+    return input;
+}
 function createXlfFilesForExtensions() {
     let counter = 0;
     let folderStreamEnded = false;
