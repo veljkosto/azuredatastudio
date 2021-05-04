@@ -15,7 +15,6 @@ import * as util2 from './util';
 const vzip = require('gulp-vinyl-zip');
 import filter = require('gulp-filter');
 import rename = require('gulp-rename');
-import remote = require('gulp-remote-retry-src');
 import * as fancyLog from 'fancy-log';
 import * as ansiColors from 'ansi-colors';
 const buffer = require('gulp-buffer');
@@ -204,6 +203,7 @@ const baseHeaders = {
 };
 
 export function fromMarketplace(extensionName: string, version: string, metadata: any): Stream {
+	const remote = require('gulp-remote-retry-src');
 	const json = require('gulp-json-editor') as typeof import('gulp-json-editor');
 
 	const [, name] = extensionName.split('.');

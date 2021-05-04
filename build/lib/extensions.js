@@ -16,7 +16,6 @@ const util2 = require("./util");
 const vzip = require('gulp-vinyl-zip');
 const filter = require("gulp-filter");
 const rename = require("gulp-rename");
-const remote = require("gulp-remote-retry-src");
 const fancyLog = require("fancy-log");
 const ansiColors = require("ansi-colors");
 const buffer = require('gulp-buffer');
@@ -176,6 +175,7 @@ const baseHeaders = {
     'X-Market-User-Id': '291C1CD0-051A-4123-9B4B-30D60EF52EE2',
 };
 function fromMarketplace(extensionName, version, metadata) {
+    const remote = require('gulp-remote-retry-src');
     const json = require('gulp-json-editor');
     const [, name] = extensionName.split('.');
     const url = `https://sqlopsextensions.blob.core.windows.net/extensions/${name}/${name}-${version}.vsix`;
