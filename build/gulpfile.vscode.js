@@ -459,9 +459,7 @@ gulp.task(task.define(
 gulp.task(task.define(
 	'export-xlfs',
 	task.series(
-		compileBuildTask,
 		compileLocalizationExtensionsBuildTask,
-		optimizeVSCodeTask,
 		function () {
 			const pathToExtensions = ['.locbuild/builtInExtensions/*', '.locbuild/extensions/*'];
 			return es.merge(
