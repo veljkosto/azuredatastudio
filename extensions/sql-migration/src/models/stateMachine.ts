@@ -709,9 +709,8 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		}
 	}
 
-	public saveAndClose() {
-		console.log('save and close');
-		console.log(this._assessmentResults);
+	public saveAssessment(serverName: string): void {
+		this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, this._assessmentResults);
 	}
 }
 

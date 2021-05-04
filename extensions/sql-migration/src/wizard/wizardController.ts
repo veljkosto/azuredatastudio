@@ -3,8 +3,6 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as azdata from 'azdata';
-import * as vscode from 'vscode';
-import * as mssql from '../../../mssql';
 import { MigrationStateModel } from '../models/stateMachine';
 import * as loc from '../constants/strings';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
@@ -20,17 +18,14 @@ import { SqlSourceConfigurationPage } from './sqlSourceConfigurationPage';
 
 export const WIZARD_INPUT_COMPONENT_WIDTH = '600px';
 export class WizardController {
-	constructor(private readonly extensionContext: vscode.ExtensionContext) {
+	stateModel: MigrationStateModel;
 
+	constructor(stateModel: MigrationStateModel) {
+		this.stateModel = stateModel;
 	}
 
 	public async openWizard(connectionId: string): Promise<void> {
-		const api = (await vscode.extensions.getExtension(mssql.extension.name)?.activate()) as mssql.IExtension;
-		if (api) {
-			const stateModel = new MigrationStateModel(this.extensionContext, connectionId, api.sqlMigration);
-			this.extensionContext.subscriptions.push(stateModel);
-			this.createWizard(stateModel);
-		}
+		this.createWizard(this.stateModel);
 	}
 
 	private async createWizard(stateModel: MigrationStateModel): Promise<void> {
@@ -39,11 +34,6 @@ export class WizardController {
 		wizard.generateScriptButton.enabled = false;
 		wizard.generateScriptButton.hidden = true;
 		const saveAndCloseButton = azdata.window.createButton(loc.SAVE_AND_CLOSE);
-		saveAndCloseButton.onClick(() => {
-			stateModel.saveAndClose();
-			//TODO: save the assessments
-			wizard.close();
-		});
 		wizard.customButtons = [saveAndCloseButton];
 		const skuRecommendationPage = new SKURecommendationPage(wizard, stateModel);
 		const migrationModePage = new MigrationModePage(wizard, stateModel);
@@ -92,6 +82,12 @@ export class WizardController {
 
 		wizard.doneButton.onClick(async (e) => {
 			await stateModel.startMigration();
+		});
+		saveAndCloseButton.onClick(() => {
+			// check what page wizard is on
+			// save stuff according to the page
+			stateModel.saveAssessment(serverName);
+			wizard.close();
 		});
 	}
 }

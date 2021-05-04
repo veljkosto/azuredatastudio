@@ -15,6 +15,11 @@ export function WIZARD_TITLE(instanceName: string): string {
 export const SOURCE_CONFIGURATION_PAGE_TITLE = localize('sql.migration.wizard.source_configuration.title', "SQL Source Configuration");
 // //#endregion
 
+// Resume Migration Dialog
+export const RESUME_TITLE = localize('sql.migration.resume.title', "Run migration workflow again");
+export const START_MIGRATION = localize('sql.migration.resume.start', "Start with Migration assessment again (recommended)");
+export const CONTINUE_MIGRATION = localize('sql.migration.resume.contine', "Continue last migration attempt...");
+
 // Assessments Progress Page
 export const ASSESSMENT_PROGRESS = localize('sql.migration.assessments.progress', "Assessments Progress");
 export const ASSESSMENT_IN_PROGRESS = localize('sql.migration.assessment.in.progress', "Assessment in progress");
@@ -377,6 +382,7 @@ export const ISSUES_DETAILS = localize('sql.migration.issues.details', "Issue De
 export const SELECT_DB_PROMPT = localize('sql.migration.select.prompt', "Click on SQL Server Instance or any of the databases on the left to view its details.");
 export const NO_ISSUES_FOUND_VM = localize('sql.migration.no.issues.vm', "No issues found for migrating to SQL Server on Azure Virtual Machine");
 export const NO_ISSUES_FOUND_MI = localize('sql.migration.no.issues.mi', "No issues found for migrating to SQL Server on Azure SQL Managed Instance");
+export const MEMENTO_STRING = localize('sql.migration.memento.string', "sqlMigration.assessmentResults");
 export function IMPACT_OBJECT_TYPE(objectType: string): string {
 	return localize('sql.migration.impact.object.type', "Type: {0}", objectType);
 }

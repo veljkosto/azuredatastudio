@@ -5,6 +5,7 @@
 
 import * as vscode from 'vscode';
 import * as azdata from 'azdata';
+import * as mssql from '../../mssql';
 import { WizardController } from './wizard/wizardController';
 import { promises as fs } from 'fs';
 import * as loc from './constants/strings';
@@ -12,6 +13,8 @@ import { MigrationNotebookInfo, NotebookPathHelper } from './constants/notebookP
 import { IconPathHelper } from './constants/iconPathHelper';
 import { DashboardWidget } from './dashboard/sqlServerDashboard';
 import { MigrationLocalStorage } from './models/migrationLocalStorage';
+import { MigrationStateModel, ServerAssessement } from './models/stateMachine';
+import { SavedAssessmentDialog } from './dialog/assessmentResults/savedAssessmentDialog';
 
 class SQLMigration {
 
@@ -65,16 +68,45 @@ class SQLMigration {
 	async launchMigrationWizard(): Promise<void> {
 		let activeConnection = await azdata.connection.getCurrentConnection();
 		let connectionId: string = '';
+		let serverName: string = '';
+		let stateModel: MigrationStateModel;
 		if (!activeConnection) {
 			const connection = await azdata.connection.openConnectionDialog();
 			if (connection) {
 				connectionId = connection.connectionId;
+				serverName = connection.options.server;
 			}
 		} else {
 			connectionId = activeConnection.connectionId;
+			serverName = activeConnection.serverName;
 		}
-		const wizardController = new WizardController(this.context);
-		await wizardController.openWizard(connectionId);
+		if (serverName) {
+			const api = (await vscode.extensions.getExtension(mssql.extension.name)?.activate()) as mssql.IExtension;
+			if (api) {
+				stateModel = new MigrationStateModel(this.context, connectionId, api.sqlMigration);
+				this.context.subscriptions.push(stateModel);
+				const savedAssessments = this.checkSavedAssessments(serverName);
+				if (savedAssessments) {
+					let savedAssessmentDialog = new SavedAssessmentDialog();
+					await savedAssessmentDialog.openDialog();
+				} else {
+					const wizardController = new WizardController(stateModel);
+					await wizardController.openWizard(connectionId);
+				}
+			}
+		}
+
+
+
+	}
+
+	private checkSavedAssessments(serverName: string): ServerAssessement | undefined {
+		let savedAssessments: ServerAssessement | undefined = this.context.globalState.get(`${loc.MEMENTO_STRING}.${serverName}`);
+		if (savedAssessments) {
+			return savedAssessments;
+		} else {
+			return;
+		}
 	}
 
 	stop(): void {
