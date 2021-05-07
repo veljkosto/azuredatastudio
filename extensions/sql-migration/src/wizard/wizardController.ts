@@ -24,7 +24,7 @@ export class WizardController {
 		this.stateModel = stateModel;
 	}
 
-	public async openWizard(connectionId: string): Promise<void> {
+	public async openWizard(): Promise<void> {
 		this.createWizard(this.stateModel);
 	}
 
@@ -84,8 +84,8 @@ export class WizardController {
 			await stateModel.startMigration();
 		});
 		saveAndCloseButton.onClick(() => {
-			// check what page wizard is on
-			// save stuff according to the page
+			// TODO: check what page wizard is on
+			// TODO: save stuff according to the page
 			stateModel.saveAssessment(serverName);
 			wizard.close();
 		});

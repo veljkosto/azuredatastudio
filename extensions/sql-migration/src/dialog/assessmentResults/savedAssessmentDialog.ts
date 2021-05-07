@@ -5,6 +5,8 @@
 
 import * as azdata from 'azdata';
 import * as constants from '../../constants/strings';
+import { MigrationStateModel } from '../../models/stateMachine';
+import { WizardController } from '../../wizard/wizardController';
 
 
 export class SavedAssessmentDialog {
@@ -15,9 +17,10 @@ export class SavedAssessmentDialog {
 	private _isOpen: boolean = false;
 	private dialog: azdata.window.Dialog | undefined;
 	private _rootContainer!: azdata.FlexContainer;
+	private stateModel: MigrationStateModel;
 
-	constructor() {
-
+	constructor(stateModel: MigrationStateModel) {
+		this.stateModel = stateModel;
 	}
 
 	private async initializeDialog(dialog: azdata.window.Dialog): Promise<void> {
@@ -57,7 +60,14 @@ export class SavedAssessmentDialog {
 
 	protected async execute() {
 
-		// Open page based on selection - either start new migration assessment OR continue last migration attempt
+		if (this.stateModel.resumeAssessment) {
+			// load saved assessments here
+			const wizardController = new WizardController(this.stateModel);
+			await wizardController.openWizard();
+		} else {
+			const wizardController = new WizardController(this.stateModel);
+			await wizardController.openWizard();
+		}
 		this._isOpen = false;
 	}
 
@@ -93,7 +103,7 @@ export class SavedAssessmentDialog {
 
 		radioStart.onDidChangeCheckedState((e) => {
 			if (e) {
-
+				this.stateModel.resumeAssessment = false;
 			}
 		});
 		const radioContinue = view.modelBuilder.radioButton().withProps({
@@ -105,6 +115,12 @@ export class SavedAssessmentDialog {
 			},
 			checked: false
 		}).component();
+
+		radioContinue.onDidChangeCheckedState((e) => {
+			if (e) {
+				this.stateModel.resumeAssessment = true;
+			}
+		});
 
 		const flex = view.modelBuilder.flexContainer().withLayout({
 			flexFlow: 'column',

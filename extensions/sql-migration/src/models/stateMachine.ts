@@ -133,6 +133,9 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public _targetType!: MigrationTargetType;
 	public refreshDatabaseBackupPage!: boolean;
 
+	public resumeAssessment!: boolean;
+	public savedAssessments!: ServerAssessement;
+
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
 		private readonly _sourceConnectionId: string,
