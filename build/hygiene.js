@@ -106,6 +106,7 @@ const indentationFilter = [
 	'!extensions/azurehybridtoolkit/notebooks/**',
 	'!extensions/integration-tests/testData/**',
 	'!extensions/arc/src/controller/generated/**',
+	'!extensions/arc/scripts/**',
 	'!extensions/sql-database-projects/resources/templates/*.xml',
 	'!extensions/sql-database-projects/src/test/baselines/*.xml',
 	'!extensions/sql-database-projects/src/test/baselines/*.json',

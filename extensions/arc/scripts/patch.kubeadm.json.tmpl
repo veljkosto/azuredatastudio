@@ -1,0 +1,24 @@
+{
+    "patch": [
+        {
+            "op": "add",
+            "path": "spec.docker",
+            "value": {
+                "registry": "$SOURCE_DOCKER_REGISTRY",
+                "repository": "$SOURCE_DOCKER_REPOSITORY",
+                "imageTag": "$SOURCE_DOCKER_TAG",
+                "imagePullPolicy": "$DOCKER_IMAGE_POLICY"
+            }
+        },        
+        {
+            "op": "add",
+            "path": "spec.storage.data.className",
+            "value": "local-storage"
+        },
+        {
+            "op": "add",
+            "path": "spec.storage.logs.className",
+            "value": "local-storage"
+        }                        
+    ]
+}

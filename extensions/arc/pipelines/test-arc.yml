@@ -1,0 +1,74 @@
+jobs:
+- job: ArcIntegrationTests
+  timeoutInMinutes: 120
+  steps:
+    - script: |
+        set -e
+        sudo apt-get update
+        sudo apt-get install -y libxkbfile-dev pkg-config libsecret-1-dev libxss1 dbus xvfb libgtk-3-0 \
+          libkrb5-dev git apt-transport-https ca-certificates curl gnupg-agent software-properties-common \
+          libnss3 libasound2 make gcc libx11-dev fakeroot rpm libgconf-2-4 libunwind8 libgbm1
+        sudo cp build/azure-pipelines/linux/xvfb.init /etc/init.d/xvfb
+        sudo chmod +x /etc/init.d/xvfb
+        sudo update-rc.d xvfb defaults
+        sudo service xvfb start
+      displayName: Set up Linux environment
+    - task: NodeTool@0
+      inputs:
+        versionSpec: "12.13.0"
+    - task: geeklearningio.gl-vsts-tasks-yarn.yarn-installer-task.YarnInstaller@3
+      inputs:
+        versionSpec: "1.x"
+    - script: |
+        yarn config set network-timeout 300000
+        yarn --frozen-lockfile
+      displayName: Install Dependencies
+    - script: yarn electron x64
+      displayName: Download Electron
+    - script: yarn compile
+      displayName: Compile Sources
+    - task: Bash@3
+      displayName: 'Create environment variables'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/create-environment-variables.sh'
+      env:
+        SPN_CLIENT_SECRET: $(SPN_CLIENT_SECRET)
+        WORKSPACE_SHARED_KEY: $(WORKSPACE_SHARED_KEY)
+        SOURCE_DOCKER_PASSWORD: $(SOURCE_DOCKER_PASSWORD)
+        AZDATA_PASSWORD: $(AZDATA_PASSWORD)
+        OPENSHIFT_PASSWORD: $(OPENSHIFT_PASSWORD)
+    - task: Bash@3
+      displayName: 'Install Prerequisites'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/setup-prerequisites.sh'
+    - task: Bash@3
+      displayName: 'Fetch Nightly Build Image Tag'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/fetch-nightly-build-tag.sh'
+    - task: Bash@3
+      displayName: 'Install Kubernetes'
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/setup-kubernetes.sh'
+    - task: Bash@3
+      displayName: 'Create Controller'
+      timeoutInMinutes: 30
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/create-controller.sh'
+    - task: Bash@3
+      displayName: 'Run tests'
+      timeoutInMinutes: 30
+      inputs:
+        targetType: filePath
+        filePath: './scripts/test-integration-arc.sh'
+    - task: Bash@3
+      displayName: 'Delete Controller'
+      timeoutInMinutes: 30
+      inputs:
+        targetType: filePath
+        filePath: './extensions/arc/scripts/delete-controller.sh'
+
