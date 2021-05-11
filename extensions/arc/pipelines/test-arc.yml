@@ -11,8 +11,18 @@ jobs:
         sudo cp build/azure-pipelines/linux/xvfb.init /etc/init.d/xvfb
         sudo chmod +x /etc/init.d/xvfb
         sudo update-rc.d xvfb defaults
-        sudo service xvfb start
       displayName: Set up Linux environment
+    - script: |
+        set -e
+        sudo apt-get update
+        sudo apt-get install gnupg ca-certificates curl wget software-properties-common apt-transport-https lsb-release -y
+        curl -sL https://packages.microsoft.com/keys/microsoft.asc |
+        gpg --dearmor |
+        sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null
+        sudo add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list)"
+        sudo apt-get update
+        sudo apt-get install -y azdata-cli
+      displayName: Install azdata
     - task: NodeTool@0
       inputs:
         versionSpec: "12.13.0"
