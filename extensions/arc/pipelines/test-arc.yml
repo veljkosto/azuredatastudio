@@ -59,12 +59,14 @@ jobs:
       inputs:
         targetType: filePath
         filePath: './extensions/arc/scripts/create-controller.sh'
-    - task: Bash@3
-      displayName: 'Run tests'
-      timeoutInMinutes: 30
-      inputs:
-        targetType: filePath
-        filePath: './scripts/test-integration-arc.sh'
+    - script: |
+        set -e
+        service xvfb start
+      displayName: Start xvfb
+    - script: |
+        set -e
+        DISPLAY=:10 ./scripts/test-integration-arc.sh
+      displayName: Run arc integration tests (Electron)
     - task: Bash@3
       displayName: 'Delete Controller'
       timeoutInMinutes: 30
