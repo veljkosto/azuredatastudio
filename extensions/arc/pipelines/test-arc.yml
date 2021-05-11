@@ -61,7 +61,7 @@ jobs:
         filePath: './extensions/arc/scripts/create-controller.sh'
     - script: |
         set -e
-        service xvfb start
+        sudo service xvfb start
       displayName: Start xvfb
     - script: |
         set -e
