@@ -53,6 +53,9 @@ export class WizardController {
 			summaryPage
 		];
 
+		if (this.stateModel.savedAssessment.closedPage) {
+			wizard.setCurrentPage(this.stateModel.savedAssessment.closedPage);
+		}
 		wizard.pages = pages.map(p => p.getwizardPage());
 
 		const wizardSetupPromises: Thenable<void>[] = [];
@@ -84,9 +87,8 @@ export class WizardController {
 			await stateModel.startMigration();
 		});
 		saveAndCloseButton.onClick(() => {
-			// TODO: check what page wizard is on
 			// TODO: save stuff according to the page
-			stateModel.saveAssessment(serverName);
+			stateModel.saveAssessment(serverName, wizard.currentPage);
 			wizard.close();
 		});
 	}

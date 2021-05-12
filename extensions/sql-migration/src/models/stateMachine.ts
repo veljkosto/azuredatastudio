@@ -89,6 +89,11 @@ export interface StateChangeEvent {
 	newState: State;
 }
 
+export interface SavedInfo {
+	closedPage: number;
+	serverAssessment: ServerAssessment;
+}
+
 export class MigrationStateModel implements Model, vscode.Disposable {
 	public _azureAccounts!: azdata.Account[];
 	public _azureAccount!: azdata.Account;
@@ -127,14 +132,15 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	private _gatheringInformationError: string | undefined;
 
 	private _skuRecommendations: SKURecommendations | undefined;
-	public _assessmentResults!: ServerAssessement;
+	public _assessmentResults!: ServerAssessment;
 	public _vmDbs: string[] = [];
 	public _miDbs: string[] = [];
 	public _targetType!: MigrationTargetType;
 	public refreshDatabaseBackupPage!: boolean;
 
 	public resumeAssessment!: boolean;
-	public savedAssessments!: ServerAssessement;
+	public savedAssessment!: SavedInfo;
+	public closedPage!: number;
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -159,7 +165,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		this._stateChangeEventEmitter.fire({ oldState, newState: this.currentState });
 	}
 
-	public async getServerAssessments(): Promise<ServerAssessement> {
+	public async getServerAssessments(): Promise<ServerAssessment> {
 		const excludeDbs: string[] = [
 			'master',
 			'tempdb',
@@ -712,12 +718,39 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		}
 	}
 
-	public saveAssessment(serverName: string): void {
-		this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, this._assessmentResults);
+	public saveAssessment(serverName: string, currentPage: number): void {
+		switch (currentPage) {
+			// Azure Account
+			case 0:
+
+			// Source Configuration
+			case 1:
+
+			// SKU Recommendation
+			case 2:
+
+			// Migration Mode
+			case 3:
+
+			// Database Backup
+			case 4:
+
+			// Integration Runtime
+			case 5:
+
+			// Summary
+			case 6:
+
+		}
+		let saveAssessment: SavedInfo = {
+			closedPage: currentPage,
+			serverAssessment: this._assessmentResults
+		};
+		this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveAssessment);
 	}
 }
 
-export interface ServerAssessement {
+export interface ServerAssessment {
 	issues: mssql.SqlMigrationAssessmentResultItem[];
 	databaseAssessments: {
 		name: string;

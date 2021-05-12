@@ -6,14 +6,13 @@
 import * as vscode from 'vscode';
 import * as azdata from 'azdata';
 import * as mssql from '../../mssql';
-import { WizardController } from './wizard/wizardController';
 import { promises as fs } from 'fs';
 import * as loc from './constants/strings';
 import { MigrationNotebookInfo, NotebookPathHelper } from './constants/notebookPathHelper';
 import { IconPathHelper } from './constants/iconPathHelper';
 import { DashboardWidget } from './dashboard/sqlServerDashboard';
 import { MigrationLocalStorage } from './models/migrationLocalStorage';
-import { MigrationStateModel, ServerAssessement } from './models/stateMachine';
+import { MigrationStateModel, SavedInfo } from './models/stateMachine';
 import { SavedAssessmentDialog } from './dialog/assessmentResults/savedAssessmentDialog';
 
 class SQLMigration {
@@ -87,7 +86,7 @@ class SQLMigration {
 				this.context.subscriptions.push(stateModel);
 				let savedAssessments = this.checkSavedAssessments(serverName);
 				if (savedAssessments) {
-					stateModel.savedAssessments = savedAssessments;
+					stateModel.savedAssessment = savedAssessments;
 					let savedAssessmentDialog = new SavedAssessmentDialog(stateModel);
 					await savedAssessmentDialog.openDialog();
 				}
@@ -99,8 +98,8 @@ class SQLMigration {
 
 	}
 
-	private checkSavedAssessments(serverName: string): ServerAssessement | undefined {
-		let savedAssessments: ServerAssessement | undefined = this.context.globalState.get(`${loc.MEMENTO_STRING}.${serverName}`);
+	private checkSavedAssessments(serverName: string): SavedInfo | undefined {
+		let savedAssessments: SavedInfo | undefined = this.context.globalState.get(`${loc.MEMENTO_STRING}.${serverName}`);
 		if (savedAssessments) {
 			return savedAssessments;
 		} else {
