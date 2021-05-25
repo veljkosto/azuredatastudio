@@ -10,7 +10,6 @@ import { promises as fs } from 'fs';
 import * as loc from './constants/strings';
 import { MigrationNotebookInfo, NotebookPathHelper } from './constants/notebookPathHelper';
 import { IconPathHelper } from './constants/iconPathHelper';
-import { FeedbackDialog } from './dialog/feedbackDialog';
 import { DashboardWidget } from './dashboard/sqlServerDashboard';
 import { MigrationLocalStorage } from './models/migrationLocalStorage';
 import { MigrationStateModel, SavedInfo } from './models/stateMachine';
@@ -59,12 +58,6 @@ class SQLMigration {
 			}),
 			azdata.tasks.registerTask('sqlmigration.start', async () => {
 				await this.launchMigrationWizard();
-			}),
-			azdata.tasks.registerTask('sqlmigration.newsupportrequest', async () => {
-				await this.launchNewSupportRequest();
-			}),
-			azdata.tasks.registerTask('sqlmigration.sendfeedback', async () => {
-				await this.sendFeedback();
 			})
 		];
 
@@ -112,16 +105,6 @@ class SQLMigration {
 		} else {
 			return;
 		}
-	}
-
-	async launchNewSupportRequest(): Promise<void> {
-		await vscode.env.openExternal(vscode.Uri.parse(
-			`https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/newsupportrequest`));
-	}
-
-	async sendFeedback(): Promise<void> {
-		const dialog = new FeedbackDialog();
-		await dialog.openDialog();
 	}
 
 	stop(): void {
