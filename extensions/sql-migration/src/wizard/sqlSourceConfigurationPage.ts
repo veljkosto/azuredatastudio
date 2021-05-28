@@ -19,7 +19,7 @@ export class SqlSourceConfigurationPage extends MigrationWizardPage {
 	}
 
 	protected async registerContent(view: azdata.ModelView): Promise<void> {
-		this.wizard.customButtons[0].enabled = false;
+		this.wizard.customButtons[0].enabled = true;
 		this._view = view;
 		const form = view.modelBuilder.formContainer()
 			.withFormItems(

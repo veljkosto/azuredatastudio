@@ -84,9 +84,9 @@ class SQLMigration {
 			if (api) {
 				stateModel = new MigrationStateModel(this.context, connectionId, api.sqlMigration);
 				this.context.subscriptions.push(stateModel);
-				let savedAssessments = this.checkSavedAssessments(serverName);
-				if (savedAssessments) {
-					stateModel.savedAssessment = savedAssessments;
+				let savedInfo = this.checkSavedInfo(serverName);
+				if (savedInfo) {
+					stateModel.savedInfo = savedInfo;
 					let savedAssessmentDialog = new SavedAssessmentDialog(stateModel);
 					await savedAssessmentDialog.openDialog();
 				}
@@ -98,10 +98,10 @@ class SQLMigration {
 
 	}
 
-	private checkSavedAssessments(serverName: string): SavedInfo | undefined {
-		let savedAssessments: SavedInfo | undefined = this.context.globalState.get(`${loc.MEMENTO_STRING}.${serverName}`);
-		if (savedAssessments) {
-			return savedAssessments;
+	private checkSavedInfo(serverName: string): SavedInfo | undefined {
+		let savedInfo: SavedInfo | undefined = this.context.globalState.get(`${loc.MEMENTO_STRING}.${serverName}`);
+		if (savedInfo) {
+			return savedInfo;
 		} else {
 			return;
 		}

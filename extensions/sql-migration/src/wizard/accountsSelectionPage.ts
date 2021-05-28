@@ -22,7 +22,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 	}
 
 	protected async registerContent(view: azdata.ModelView): Promise<void> {
-		this.wizard.customButtons[0].enabled = false;
+		this.wizard.customButtons[0].enabled = true;
 		const form = view.modelBuilder.formContainer()
 			.withFormItems(
 				[

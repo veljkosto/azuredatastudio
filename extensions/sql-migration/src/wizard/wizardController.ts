@@ -53,11 +53,12 @@ export class WizardController {
 			summaryPage
 		];
 
-		if (this.stateModel.savedAssessment.closedPage) {
-			wizard.setCurrentPage(this.stateModel.savedAssessment.closedPage);
-		}
-		wizard.pages = pages.map(p => p.getwizardPage());
 
+		wizard.pages = pages.map(p => p.getwizardPage());
+		if (this.stateModel.savedInfo.closedPage) {
+			// this did not set the current page
+			wizard.setCurrentPage(this.stateModel.savedInfo.closedPage);
+		}
 		const wizardSetupPromises: Thenable<void>[] = [];
 		wizardSetupPromises.push(...pages.map(p => p.registerWizardContent()));
 		wizardSetupPromises.push(wizard.open());
@@ -88,7 +89,7 @@ export class WizardController {
 		});
 		saveAndCloseButton.onClick(() => {
 			// TODO: save stuff according to the page
-			stateModel.saveAssessment(serverName, wizard.currentPage);
+			stateModel.saveInfo(serverName, wizard.currentPage);
 			wizard.close();
 		});
 	}

@@ -13,6 +13,8 @@ import { SKURecommendations } from './externalContract';
 import * as constants from '../constants/strings';
 import { MigrationLocalStorage } from './migrationLocalStorage';
 import * as nls from 'vscode-nls';
+import { NONAME } from 'node:dns';
+import { deepClone } from '../api/utils';
 const localize = nls.loadMessageBundle();
 
 export enum State {
@@ -94,7 +96,8 @@ export interface StateChangeEvent {
 
 export interface SavedInfo {
 	closedPage: number;
-	serverAssessment: ServerAssessment;
+	serverAssessment: ServerAssessment | null;
+	azureAccount: azdata.Account | null;
 }
 
 export class MigrationStateModel implements Model, vscode.Disposable {
@@ -142,7 +145,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public refreshDatabaseBackupPage!: boolean;
 
 	public resumeAssessment!: boolean;
-	public savedAssessment!: SavedInfo;
+	public savedInfo!: SavedInfo;
 	public closedPage!: number;
 
 	constructor(
@@ -740,35 +743,49 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		}
 	}
 
-	public saveAssessment(serverName: string, currentPage: number): void {
+	//TODO: code this method to save appropriate info for page
+	public saveInfo(serverName: string, currentPage: number): void {
+		let saveInfo: SavedInfo;
+		saveInfo = {
+			closedPage: currentPage,
+			serverAssessment: null,
+			azureAccount: null
+		};
 		switch (currentPage) {
-			// Azure Account
-			case 0:
-
-			// Source Configuration
-			case 1:
-
-			// SKU Recommendation
-			case 2:
-
-			// Migration Mode
-			case 3:
-
-			// Database Backup
-			case 4:
+			// Summary
+			case 6:
+				console.log('Saving assessment from page: Summary');
 
 			// Integration Runtime
 			case 5:
+				console.log('Saving assessment from page: Integration Runtime');
 
-			// Summary
-			case 6:
+			// Database Backup
+			case 4:
+				console.log('Saving assessment from page: Database Backup');
 
+			// Migration Mode
+			case 3:
+				console.log('Saving assessment from page: Migration Mode');
+
+			// SKU Recommendation
+			case 2:
+				console.log('Saving assessment from page: SKU Recommendation');
+				saveInfo.serverAssessment = this._assessmentResults;
+				console.log(saveInfo);
+			// Source Configuration
+			case 1:
+				console.log('Saving assessment from page: Source Configuration');
+
+			// Azure Account
+			case 0:
+				console.log('Saving assessment from page: Azure Account');
+				saveInfo.azureAccount = deepClone(this._azureAccount);
+
+				console.log(`Save Info: ${saveInfo}`);
+				this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveInfo);
 		}
-		let saveAssessment: SavedInfo = {
-			closedPage: currentPage,
-			serverAssessment: this._assessmentResults
-		};
-		this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveAssessment);
+
 	}
 }
 

@@ -62,9 +62,11 @@ export class SavedAssessmentDialog {
 
 		if (this.stateModel.resumeAssessment) {
 			// load saved assessments here
+			// stateModel.savedAssessment
 			const wizardController = new WizardController(this.stateModel);
 			await wizardController.openWizard();
 		} else {
+			// normal flow
 			const wizardController = new WizardController(this.stateModel);
 			await wizardController.openWizard();
 		}
