@@ -26,6 +26,20 @@
     "Microsoft.mssql"
   ],
   "contributes": {
+    "configuration":{
+      "title": "%displayName%",
+      "properties": {
+        "sqlmigration.enable": {
+          "type": "boolean",
+          "description": "%enable-custom-host-settings-description%"
+        },
+        "sqlmigration.url": {
+          "type": "string",
+          "default": " https://management.azure.com",
+          "description": "%custom-host-url-setting%"
+        }
+      }
+    },
     "commands": [
       {
         "command": "sqlmigration.start",
