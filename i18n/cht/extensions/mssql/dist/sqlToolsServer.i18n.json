@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "正在下載 {0}",
 	"downloadingServiceSizeChannelMsg": "({0} KB)",
 	"downloadingServiceStatusMsg": "正在下載 {0}",
-	"downloadServiceDoneChannelMsg": "已完成 {0} 的安裝"
+	"downloadServiceDoneChannelMsg": "已完成 {0} 的安裝",
+	"entryExtractedChannelMsg": "已擷取 {0} ({1}/{2})"
 }

@@ -10,5 +10,7 @@
 	"status.query.rowCount": "資料列計數",
 	"rowCount": "{0} 個資料列",
 	"query.status.executing": "執行查詢中...",
-	"status.query.status": "執行狀態"
+	"status.query.status": "執行狀態",
+	"status.query.selection-summary": "選取摘要",
+	"status.query.summaryText": "平均: {0} 計數: {1} 總和: {2}"
 }

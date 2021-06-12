@@ -12,5 +12,5 @@
 	"changeSqlProvider": "變更 SQL 引擎提供者",
 	"alreadyConnected": "使用引擎 {0} 的連線已存在。若要變更，請中斷或變更連線",
 	"noEditor": "目前無使用中的文字編輯器",
-	"pickSqlProvider": "選擇 SQL 語言提供者"
+	"pickSqlProvider": "選擇語言提供者"
 }

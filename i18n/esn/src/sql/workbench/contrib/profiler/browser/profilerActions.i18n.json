@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "Reanudar",
 	"profilerStop.stop": "Detener",
 	"profiler.clear": "Borrar los datos",
+	"profiler.clearDataPrompt": "¿Está seguro de que quiere borrar los datos?",
+	"profiler.yes": "Sí",
+	"profiler.no": "No",
 	"profilerAction.autoscrollOn": "Desplazamiento automático: activado",
 	"profilerAction.autoscrollOff": "Desplazamiento automático: desactivado",
 	"profiler.toggleCollapsePanel": "Alternar el panel contraído",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "Buscar la cadena anterior",
 	"profilerAction.newProfiler": "Iniciar Profiler",
 	"profiler.filter": "Filtrar...",
-	"profiler.clearFilter": "Borrar filtro"
+	"profiler.clearFilter": "Borrar filtro",
+	"profiler.clearFilterPrompt": "¿Está seguro de que quiere borrar los filtros?"
 }

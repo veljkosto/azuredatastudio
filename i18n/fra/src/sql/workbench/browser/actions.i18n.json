@@ -8,5 +8,6 @@
 	],
 	"manage": "Gérer",
 	"showDetails": "Afficher les détails",
-	"configureDashboard": "Découvrir comment configurer le tableau de bord"
+	"configureDashboardLearnMore": "En savoir plus",
+	"clearSavedAccounts": "Effacer tous les comptes enregistrés"
 }

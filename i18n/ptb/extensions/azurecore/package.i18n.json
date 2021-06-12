@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Atualizar",
 	"azure.resource.signin.title": "Azure: Entrar",
 	"azure.resource.selectsubscriptions.title": "Selecionar Assinaturas",
+	"azure.resource.startterminal.title": "Iniciar Cloud Shell",
 	"azure.resource.connectsqlserver.title": "Conectar",
 	"azure.resource.connectsqldb.title": "Adicionar aos Servidores",
+	"azure.resource.view.title": "Azure (Versão Prévia)",
+	"azure.tenant.config.filter.description": "A lista de IDs de locatário a serem ignoradas ao consultar os recursos do Azure. Cada elemento é uma ID de locatário.",
 	"accounts.clearTokenCache": "Limpar o Cache de Token da Conta do Azure",
+	"azure.openInAzurePortal.title": "Abrir no Portal do Azure",
+	"config.azureAccountConfigurationSection": "Configuração da Conta do Azure",
 	"config.enablePublicCloudDescription": "A integração de nuvem pública do Azure deve estar habilitada?",
 	"config.enableUsGovCloudDescription": "A integração de nuvem do US Government Azure (Fairfax) deve estar habilitada?",
+	"config.enableUsNatCloudDescription": "A integração de nuvem Nacional dos EUA do Azure deve estar habilitada?",
 	"config.enableChinaCloudDescription": "A integração com o Azure China deve estar habilitada?",
-	"config.enableGermanyCloudDescription": "A integração do Azure Alemanha deve estar habilitada?"
+	"config.enableGermanyCloudDescription": "A integração do Azure Alemanha deve estar habilitada?",
+	"config.azureAuthMethodConfigurationSection": "Método de Autenticação do Azure",
+	"config.azureCodeGrantMethod": "Método de Concessão de Código",
+	"config.azureDeviceCodeMethod": "Método de Código do Dispositivo",
+	"config.noSystemKeychain": "Desabilite a integração do conjunto de chaves do sistema. As credenciais serão armazenadas em um arquivo simples no diretório base do usuário.",
+	"config.piiLogging": "A PPI (Informações de Identificação Pessoal) deve ser registrada no modo de exibição do console localmente?"
 }

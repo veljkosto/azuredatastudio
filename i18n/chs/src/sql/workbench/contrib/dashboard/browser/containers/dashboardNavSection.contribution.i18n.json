@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "要向用户显示的导航部分的标题。",
 	"dashboard.container.left-nav-bar.container": "将在此导航部分显示的容器。",
 	"dashboard.container.left-nav-bar": "将在此导航部分显示的仪表板容器的列表。",
-	"opticon": "可以省略属性 \"icon\"，若不省略则必须是字符串或文字，例如 \"{dark, light}\"",
 	"navSection.missingTitle.error": "未在导航部分为扩展指定标题。",
 	"navSection.missingContainer.error": "未在导航部分为扩展指定容器。",
 	"navSection.moreThanOneDashboardContainersError": "必须在每个空间定义恰好 1 个仪表板容器。",

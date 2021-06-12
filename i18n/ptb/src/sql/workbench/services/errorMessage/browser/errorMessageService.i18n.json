@@ -8,5 +8,6 @@
 	],
 	"error": "Erro",
 	"warning": "Aviso",
-	"info": "Informações"
+	"info": "Informações",
+	"ignore": "Ignorar"
 }

@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Conta",
 	"connectionWidget.refreshAzureCredentials": "Atualizar as credenciais de conta",
 	"connection.azureTenantDropdownLabel": "Locatário do Azure AD",
-	"connectionWidget.toggleDatabaseNameDropdown": "Selecione o Menu Suspenso de Alternância de Bancos de Dados",
 	"connectionName": "Nome (opcional)",
 	"advanced": "Avançado...",
 	"connectionWidget.invalidAzureAccount": "Você precisa selecionar uma conta"

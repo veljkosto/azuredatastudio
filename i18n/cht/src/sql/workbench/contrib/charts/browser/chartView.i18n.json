@@ -15,5 +15,7 @@
 	"imageAltName": "映像",
 	"countAltName": "計數",
 	"tableAltName": "資料表",
-	"doughnutAltName": "環圈圖"
+	"doughnutAltName": "環圈圖",
+	"charting.failedToGetRows": "無法取得資料集的資料列以繪製圖表。",
+	"charting.unsupportedType": "不支援圖表類型 '{0}'。"
 }

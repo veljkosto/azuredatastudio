@@ -17,7 +17,5 @@
 	"backup.compressBackup": "Sicherung komprimieren",
 	"backup.doNotCompress": "Sicherung nicht komprimieren",
 	"backup.serverCertificate": "Serverzertifikat",
-	"backup.asymmetricKey": "Asymmetrischer Schlüssel",
-	"backup.filterBackupFiles": "Sicherungsdateien",
-	"backup.allFiles": "Alle Dateien"
+	"backup.asymmetricKey": "Asymmetrischer Schlüssel"
 }

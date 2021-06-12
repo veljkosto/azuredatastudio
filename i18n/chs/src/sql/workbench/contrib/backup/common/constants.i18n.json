@@ -17,7 +17,5 @@
 	"backup.compressBackup": "压缩备份",
 	"backup.doNotCompress": "不压缩备份",
 	"backup.serverCertificate": "服务器证书",
-	"backup.asymmetricKey": "非对称密钥",
-	"backup.filterBackupFiles": "备份文件",
-	"backup.allFiles": "所有文件"
+	"backup.asymmetricKey": "非对称密钥"
 }

@@ -14,6 +14,7 @@
 	"edition": "版本",
 	"computerName": "计算机名",
 	"osVersion": "OS 版本",
+	"explorerWidgetsTitle": "搜索",
 	"dashboardServer": "自定义服务器仪表板页面",
 	"dashboardServerTabs": "自定义服务器仪表板选项卡"
 }

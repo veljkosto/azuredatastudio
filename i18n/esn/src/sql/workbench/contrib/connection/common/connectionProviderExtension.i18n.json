@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "Identificador común para el proveedor",
 	"schema.displayName": "Nombre para mostrar del proveedor",
+	"schema.notebookKernelAlias": "Alias de kernel del cuaderno para el proveedor",
 	"schema.iconPath": "Ruta de acceso al icono para el tipo de servidor",
 	"schema.connectionOptions": "Opciones para la conexión"
 }

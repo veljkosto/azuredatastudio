@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "Contribui com exibições para o editor",
 	"extension.dataExplorer": "Contribui com exibições para o contêiner do Data Explorer na barra de Atividade",
 	"dataExplorer.contributed": "Contribui com exibições para o contêiner de exibições contribuídas",
-	"ViewsContainerDoesnotExist": "O contêiner de exibição '{0}' não existe e todas as exibições registradas nele serão adicionadas ao 'Data Explorer'.",
 	"duplicateView1": "Não é possível registrar vários modos de exibição com a mesma id '{0}' no contêiner de exibição '{1}'",
 	"duplicateView2": "Uma exibição com a id '{0}' já está registrada no contêiner de exibição '{1}'",
 	"requirearray": "as exibições devem ser uma matriz",

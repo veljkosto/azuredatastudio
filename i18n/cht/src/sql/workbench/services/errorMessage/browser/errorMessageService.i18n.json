@@ -8,5 +8,6 @@
 	],
 	"error": "錯誤",
 	"warning": "警告",
-	"info": "資訊"
+	"info": "資訊",
+	"ignore": "忽略"
 }

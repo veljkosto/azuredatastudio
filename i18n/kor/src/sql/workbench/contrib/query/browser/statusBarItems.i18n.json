@@ -10,5 +10,7 @@
 	"status.query.rowCount": "행 개수",
 	"rowCount": "{0}개의 행",
 	"query.status.executing": "쿼리를 실행하는 중...",
-	"status.query.status": "실행 상태"
+	"status.query.status": "실행 상태",
+	"status.query.selection-summary": "선택 요약",
+	"status.query.summaryText": "평균: {0} 개수: {1} 합계: {2}"
 }

@@ -8,7 +8,7 @@
 	],
 	"createSessionDialog.cancel": "취소",
 	"createSessionDialog.create": "시작",
-	"createSessionDialog.title": "새 프로파일러 세션 시작",
+	"createSessionDialog.title": "새 Profiler 세션 시작",
 	"createSessionDialog.templatesInvalid": "템플릿 목록이 잘못되었습니다. 대화 상자를 열 수 없습니다.",
 	"createSessionDialog.dialogOwnerInvalid": "대화 상자 소유자가 잘못되었습니다. 대화 상자를 열 수 없습니다.",
 	"createSessionDialog.invalidProviderType": "공급자 유형이 잘못되었습니다. 대화 상자를 열 수 없습니다.",

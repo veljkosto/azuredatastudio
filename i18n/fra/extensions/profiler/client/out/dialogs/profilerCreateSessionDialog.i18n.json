@@ -8,7 +8,7 @@
 	],
 	"createSessionDialog.cancel": "Annuler",
 	"createSessionDialog.create": "Démarrer",
-	"createSessionDialog.title": "Démarrer une nouvelle session du profileur",
+	"createSessionDialog.title": "Démarrer une nouvelle session Profiler",
 	"createSessionDialog.templatesInvalid": "Liste de modèles non valide, impossible d'ouvrir la boîte de dialogue",
 	"createSessionDialog.dialogOwnerInvalid": "Propriétaire de boîte de dialogue non valide, impossible d'ouvrir la boîte de dialogue",
 	"createSessionDialog.invalidProviderType": "Type de fournisseur non valide, impossible d'ouvrir la boîte de dialogue",

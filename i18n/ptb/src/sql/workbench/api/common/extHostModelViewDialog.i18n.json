@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Cancelar",
 	"generateScriptLabel": "Gerar script",
 	"dialogNextLabel": "Próximo",
-	"dialogPreviousLabel": "Anterior"
+	"dialogPreviousLabel": "Anterior",
+	"dashboardNotInitialized": "As guias não estão inicializadas"
 }

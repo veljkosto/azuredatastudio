@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "繼續",
 	"profilerStop.stop": "停止",
 	"profiler.clear": "清除資料",
+	"profiler.clearDataPrompt": "確定要清除資料嗎?",
+	"profiler.yes": "是",
+	"profiler.no": "否",
 	"profilerAction.autoscrollOn": "自動捲動: 開啟",
 	"profilerAction.autoscrollOff": "自動捲動: 關閉",
 	"profiler.toggleCollapsePanel": "切換折疊面板",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "尋找前一個字串",
 	"profilerAction.newProfiler": "啟動分析工具",
 	"profiler.filter": "篩選...",
-	"profiler.clearFilter": "清除篩選"
+	"profiler.clearFilter": "清除篩選",
+	"profiler.clearFilterPrompt": "確定要清除篩選嗎?"
 }

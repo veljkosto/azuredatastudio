@@ -17,12 +17,9 @@
 	"msgInstallPkgStart": "正在安装笔记本依赖项；有关详细信息，请参阅“任务”视图",
 	"msgInstallPkgFinish": "笔记本依赖项安装完毕",
 	"msgPythonRunningError": "在 Python 运行时无法覆盖现有 Python 安装。请关闭所有活动笔记本，再继续操作。",
-	"msgSkipPythonInstall": "该位置已存在 Python。即将跳过安装。",
 	"msgWaitingForInstall": "另一个 Python 安装正在进行中。请等待它完成。",
 	"msgDependenciesInstallationFailed": "安装笔记本依赖项失败，错误: {0}",
 	"msgDownloadPython": "正在将平台 {0} 的本地 python 下载到 {1}",
-	"confirmPackageUpgrade": "某些已安装的 python 包需要升级。是否立即升级它们?",
-	"upgradePackages.pipInstall": "正在安装 {0}",
-	"msgInstallStart": "正在安装运行笔记本所需的包…",
-	"msgJupyterInstallDone": "…Jupyter 安装完毕。"
+	"msgPackageRetrievalFailed": "尝试检索已安装的包列表时遇到错误: {0}",
+	"msgGetPythonUserDirFailed": "获取 Python 用户路径时遇到错误: {0}"
 }

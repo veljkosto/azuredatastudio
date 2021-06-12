@@ -12,10 +12,9 @@
 	"dashboard.container.left-nav-bar.icon.dark": "Caminho de ícone quando um tema escuro é usado",
 	"dashboard.container.left-nav-bar.title": "Título da seção de navegação para mostrar ao usuário.",
 	"dashboard.container.left-nav-bar.container": "O contêiner que será exibido nesta seção de navegação.",
-	"dashboard.container.left-nav-bar": "A lista de contêineres do painel que será exibida nesta seção de navegação.",
-	"opticon": "propriedade `ícone` pode ser omitida ou deve ser uma cadeia de caracteres ou um literal como `{escuro, claro}`",
+	"dashboard.container.left-nav-bar": "A lista de contêineres de painéis que será exibida nesta seção de navegação.",
 	"navSection.missingTitle.error": "Não foi especificado nenhum título na seção de navegação para a extensão.",
 	"navSection.missingContainer.error": "Não foi especificado nenhum contêiner na seção de navegação para a extensão.",
-	"navSection.moreThanOneDashboardContainersError": "Exatamente 1 contêiner do painel deve ser definido por espaço.",
+	"navSection.moreThanOneDashboardContainersError": "Exatamente 1 contêiner de painéis deve ser definido por espaço.",
 	"navSection.invalidContainer.error": "NAV_SECTION dentro de NAV_SECTION é um contêiner inválido para a extensão."
 }

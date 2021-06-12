@@ -12,5 +12,5 @@
 	"changeSqlProvider": "SQL エンジン プロバイダーの変更",
 	"alreadyConnected": "エンジン {0} を使用している接続が存在します。変更するには、切断するか、接続を変更してください",
 	"noEditor": "現時点でアクティブなテキスト エディターはありません",
-	"pickSqlProvider": "SQL 言語プロバイダーを選択します"
+	"pickSqlProvider": "言語プロバイダーの選択"
 }

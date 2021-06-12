@@ -8,13 +8,16 @@
 	],
 	"description": "Compatibilidad con la administración de clústeres de macrodatos de SQL Server",
 	"text.sqlServerBigDataClusters": "Clústeres de macrodatos de SQL Server",
-	"command.addController.title": "Conectar con el controlador",
-	"command.deleteController.title": "Eliminar",
+	"command.connectController.title": "Conexión con el controlador existente",
+	"command.createController.title": "Creación de un nuevo controlador",
+	"command.removeController.title": "Eliminación de un controlador",
 	"command.refreshController.title": "Actualizar",
 	"command.manageController.title": "Administrar",
 	"command.mount.title": "Montar HDFS",
 	"command.refreshmount.title": "Actualizar montaje",
 	"command.deletemount.title": "Eliminar montaje",
 	"bdc.configuration.title": "Clúster de macrodatos",
+	"bdc.view.welcome.connect": "No se ha registrado ningún controlador del clúster de macrodatos de SQL. [Más información](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[Conexión de un controlador](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "Se están cargando los controladores...",
 	"bdc.ignoreSslVerification.desc": "Ignorar los errores de verificación SSL en los puntos de conexión del clúster de macrodatos de SQL Server, como HDFS, Spark y Controller, si es true"
 }

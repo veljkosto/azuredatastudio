@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "正在下载 {0}",
 	"downloadingServiceSizeChannelMsg": "({0} KB)",
 	"downloadingServiceStatusMsg": "正在下载 {0}",
-	"downloadServiceDoneChannelMsg": "已安装 {0}"
+	"downloadServiceDoneChannelMsg": "已安装 {0}",
+	"entryExtractedChannelMsg": "已提取 {0} ({1}/{2})"
 }

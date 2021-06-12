@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "사용자에게 표시할 탐색 섹션의 제목입니다.",
 	"dashboard.container.left-nav-bar.container": "이 탐색 섹션에 표시할 컨테이너입니다.",
 	"dashboard.container.left-nav-bar": "이 탐색 섹션에 표시할 대시보드 컨테이너 목록입니다.",
-	"opticon": "'icon' 속성은 생략하거나, '{dark, light}' 같은 문자열 또는 리터럴이어야 합니다.",
 	"navSection.missingTitle.error": "탐색 섹션에 확장용으로 지정된 제목이 없습니다.",
 	"navSection.missingContainer.error": "탐색 섹션에 확장용으로 지정된 컨테이너가 없습니다.",
 	"navSection.moreThanOneDashboardContainersError": "공란 1개에 정확히 1개의 대시보드 컨테이너를 정의해야 합니다.",

@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "Общий идентификатор поставщика",
 	"schema.displayName": "Отображаемое имя поставщика",
+	"schema.notebookKernelAlias": "Псевдоним ядра записной книжки для поставщика",
 	"schema.iconPath": "Путь к значку для типа сервера",
 	"schema.connectionOptions": "Параметры подключения"
 }

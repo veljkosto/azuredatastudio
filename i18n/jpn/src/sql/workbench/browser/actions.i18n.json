@@ -8,5 +8,6 @@
 	],
 	"manage": "管理",
 	"showDetails": "詳細の表示",
-	"configureDashboard": "ダッシュボードの構成方法について"
+	"configureDashboardLearnMore": "詳細情報",
+	"clearSavedAccounts": "保存されているすべてのアカウントのクリア"
 }

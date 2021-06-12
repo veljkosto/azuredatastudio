@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Обновить",
 	"azure.resource.signin.title": "Azure: вход",
 	"azure.resource.selectsubscriptions.title": "Выберите подписки",
+	"azure.resource.startterminal.title": "Запуск Cloud Shell",
 	"azure.resource.connectsqlserver.title": "Подключиться",
 	"azure.resource.connectsqldb.title": "Добавить к серверам",
+	"azure.resource.view.title": "Azure (предварительная версия)",
+	"azure.tenant.config.filter.description": "Список идентификаторов клиентов, которые будут проигнорированы при запросе ресурсов Azure. Каждый элемент представляет собой идентификатор клиента.",
 	"accounts.clearTokenCache": "Очистить кэш токена учетной записи Azure",
+	"azure.openInAzurePortal.title": "Открыть на портале Azure",
+	"config.azureAccountConfigurationSection": "Конфигурация учетной записи Azure",
 	"config.enablePublicCloudDescription": "Следует ли включить интеграцию общедоступного облака Azure",
 	"config.enableUsGovCloudDescription": "Следует ли включить интеграцию облака Azure для государственных организаций США (Fairfax)",
+	"config.enableUsNatCloudDescription": "Следует ли включить интеграцию с национальным облаком Azure для США",
 	"config.enableChinaCloudDescription": "Нужно ли включить интеграцию Azure для Китая",
-	"config.enableGermanyCloudDescription": "Следует ли включить интеграцию Azure для Германии"
+	"config.enableGermanyCloudDescription": "Следует ли включить интеграцию Azure для Германии",
+	"config.azureAuthMethodConfigurationSection": "Метод проверки подлинности Azure",
+	"config.azureCodeGrantMethod": "Метод предоставления кода",
+	"config.azureDeviceCodeMethod": "Метод кода устройства",
+	"config.noSystemKeychain": "Отключение интеграции с цепочкой ключей системы. Учетные данные будут храниться в неструктурированном файле в основном каталоге пользователя.",
+	"config.piiLogging": "Должны ли личные сведения (PII) выводиться в представление консоли локально"
 }

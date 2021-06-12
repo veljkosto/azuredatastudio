@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Aggiorna",
 	"azure.resource.signin.title": "Azure: Accedi",
 	"azure.resource.selectsubscriptions.title": "Seleziona sottoscrizioni",
+	"azure.resource.startterminal.title": "Avvia Cloud Shell",
 	"azure.resource.connectsqlserver.title": "Connetti",
 	"azure.resource.connectsqldb.title": "Aggiungi ai server",
+	"azure.resource.view.title": "Azure (anteprima)",
+	"azure.tenant.config.filter.description": "Elenco di ID tenant da ignorare durante l'esecuzione di query sulle risorse di Azure. Ogni elemento è un ID tenant.",
 	"accounts.clearTokenCache": "Cancella la cache dei token dell'account Azure",
+	"azure.openInAzurePortal.title": "Apri nel portale di Azure",
+	"config.azureAccountConfigurationSection": "Configurazione dell'account Azure",
 	"config.enablePublicCloudDescription": "Consente di indicare se l'integrazione del cloud pubblico di Azure deve essere abilitata",
 	"config.enableUsGovCloudDescription": "Consente di indicare se l'integrazione del cloud US Government Azure (Fairfax) deve essere abilitata",
+	"config.enableUsNatCloudDescription": "Consente di indicare se l'integrazione del cloud Azure US National deve essere abilitata",
 	"config.enableChinaCloudDescription": "Consente di indicare se l'integrazione di Azure Cina deve essere abilitata",
-	"config.enableGermanyCloudDescription": "Consente di indicare se l'integrazione di Azure Germania deve essere abilitata"
+	"config.enableGermanyCloudDescription": "Consente di indicare se l'integrazione di Azure Germania deve essere abilitata",
+	"config.azureAuthMethodConfigurationSection": "Metodo di autenticazione di Azure",
+	"config.azureCodeGrantMethod": "Metodo di concessione codice",
+	"config.azureDeviceCodeMethod": "Metodo del codice del dispositivo",
+	"config.noSystemKeychain": "Disabilitare l'integrazione del keychain di sistema. Le credenziali verranno archiviate in un file flat nella home directory dell'utente.",
+	"config.piiLogging": "Indicare se le informazioni personali devono essere registrate nella visualizzazione della console in locale"
 }

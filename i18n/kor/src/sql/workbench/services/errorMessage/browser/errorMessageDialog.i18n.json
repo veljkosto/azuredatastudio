@@ -8,5 +8,6 @@
 	],
 	"errorMessageDialog.ok": "확인",
 	"errorMessageDialog.close": "닫기",
+	"errorMessageDialog.action": "작업",
 	"copyDetails": "세부 정보 복사"
 }

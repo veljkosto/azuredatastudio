@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "プロバイダーの共通 ID",
 	"schema.displayName": "プロバイダーの表示名",
+	"schema.notebookKernelAlias": "プロバイダーの Notebook カーネル別名",
 	"schema.iconPath": "サーバーの種類のアイコン パス",
 	"schema.connectionOptions": "接続のオプション"
 }

@@ -15,5 +15,7 @@
 	"imageAltName": "Imagen",
 	"countAltName": "Recuento",
 	"tableAltName": "Tabla",
-	"doughnutAltName": "Anillo"
+	"doughnutAltName": "Anillo",
+	"charting.failedToGetRows": "No se pudieron obtener las filas para el conjunto de datos en el gráfico.",
+	"charting.unsupportedType": "No se admite el tipo de gráfico \"{0}\"."
 }

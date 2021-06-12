@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "ID comune del provider",
 	"schema.displayName": "Nome visualizzato del provider",
+	"schema.notebookKernelAlias": "Alias del kernel del notebook per il provider",
 	"schema.iconPath": "Percorso dell'icona per il tipo di server",
 	"schema.connectionOptions": "Opzioni per la connessione"
 }

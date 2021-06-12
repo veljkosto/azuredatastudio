@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Nivel de compatibilidad",
 	"owner": "Propietario",
 	"dashboardDatabase": "Personaliza la página del panel de base de datos",
+	"objectsWidgetTitle": "Búsqueda",
 	"dashboardDatabaseTabs": "Personaliza las pestañas de consola de base de datos"
 }

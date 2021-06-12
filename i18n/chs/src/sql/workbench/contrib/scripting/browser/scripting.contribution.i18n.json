@@ -13,6 +13,7 @@
 	"scriptAsAlter": "执行 Alter 脚本",
 	"editData": "编辑数据",
 	"scriptSelect": "选择前 1000 项",
+	"scriptKustoSelect": "选取 10 个",
 	"scriptCreate": "执行 Create 脚本",
 	"scriptExecute": "执行 Execute 脚本",
 	"scriptAlter": "执行 Alter 脚本",

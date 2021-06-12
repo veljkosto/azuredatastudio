@@ -8,10 +8,8 @@
 	],
 	"data": "Datos",
 	"connection": "Conexión",
-	"query": "Consulta",
+	"queryEditor": "Editor de Power Query",
 	"notebook": "Notebook",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "Panel",
 	"profiler": "Profiler"
 }

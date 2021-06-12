@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "{0} のダウンロード中",
 	"downloadingServiceSizeChannelMsg": "({0} KB)",
 	"downloadingServiceStatusMsg": "{0} のダウンロード中",
-	"downloadServiceDoneChannelMsg": "{0} のインストールが完了しました"
+	"downloadServiceDoneChannelMsg": "{0} のインストールが完了しました",
+	"entryExtractedChannelMsg": "{0} を抽出しました ({1}/{2})"
 }

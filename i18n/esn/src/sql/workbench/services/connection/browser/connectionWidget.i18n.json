@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Cuenta",
 	"connectionWidget.refreshAzureCredentials": "Actualizar credenciales de la cuenta",
 	"connection.azureTenantDropdownLabel": "Inquilino de Azure AD",
-	"connectionWidget.toggleDatabaseNameDropdown": "Seleccionar menú desplegable para alternar base de datos",
 	"connectionName": "Nombre (opcional)",
 	"advanced": "Avanzado...",
 	"connectionWidget.invalidAzureAccount": "Debe seleccionar una cuenta"

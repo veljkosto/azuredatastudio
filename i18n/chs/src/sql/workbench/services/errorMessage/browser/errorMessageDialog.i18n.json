@@ -8,5 +8,6 @@
 	],
 	"errorMessageDialog.ok": "确定",
 	"errorMessageDialog.close": "关闭",
+	"errorMessageDialog.action": "操作",
 	"copyDetails": "复制详细信息"
 }

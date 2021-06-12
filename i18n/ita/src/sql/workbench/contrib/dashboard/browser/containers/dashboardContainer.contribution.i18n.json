@@ -8,9 +8,9 @@
 	],
 	"azdata.extension.contributes.dashboard.container.id": "Identificatore univoco per questo contenitore.",
 	"azdata.extension.contributes.dashboard.container.container": "Contenitore che verrà visualizzato nella scheda.",
-	"azdata.extension.contributes.containers": "Aggiunge come contributo uno o più contenitori di dashboard che gli utenti possono aggiungere al proprio dashboard.",
-	"dashboardContainer.contribution.noIdError": "Nel contenitore del dashboard non è stato specificato alcun ID per l'estensione.",
-	"dashboardContainer.contribution.noContainerError": "Nel contenitore del dashboard non è stato specificato alcun contenitore per l'estensione.",
-	"dashboardContainer.contribution.moreThanOneDashboardContainersError": "Per ogni spazio è necessario definire un solo contenitore di dashboard.",
-	"dashboardTab.contribution.unKnownContainerType": "Nel contenitore del dashboard è stato definito un tipo di contenitore sconosciuto per l'estensione."
+	"azdata.extension.contributes.containers": "Aggiunge come contributo uno o più container di dashboard che gli utenti possono aggiungere al proprio dashboard.",
+	"dashboardContainer.contribution.noIdError": "Nel container di dashboard non è stato specificato alcun ID per l'estensione.",
+	"dashboardContainer.contribution.noContainerError": "Nel container di dashboard non è stato specificato alcun contenitore per l'estensione.",
+	"dashboardContainer.contribution.moreThanOneDashboardContainersError": "Per ogni spazio è necessario definire un solo container di dashboard.",
+	"dashboardTab.contribution.unKnownContainerType": "Nel container di dashboard è stato definito un tipo di contenitore sconosciuto per l'estensione."
 }

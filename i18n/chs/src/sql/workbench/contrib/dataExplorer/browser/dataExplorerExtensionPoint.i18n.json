@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "向编辑器提供视图",
 	"extension.dataExplorer": "向“活动”栏中的“数据资源管理器”容器提供视图",
 	"dataExplorer.contributed": "向“提供的视图”容器提供视图",
-	"ViewsContainerDoesnotExist": "视图容器“{0}”不存在，向其注册的所有视图都将添加到“数据资源管理器”中。",
 	"duplicateView1": "无法在视图容器“{1}”中注册多个具有相同 ID (“{0}”) 的视图",
 	"duplicateView2": "视图容器“{1}”中已注册有 ID 为“{0}”的视图",
 	"requirearray": "视图必须为数组",

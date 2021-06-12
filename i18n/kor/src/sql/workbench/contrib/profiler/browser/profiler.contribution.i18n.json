@@ -8,5 +8,5 @@
 	],
 	"profiler.settings.viewTemplates": "뷰 템플릿 지정",
 	"profiler.settings.sessionTemplates": "세션 템플릿 지정",
-	"profiler.settings.Filters": "프로파일러 필터"
+	"profiler.settings.Filters": "Profiler 필터"
 }

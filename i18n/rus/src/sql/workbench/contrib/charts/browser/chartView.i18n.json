@@ -15,5 +15,7 @@
 	"imageAltName": "Образ",
 	"countAltName": "Подсчет",
 	"tableAltName": "Таблицы",
-	"doughnutAltName": "Круговая диаграмма"
+	"doughnutAltName": "Круговая диаграмма",
+	"charting.failedToGetRows": "Не удалось получить строки для набора данных, чтобы построить диаграмму.",
+	"charting.unsupportedType": "Тип диаграммы \"{0}\" не поддерживается."
 }

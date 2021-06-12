@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "Allgemeine ID für den Anbieter",
 	"schema.displayName": "Anzeigename für den Anbieter",
+	"schema.notebookKernelAlias": "Notebook-Kernelalias für den Anbieter",
 	"schema.iconPath": "Symbolpfad für den Servertyp",
 	"schema.connectionOptions": "Verbindungsoptionen"
 }

@@ -17,7 +17,5 @@
 	"backup.compressBackup": "Сжимать резервные копии",
 	"backup.doNotCompress": "Не сжимать резервные копии",
 	"backup.serverCertificate": "Сертификат сервера",
-	"backup.asymmetricKey": "Асимметричный ключ",
-	"backup.filterBackupFiles": "Резервные файлы",
-	"backup.allFiles": "Все файлы"
+	"backup.asymmetricKey": "Асимметричный ключ"
 }

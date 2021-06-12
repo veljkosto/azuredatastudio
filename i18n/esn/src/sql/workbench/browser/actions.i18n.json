@@ -8,5 +8,6 @@
 	],
 	"manage": "Administrar",
 	"showDetails": "Mostrar detalles",
-	"configureDashboard": "Aprenda a configurar el panel"
+	"configureDashboardLearnMore": "Más información",
+	"clearSavedAccounts": "Borrar todas las cuentas guardadas"
 }

@@ -9,11 +9,11 @@
 	"editDashboard": "Изменить",
 	"editDashboardExit": "Выход",
 	"refreshWidget": "Обновить",
-	"toggleMore": "Переключить еще",
+	"toggleMore": "Показать действия",
 	"deleteWidget": "Удалить мини-приложение",
 	"clickToUnpin": "Щелкните, чтобы открепить",
 	"clickToPin": "Щелкните, чтобы закрепить",
 	"addFeatureAction.openInstalledFeatures": "Открыть установленные компоненты",
-	"collapseWidget": "Свернуть",
-	"expandWidget": "Развернуть"
+	"collapseWidget": "Свернуть мини-приложение",
+	"expandWidget": "Развернуть мини-приложение"
 }

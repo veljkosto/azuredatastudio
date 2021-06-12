@@ -8,5 +8,6 @@
 	],
 	"manage": "管理",
 	"showDetails": "顯示詳細資訊",
-	"configureDashboard": "了解如何設定儀表板"
+	"configureDashboardLearnMore": "深入了解",
+	"clearSavedAccounts": "清除所有儲存的帳戶"
 }

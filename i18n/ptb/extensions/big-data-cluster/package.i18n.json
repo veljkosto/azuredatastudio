@@ -8,13 +8,16 @@
 	],
 	"description": "Suporte para gerenciar clusters de Big Data do SQL Server",
 	"text.sqlServerBigDataClusters": "Clusters de Big Data do SQL Server",
-	"command.addController.title": "Conectar ao Controlador",
-	"command.deleteController.title": "Excluir",
+	"command.connectController.title": "Connect to Existing Controller",
+	"command.createController.title": "Create New Controller",
+	"command.removeController.title": "Remove Controller",
 	"command.refreshController.title": "Atualizar",
 	"command.manageController.title": "Gerenciar",
 	"command.mount.title": "Montar o HDFS",
 	"command.refreshmount.title": "Atualizar Montagem",
 	"command.deletemount.title": "Excluir Montagem",
 	"bdc.configuration.title": "Cluster de Big Data",
+	"bdc.view.welcome.connect": "No SQL Big Data Cluster controllers registered. [Learn More](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[Connect Controller](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "Loading controllers...",
 	"bdc.ignoreSslVerification.desc": "Ignorar os erros de verificação do SSL em relação aos pontos de extremidade do Cluster de Big Data do SQL Server, como o HDFS, o Spark e o Controlador, se for true"
 }

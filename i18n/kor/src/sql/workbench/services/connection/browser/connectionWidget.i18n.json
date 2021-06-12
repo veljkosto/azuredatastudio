@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "계정",
 	"connectionWidget.refreshAzureCredentials": "계정 자격 증명 새로 고침",
 	"connection.azureTenantDropdownLabel": "Azure AD 테넌트",
-	"connectionWidget.toggleDatabaseNameDropdown": "데이터베이스 토글 드롭다운 선택",
 	"connectionName": "이름(옵션)",
 	"advanced": "고급...",
 	"connectionWidget.invalidAzureAccount": "계정을 선택해야 합니다."

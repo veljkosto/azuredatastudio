@@ -9,6 +9,6 @@
 	"queryHistoryConfigurationTitle": "查詢歷史記錄",
 	"queryHistoryCaptureEnabled": "是否啟用了查詢歷史記錄擷取。若未啟用，將不會擷取已經執行的查詢。",
 	"viewCategory": "檢視",
-	"queryHistory": "查詢歷史記錄",
-	"miViewQueryHistory": "查詢歷史記錄(&&Q)"
+	"miViewQueryHistory": "查詢歷史記錄(&&Q)",
+	"queryHistory": "查詢歷史記錄"
 }

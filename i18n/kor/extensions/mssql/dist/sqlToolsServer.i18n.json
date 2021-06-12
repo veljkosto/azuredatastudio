@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "{0} 다운로드 중",
 	"downloadingServiceSizeChannelMsg": "({0}KB)",
 	"downloadingServiceStatusMsg": "{0} 다운로드 중",
-	"downloadServiceDoneChannelMsg": "{0} 설치 완료"
+	"downloadServiceDoneChannelMsg": "{0} 설치 완료",
+	"entryExtractedChannelMsg": "추출된 {0}({1}/{2})"
 }

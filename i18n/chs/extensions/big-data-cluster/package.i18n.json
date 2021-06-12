@@ -8,13 +8,16 @@
 	],
 	"description": "支持管理 SQL Server 大数据群集",
 	"text.sqlServerBigDataClusters": "SQL Server 大数据群集",
-	"command.addController.title": "连接到控制器",
-	"command.deleteController.title": "删除",
+	"command.connectController.title": "连接到现有控制器",
+	"command.createController.title": "创建新控制器",
+	"command.removeController.title": "移除控制器",
 	"command.refreshController.title": "刷新",
 	"command.manageController.title": "管理",
 	"command.mount.title": "装载 HDFS",
 	"command.refreshmount.title": "刷新装载",
 	"command.deletemount.title": "删除装载",
 	"bdc.configuration.title": "大数据群集",
+	"bdc.view.welcome.connect": "未注册任何 SQL 大数据群集控制器。[了解更多](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[连接控制器](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "正在加载控制器...",
 	"bdc.ignoreSslVerification.desc": "如果为 true，则忽略针对 SQL Server 大数据群集终结点(如 HDFS、Spark 和控制器)的 SSL 验证错误"
 }

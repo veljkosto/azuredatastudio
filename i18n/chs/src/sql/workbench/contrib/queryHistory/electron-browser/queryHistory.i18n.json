@@ -9,6 +9,6 @@
 	"queryHistoryConfigurationTitle": "QueryHistory",
 	"queryHistoryCaptureEnabled": "是否启用查询历史记录捕获。若为 false，则不捕获所执行的查询。",
 	"viewCategory": "查看",
-	"queryHistory": "查询历史记录",
-	"miViewQueryHistory": "查询历史记录(&&Q)"
+	"miViewQueryHistory": "查询历史记录(&&Q)",
+	"queryHistory": "查询历史记录"
 }

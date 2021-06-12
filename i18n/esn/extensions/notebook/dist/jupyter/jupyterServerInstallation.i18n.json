@@ -17,12 +17,9 @@
 	"msgInstallPkgStart": "Instalando dependencias de Notebook, consulte la vista Tareas para obtener más información",
 	"msgInstallPkgFinish": "La instalación de las dependencias de Notebook se ha completado",
 	"msgPythonRunningError": "No se puede sobrescribir una instalación de Python existente mientras Python se está ejecutando. Cierre los cuadernos activos antes de continuar.",
-	"msgSkipPythonInstall": "Python ya existe en la ubicación específica. Omitiendo la instalación.",
 	"msgWaitingForInstall": "Otra instalación de Python está actualmente en curso. Esperando a que se complete.",
 	"msgDependenciesInstallationFailed": "Error al instalar las dependencias de Notebook: {0}",
 	"msgDownloadPython": "Descargando Python local para la plataforma: {0} a {1}",
-	"confirmPackageUpgrade": "Es necesario actualizar algunos paquetes de Python instalados. ¿Quiere hacerlo ahora?",
-	"upgradePackages.pipInstall": "Instalando {0}",
-	"msgInstallStart": "Instalando paquetes necesarios para ejecutar Notebooks...",
-	"msgJupyterInstallDone": "... Instalación de Jupyter completa."
+	"msgPackageRetrievalFailed": "Se ha encontrado un error al intentar recuperar la lista de paquetes instalados: {0}",
+	"msgGetPythonUserDirFailed": "Se ha encontrado un error al obtener la ruta de acceso del usuario de Python: {0}"
 }

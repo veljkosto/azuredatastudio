@@ -14,6 +14,7 @@
 	"edition": "Edición",
 	"computerName": "Nombre del equipo",
 	"osVersion": "Versión del sistema operativo",
+	"explorerWidgetsTitle": "Búsqueda",
 	"dashboardServer": "Personaliza la página del panel de servidor",
 	"dashboardServerTabs": "Personaliza las pestañas del panel de servidor"
 }

@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Konto",
 	"connectionWidget.refreshAzureCredentials": "Kontoanmeldeinformationen aktualisieren",
 	"connection.azureTenantDropdownLabel": "Azure AD-Mandant",
-	"connectionWidget.toggleDatabaseNameDropdown": "Dropdown zum Auswählen der Datenbank",
 	"connectionName": "Name (optional)",
 	"advanced": "Erweitert...",
 	"connectionWidget.invalidAzureAccount": "Sie müssen ein Konto auswählen."

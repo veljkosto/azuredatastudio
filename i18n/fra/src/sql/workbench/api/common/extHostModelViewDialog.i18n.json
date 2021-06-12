@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Annuler",
 	"generateScriptLabel": "Générer le script",
 	"dialogNextLabel": "Suivant",
-	"dialogPreviousLabel": "Précédent"
+	"dialogPreviousLabel": "Précédent",
+	"dashboardNotInitialized": "Les onglets ne sont pas initialisés"
 }

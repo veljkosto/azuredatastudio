@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Уровень совместимости",
 	"owner": "Владелец",
 	"dashboardDatabase": "Настраивает страницу панели мониторинга базы данных",
+	"objectsWidgetTitle": "Поиск",
 	"dashboardDatabaseTabs": "Настраивает вкладки панели мониторинга базы данных"
 }

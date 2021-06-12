@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Niveau de compatibilité",
 	"owner": "Propriétaire",
 	"dashboardDatabase": "Personnalise la page de tableau de bord de base de données",
+	"objectsWidgetTitle": "Recherche",
 	"dashboardDatabaseTabs": "Personnalise les onglets de tableau de bord de base de données"
 }

@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "ID courant du fournisseur",
 	"schema.displayName": "Nom d'affichage du fournisseur",
+	"schema.notebookKernelAlias": "Alias du noyau de notebook pour le fournisseur",
 	"schema.iconPath": "Chemin de l'icône du type de serveur",
 	"schema.connectionOptions": "Options de connexion"
 }

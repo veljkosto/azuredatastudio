@@ -9,11 +9,11 @@
 	"editDashboard": "편집",
 	"editDashboardExit": "끝내기",
 	"refreshWidget": "새로 고침",
-	"toggleMore": "자세히 전환",
+	"toggleMore": "작업 표시",
 	"deleteWidget": "위젯 삭제",
 	"clickToUnpin": "클릭하여 고정 해제",
 	"clickToPin": "클릭하여 고정",
 	"addFeatureAction.openInstalledFeatures": "설치된 기능 열기",
-	"collapseWidget": "축소",
-	"expandWidget": "확장"
+	"collapseWidget": "위젯 축소",
+	"expandWidget": "위젯 확장"
 }

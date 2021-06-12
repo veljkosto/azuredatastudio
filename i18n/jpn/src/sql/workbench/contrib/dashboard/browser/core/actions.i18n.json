@@ -9,11 +9,11 @@
 	"editDashboard": "編集",
 	"editDashboardExit": "終了",
 	"refreshWidget": "最新の情報に更新",
-	"toggleMore": "詳細の切り替え",
+	"toggleMore": "アクションの表示",
 	"deleteWidget": "ウィジェットの削除",
 	"clickToUnpin": "クリックしてピン留めを外します",
 	"clickToPin": "クリックしてピン留めします",
 	"addFeatureAction.openInstalledFeatures": "インストールされている機能を開く",
-	"collapseWidget": "折りたたむ",
-	"expandWidget": "展開する"
+	"collapseWidget": "ウィジェットの折りたたみ",
+	"expandWidget": "ウィジェットの展開"
 }

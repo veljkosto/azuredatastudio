@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Annulla",
 	"generateScriptLabel": "Genera script",
 	"dialogNextLabel": "Avanti",
-	"dialogPreviousLabel": "Indietro"
+	"dialogPreviousLabel": "Indietro",
+	"dashboardNotInitialized": "Le schede non sono inizializzate"
 }

@@ -15,5 +15,7 @@
 	"imageAltName": "이미지",
 	"countAltName": "개수",
 	"tableAltName": "테이블",
-	"doughnutAltName": "도넛형"
+	"doughnutAltName": "도넛형",
+	"charting.failedToGetRows": "데이터 세트의 행을 차트로 가져오지 못했습니다.",
+	"charting.unsupportedType": "차트 종류 '{0}'은(는) 지원되지 않습니다."
 }

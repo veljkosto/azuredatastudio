@@ -8,5 +8,6 @@
 	],
 	"errorMessageDialog.ok": "OK",
 	"errorMessageDialog.close": "Chiudi",
+	"errorMessageDialog.action": "Azione",
 	"copyDetails": "Copia dettagli"
 }

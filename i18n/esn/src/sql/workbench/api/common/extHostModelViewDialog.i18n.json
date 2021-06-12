@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Cancelar",
 	"generateScriptLabel": "Generar script",
 	"dialogNextLabel": "Siguiente",
-	"dialogPreviousLabel": "Anterior"
+	"dialogPreviousLabel": "Anterior",
+	"dashboardNotInitialized": "Las pestañas no se han inicializado."
 }

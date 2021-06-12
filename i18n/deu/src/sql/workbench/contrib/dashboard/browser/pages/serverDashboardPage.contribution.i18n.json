@@ -14,6 +14,7 @@
 	"edition": "Edition",
 	"computerName": "Computername",
 	"osVersion": "Betriebssystemversion",
+	"explorerWidgetsTitle": "Suchen",
 	"dashboardServer": "Hiermit wird die Dashboardseite des Servers angepasst.",
 	"dashboardServerTabs": "Hiermit werden die Dashboardregisterkarten des Servers angepasst."
 }

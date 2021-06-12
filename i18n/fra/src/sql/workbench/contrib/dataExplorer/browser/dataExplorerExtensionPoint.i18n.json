@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "Ajoute des vues à l'éditeur",
 	"extension.dataExplorer": "Ajoute des vues au conteneur Explorateur de données dans la barre d'activités",
 	"dataExplorer.contributed": "Ajoute des vues au conteneur de vues ajoutées",
-	"ViewsContainerDoesnotExist": "Le conteneur de vues '{0}' n'existe pas et toutes les vues qui y sont inscrites sont ajoutées à 'Explorateur de données'.",
 	"duplicateView1": "Impossible d'inscrire plusieurs vues avec le même ID '{0}' dans le conteneur de vues '{1}'",
 	"duplicateView2": "Une vue avec l'ID '{0}' est déjà inscrite dans le conteneur de vues '{1}'",
 	"requirearray": "les vues doivent figurer dans un tableau",

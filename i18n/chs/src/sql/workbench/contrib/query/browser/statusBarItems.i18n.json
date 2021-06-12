@@ -10,5 +10,7 @@
 	"status.query.rowCount": "行数",
 	"rowCount": "{0} 行",
 	"query.status.executing": "正在执行查询…",
-	"status.query.status": "执行状态"
+	"status.query.status": "执行状态",
+	"status.query.selection-summary": "选择摘要",
+	"status.query.summaryText": "平均值: {0} 计数: {1} 总和: {2}"
 }

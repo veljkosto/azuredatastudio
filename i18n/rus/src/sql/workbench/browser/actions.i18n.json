@@ -8,5 +8,6 @@
 	],
 	"manage": "Управление",
 	"showDetails": "Показать подробные сведения",
-	"configureDashboard": "Сведения о настройке панели мониторинга"
+	"configureDashboardLearnMore": "Дополнительные сведения",
+	"clearSavedAccounts": "Очистить все сохраненные учетные записи"
 }

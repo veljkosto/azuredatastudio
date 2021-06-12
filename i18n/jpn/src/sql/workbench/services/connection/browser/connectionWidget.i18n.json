@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "アカウント",
 	"connectionWidget.refreshAzureCredentials": "アカウントの資格情報を更新",
 	"connection.azureTenantDropdownLabel": "Azure AD テナント",
-	"connectionWidget.toggleDatabaseNameDropdown": "データベースの選択の切り替えドロップダウン",
 	"connectionName": "名前 (省略可能)",
 	"advanced": "詳細設定...",
 	"connectionWidget.invalidAzureAccount": "アカウントを選択する必要があります"

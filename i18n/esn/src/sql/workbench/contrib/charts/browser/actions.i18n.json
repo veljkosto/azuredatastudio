@@ -9,6 +9,7 @@
 	"createInsightLabel": "Crear conclusión",
 	"createInsightNoEditor": "No se puede crear la conclusión porque el editor activo no es un Editor de SQL",
 	"myWidgetName": "Mi Widget",
+	"configureChartLabel": "Configurar gráfico",
 	"copyChartLabel": "Copiar como imagen",
 	"chartNotFound": "No se pudo encontrar el gráfico a guardar",
 	"saveImageLabel": "Guardar como imagen",

@@ -9,6 +9,6 @@
 	"queryHistoryConfigurationTitle": "Abfrageverlauf",
 	"queryHistoryCaptureEnabled": "Gibt an, ob die Erfassung des Abfrageverlaufs aktiviert ist. Bei Festlegung auf FALSE werden ausgeführte Abfragen nicht erfasst.",
 	"viewCategory": "Sicht",
-	"queryHistory": "Abfrageverlauf",
-	"miViewQueryHistory": "&&Abfrageverlauf"
+	"miViewQueryHistory": "&&Abfrageverlauf",
+	"queryHistory": "Abfrageverlauf"
 }

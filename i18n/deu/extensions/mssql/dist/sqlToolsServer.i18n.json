@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "\"{0}\" wird heruntergeladen.",
 	"downloadingServiceSizeChannelMsg": "({0} KB)",
 	"downloadingServiceStatusMsg": "\"{0}\" wird heruntergeladen.",
-	"downloadServiceDoneChannelMsg": "Die Installation von {0} wurde abgeschlossen."
+	"downloadServiceDoneChannelMsg": "Die Installation von {0} wurde abgeschlossen.",
+	"entryExtractedChannelMsg": "{0} extrahiert ({1}/{2})"
 }

@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "SQLCMD 사용",
 	"disablesqlcmdLabel": "SQLCMD 사용 안 함",
 	"selectDatabase": "데이터베이스 선택",
-	"listDatabases.toggleDatabaseNameDropdown": "데이터베이스 토글 드롭다운 선택",
 	"changeDatabase.failed": "데이터베이스를 변경하지 못함",
-	"changeDatabase.failedWithError": "{0} 데이터베이스를 변경하지 못함"
+	"changeDatabase.failedWithError": "{0} 데이터베이스를 변경하지 못함",
+	"queryEditor.exportSqlAsNotebook": "Notebook으로 내보내기"
 }

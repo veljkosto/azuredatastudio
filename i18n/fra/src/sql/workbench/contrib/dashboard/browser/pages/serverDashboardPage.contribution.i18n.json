@@ -14,6 +14,7 @@
 	"edition": "Édition",
 	"computerName": "Nom de l'ordinateur",
 	"osVersion": "Version de système d'exploitation",
+	"explorerWidgetsTitle": "Recherche",
 	"dashboardServer": "Personnalise la page de tableau de bord de serveur",
 	"dashboardServerTabs": "Personnalise les onglets de tableau de bord de serveur"
 }

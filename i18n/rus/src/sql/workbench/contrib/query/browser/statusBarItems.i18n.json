@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Число строк",
 	"rowCount": "{0} строк",
 	"query.status.executing": "Выполнение запроса…",
-	"status.query.status": "Состояние выполнения"
+	"status.query.status": "Состояние выполнения",
+	"status.query.selection-summary": "Сводка по выбранным элементам",
+	"status.query.summaryText": "Среднее значение: {0}  Количество: {1}  Сумма: {2}"
 }

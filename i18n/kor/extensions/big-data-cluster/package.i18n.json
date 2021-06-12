@@ -8,13 +8,16 @@
 	],
 	"description": "SQL Server 빅 데이터 클러스터 관리 지원",
 	"text.sqlServerBigDataClusters": "SQL Server 빅 데이터 클러스터",
-	"command.addController.title": "컨트롤러에 연결",
-	"command.deleteController.title": "삭제",
+	"command.connectController.title": "Connect to Existing Controller",
+	"command.createController.title": "Create New Controller",
+	"command.removeController.title": "Remove Controller",
 	"command.refreshController.title": "새로 고침",
 	"command.manageController.title": "관리",
 	"command.mount.title": "HDFS 탑재",
 	"command.refreshmount.title": "탑재 새로 고침",
 	"command.deletemount.title": "탑재 삭제",
 	"bdc.configuration.title": "빅 데이터 클러스터",
+	"bdc.view.welcome.connect": "No SQL Big Data Cluster controllers registered. [Learn More](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[Connect Controller](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "Loading controllers...",
 	"bdc.ignoreSslVerification.desc": "True인 경우 HDFS, Spark 및 Controller와 같은 SQL Server 빅 데이터 클러스터 엔드포인트를 대상으로 SSL 확인 오류 무시"
 }

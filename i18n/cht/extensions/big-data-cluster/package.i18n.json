@@ -8,13 +8,16 @@
 	],
 	"description": "管理 SQL Server 巨量資料叢集的支援",
 	"text.sqlServerBigDataClusters": "SQL Server 巨量資料叢集",
-	"command.addController.title": "連線到控制器",
-	"command.deleteController.title": "刪除",
+	"command.connectController.title": "連線至現有的控制器",
+	"command.createController.title": "建立新控制器",
+	"command.removeController.title": "移除控制器",
 	"command.refreshController.title": "重新整理",
 	"command.manageController.title": "管理",
 	"command.mount.title": "裝載 HDFS",
 	"command.refreshmount.title": "重新整理裝載",
 	"command.deletemount.title": "刪除裝載",
 	"bdc.configuration.title": "巨量資料叢集",
+	"bdc.view.welcome.connect": "未註冊任何 SQL 巨量資料叢集控制器。[深入了解](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[連線控制器](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "正在載入控制器...",
 	"bdc.ignoreSslVerification.desc": "若為 True，則忽略對 SQL Server 巨量資料叢集端點 (例如 HDFS、Spark 及控制器) 所產生的 SSL 驗證錯誤"
 }

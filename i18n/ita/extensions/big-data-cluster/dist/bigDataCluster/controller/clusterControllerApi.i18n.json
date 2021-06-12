@@ -9,9 +9,11 @@
 	"error.no.activedirectory": "Questo cluster non supporta l'autenticazione di Windows",
 	"bdc.error.tokenPost": "Si è verificato un errore durante l'autenticazione",
 	"bdc.error.unauthorized": "Non si è autorizzati ad accedere a questo cluster con Autenticazione di Windows",
+	"bdc.error.getClusterConfig": "Errore durante il recupero della configurazione del cluster da {0}",
 	"bdc.error.getEndPoints": "Si è verificato un errore durante il recupero degli endpoint da {0}",
 	"bdc.error.getBdcStatus": "Si è verificato un errore durante il recupero dello stato del cluster Big Data da {0}",
 	"bdc.error.mountHdfs": "Si è verificato un errore durante la creazione del montaggio",
+	"bdc.error.statusHdfs": "Errore durante il recupero dello stato di montaggio",
 	"bdc.error.refreshHdfs": "Si è verificato un errore durante l'aggiornamento del montaggio",
 	"bdc.error.deleteHdfs": "Si è verificato un errore durante l'eliminazione del montaggio"
 }

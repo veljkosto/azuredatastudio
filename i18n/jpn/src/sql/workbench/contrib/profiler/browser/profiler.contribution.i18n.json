@@ -8,5 +8,5 @@
 	],
 	"profiler.settings.viewTemplates": "ビュー テンプレートを指定する",
 	"profiler.settings.sessionTemplates": "セッション テンプレートを指定する",
-	"profiler.settings.Filters": "プロファイラー フィルター"
+	"profiler.settings.Filters": "Profiler フィルター"
 }

@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "Aggiunge come contributo le visualizzazioni all'editor",
 	"extension.dataExplorer": "Aggiunge come contributo le visualizzazioni al contenitore Esplora dati nella barra attività",
 	"dataExplorer.contributed": "Aggiunge come contributo le visualizzazioni al contenitore delle visualizzazioni aggiunto come contributo",
-	"ViewsContainerDoesnotExist": "Il contenitore di visualizzazioni '{0}' non esiste e tutte le visualizzazioni registrate verranno aggiunte a 'Esplora dati'.",
 	"duplicateView1": "Non è possibile registrare più visualizzazioni con stesso ID `{0}` nel contenitore di visualizzazioni `{1}`",
 	"duplicateView2": "Una visualizzazione con ID `{0}` è già registrata nel contenitore di visualizzazioni `{1}`",
 	"requirearray": "le visualizzazioni devono essere una matrice",

@@ -9,9 +9,11 @@
 	"error.no.activedirectory": "このクラスターは Windows 認証をサポートしていません",
 	"bdc.error.tokenPost": "認証中のエラー",
 	"bdc.error.unauthorized": "Windows 認証を使用してこのクラスターにログインするアクセス許可がありません",
+	"bdc.error.getClusterConfig": "{0} からのクラスター構成の取得でエラーが発生しました",
 	"bdc.error.getEndPoints": "{0} からのエンドポイントの取得でエラーが発生しました",
 	"bdc.error.getBdcStatus": "{0} から BDC ステータスを取得する操作でエラーが発生しました",
 	"bdc.error.mountHdfs": "マウントの作成でエラーが発生しました",
+	"bdc.error.statusHdfs": "マウント状態の取得エラー",
 	"bdc.error.refreshHdfs": "マウントの更新エラー",
 	"bdc.error.deleteHdfs": "マウントの削除エラー"
 }

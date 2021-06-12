@@ -17,5 +17,6 @@
 	"compatibilityLevel": "相容性層級",
 	"owner": "擁有者",
 	"dashboardDatabase": "自訂 \"資料庫儀表板\" 頁",
+	"objectsWidgetTitle": "搜尋",
 	"dashboardDatabaseTabs": "自訂資料庫儀表板索引標籤"
 }

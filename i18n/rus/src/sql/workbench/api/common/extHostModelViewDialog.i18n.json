@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Отмена",
 	"generateScriptLabel": "Создать сценарий",
 	"dialogNextLabel": "Далее",
-	"dialogPreviousLabel": "Назад"
+	"dialogPreviousLabel": "Назад",
+	"dashboardNotInitialized": "Вкладки не инициализированы"
 }

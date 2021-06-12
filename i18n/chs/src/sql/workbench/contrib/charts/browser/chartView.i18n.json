@@ -15,5 +15,7 @@
 	"imageAltName": "图像",
 	"countAltName": "计数",
 	"tableAltName": "表",
-	"doughnutAltName": "圆环图"
+	"doughnutAltName": "圆环图",
+	"charting.failedToGetRows": "未能获得数据集的行来绘制图表。",
+	"charting.unsupportedType": "不支持图表类型“{0}”。"
 }

@@ -15,5 +15,6 @@
 	"downloadingServiceChannelMsg": "Baixando {0}",
 	"downloadingServiceSizeChannelMsg": "({0} KB)",
 	"downloadingServiceStatusMsg": "Baixando {0}",
-	"downloadServiceDoneChannelMsg": "Concluída a instalação de {0}"
+	"downloadServiceDoneChannelMsg": "Concluída a instalação de {0}",
+	"entryExtractedChannelMsg": "{0} extraído ({1}/{2})"
 }

@@ -17,5 +17,6 @@
 	"compatibilityLevel": "호환성 수준",
 	"owner": "소유자",
 	"dashboardDatabase": "데이터베이스 대시보드 페이지를 사용자 지정합니다.",
+	"objectsWidgetTitle": "검색",
 	"dashboardDatabaseTabs": "데이터베이스 대시보드 탭을 사용자 지정합니다."
 }

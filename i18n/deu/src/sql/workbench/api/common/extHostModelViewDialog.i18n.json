@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "Abbrechen",
 	"generateScriptLabel": "Skript generieren",
 	"dialogNextLabel": "Weiter",
-	"dialogPreviousLabel": "Zurück"
+	"dialogPreviousLabel": "Zurück",
+	"dashboardNotInitialized": "Registerkarten sind nicht initialisiert."
 }

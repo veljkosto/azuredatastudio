@@ -8,13 +8,16 @@
 	],
 	"description": "Поддержка управления кластерами больших данных SQL Server",
 	"text.sqlServerBigDataClusters": "Кластеры больших данных SQL Server",
-	"command.addController.title": "Подключение к контроллеру",
-	"command.deleteController.title": "Удалить",
+	"command.connectController.title": "Подключение к существующему контроллеру",
+	"command.createController.title": "Создание нового контроллера",
+	"command.removeController.title": "Удаление контроллера",
 	"command.refreshController.title": "Обновить",
 	"command.manageController.title": "Управление",
 	"command.mount.title": "Подключение HDFS",
 	"command.refreshmount.title": "Обновить подключение",
 	"command.deletemount.title": "Удалить подключение",
 	"bdc.configuration.title": "Кластер больших данных",
+	"bdc.view.welcome.connect": "Контроллеры кластера больших данных SQL не зарегистрированы. [Дополнительные сведения](https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[Connect Controller](command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "Загрузка контроллеров…",
 	"bdc.ignoreSslVerification.desc": "Если этот параметр имеет значение TRUE, игнорировать ошибки проверки SSL в отношении конечных точек кластера больших данных SQL Server, таких как HDFS, Spark и Controller"
 }

@@ -8,5 +8,6 @@
 	],
 	"errorMessageDialog.ok": "確定",
 	"errorMessageDialog.close": "關閉",
+	"errorMessageDialog.action": "動作",
 	"copyDetails": "複製詳細資訊"
 }

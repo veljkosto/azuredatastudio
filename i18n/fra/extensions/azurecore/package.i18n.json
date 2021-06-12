@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Actualiser",
 	"azure.resource.signin.title": "Azure : Se connecter",
 	"azure.resource.selectsubscriptions.title": "Sélectionner des abonnements",
+	"azure.resource.startterminal.title": "Démarrer Cloud Shell",
 	"azure.resource.connectsqlserver.title": "Connecter",
 	"azure.resource.connectsqldb.title": "Ajouter aux serveurs",
+	"azure.resource.view.title": "Azure (préversion)",
+	"azure.tenant.config.filter.description": "Liste des ID de locataire à ignorer pendant l'interrogation des ressources Azure. Chaque élément est un ID de locataire.",
 	"accounts.clearTokenCache": "Effacer le cache de jetons du compte Azure",
+	"azure.openInAzurePortal.title": "Ouvrir dans le portail Azure",
+	"config.azureAccountConfigurationSection": "Configuration du compte Azure",
 	"config.enablePublicCloudDescription": "Spécifie si l'intégration du cloud Azure public doit être activée",
 	"config.enableUsGovCloudDescription": "Spécifie si l'intégration du cloud Azure US Government (Fairfax) doit être activée",
+	"config.enableUsNatCloudDescription": "Spécifie si l'intégration du cloud Azure US National doit être activée",
 	"config.enableChinaCloudDescription": "Spécifie si l'intégration d'Azure Chine doit être activée",
-	"config.enableGermanyCloudDescription": "Spécifie si l'intégration d'Azure Allemagne doit être activée"
+	"config.enableGermanyCloudDescription": "Spécifie si l'intégration d'Azure Allemagne doit être activée",
+	"config.azureAuthMethodConfigurationSection": "Méthode d'authentification Azure",
+	"config.azureCodeGrantMethod": "Méthode d'octroi de code",
+	"config.azureDeviceCodeMethod": "Méthode de code d'appareil",
+	"config.noSystemKeychain": "Désactivez l'intégration du trousseau système. Les informations d'identification sont stockées dans un fichier plat dans le dossier de base de l'utilisateur.",
+	"config.piiLogging": "Les informations d'identification personnelle (PII) doivent-elles être journalisées localement dans la vue de console"
 }

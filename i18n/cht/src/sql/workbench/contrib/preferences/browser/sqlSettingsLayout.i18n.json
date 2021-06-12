@@ -8,10 +8,8 @@
 	],
 	"data": "資料",
 	"connection": "連線",
-	"query": "查詢",
+	"queryEditor": "查詢編輯器",
 	"notebook": "Notebook",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "儀表板",
 	"profiler": "分析工具"
 }

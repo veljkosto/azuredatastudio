@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Kompatibilitätsgrad",
 	"owner": "Besitzer",
 	"dashboardDatabase": "Hiermit wird die Dashboardseite für die Datenbank angepasst.",
+	"objectsWidgetTitle": "Suchen",
 	"dashboardDatabaseTabs": "Hiermit werden die Dashboardregisterkarten für die Datenbank angepasst."
 }

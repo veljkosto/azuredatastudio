@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Account",
 	"connectionWidget.refreshAzureCredentials": "Aggiorna credenziali dell'account",
 	"connection.azureTenantDropdownLabel": "Tenant di Azure AD",
-	"connectionWidget.toggleDatabaseNameDropdown": "Elenco a discesa per attivazione/disattivazione della selezione del database",
 	"connectionName": "Nome (facoltativo)",
 	"advanced": "Avanzate...",
 	"connectionWidget.invalidAzureAccount": "È necessario selezionare un account"

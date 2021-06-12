@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "帐户",
 	"connectionWidget.refreshAzureCredentials": "刷新帐户凭据",
 	"connection.azureTenantDropdownLabel": "Azure AD 租户",
-	"connectionWidget.toggleDatabaseNameDropdown": "“选择数据库”切换下拉列表",
 	"connectionName": "名称(可选)",
 	"advanced": "高级…",
 	"connectionWidget.invalidAzureAccount": "必须选择一个帐户"

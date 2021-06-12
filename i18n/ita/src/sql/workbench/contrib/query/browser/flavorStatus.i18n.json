@@ -12,5 +12,5 @@
 	"changeSqlProvider": "Cambia provider del motore SQL",
 	"alreadyConnected": "Esiste già una connessione che usa il motore {0}. Per cambiare, disconnettersi o cambiare connessione",
 	"noEditor": "Al momento non ci sono editor di testo attivi",
-	"pickSqlProvider": "Seleziona provider del linguaggio SQL"
+	"pickSqlProvider": "Seleziona provider del linguaggio"
 }

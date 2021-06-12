@@ -14,13 +14,17 @@
 	"profilerAction.resumeCapture": "Reprendre",
 	"profilerStop.stop": "Arrêter",
 	"profiler.clear": "Effacer les données",
+	"profiler.clearDataPrompt": "Voulez-vous vraiment effacer les données ?",
+	"profiler.yes": "Oui",
+	"profiler.no": "Non",
 	"profilerAction.autoscrollOn": "Défilement automatique : activé",
 	"profilerAction.autoscrollOff": "Défilement automatique : désactivé",
 	"profiler.toggleCollapsePanel": "Afficher/masquer le panneau réduit",
 	"profiler.editColumns": "Modifier les colonnes",
 	"profiler.findNext": "Rechercher la chaîne suivante",
 	"profiler.findPrevious": "Rechercher la chaîne précédente",
-	"profilerAction.newProfiler": "Lancer le profileur",
+	"profilerAction.newProfiler": "Lancer Profiler",
 	"profiler.filter": "Filtrer...",
-	"profiler.clearFilter": "Effacer le filtre"
+	"profiler.clearFilter": "Effacer le filtre",
+	"profiler.clearFilterPrompt": "Voulez-vous vraiment effacer les filtres ?"
 }

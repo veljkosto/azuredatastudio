@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Contagem de Linhas",
 	"rowCount": "{0} linhas",
 	"query.status.executing": "Executando consulta...",
-	"status.query.status": "Status de Execução"
+	"status.query.status": "Status de Execução",
+	"status.query.selection-summary": "Resumo da Seleção",
+	"status.query.summaryText": "Média: {0}  Contagem: {1}  Soma: {2}"
 }

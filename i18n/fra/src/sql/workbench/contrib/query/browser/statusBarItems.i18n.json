@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Nombre de lignes",
 	"rowCount": "{0} lignes",
 	"query.status.executing": "Exécution de la requête...",
-	"status.query.status": "État d'exécution"
+	"status.query.status": "État d'exécution",
+	"status.query.selection-summary": "Récapitulatif de la sélection",
+	"status.query.summaryText": "Moyenne : {0}, nombre : {1}, somme : {2}"
 }

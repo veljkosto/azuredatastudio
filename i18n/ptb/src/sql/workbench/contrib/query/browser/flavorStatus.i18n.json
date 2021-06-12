@@ -12,5 +12,5 @@
 	"changeSqlProvider": "Alterar Provedor de Mecanismo SQL",
 	"alreadyConnected": "Existe uma conexão usando o mecanismo {0}. Para alterar, desconecte ou altere a conexão",
 	"noEditor": "Nenhum editor de texto ativo neste momento",
-	"pickSqlProvider": "Selecione o provedor de linguagem SQL"
+	"pickSqlProvider": "Selecionar o Provedor de Linguagem"
 }

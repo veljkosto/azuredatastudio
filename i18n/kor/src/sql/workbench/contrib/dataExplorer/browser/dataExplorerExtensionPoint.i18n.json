@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "뷰를 편집기에 적용합니다.",
 	"extension.dataExplorer": "뷰를 작업 막대의 Data Explorer 컨테이너에 적용합니다.",
 	"dataExplorer.contributed": "뷰를 적용된 뷰 컨테이너에 적용합니다.",
-	"ViewsContainerDoesnotExist": "뷰 컨테이너 '{0}'이(가) 없으며 해당 뷰 컨테이너에 등록된 모든 뷰가 'Data Explorer'에 추가됩니다.",
 	"duplicateView1": "뷰 컨테이너 '{1}'에서 동일한 ID '{0}'의 여러 뷰를 등록할 수 없습니다.",
 	"duplicateView2": "ID가 '{0}'인 뷰가 뷰 컨테이너 '{1}'에 이미 등록되어 있습니다.",
 	"requirearray": "뷰는 배열이어야 합니다.",

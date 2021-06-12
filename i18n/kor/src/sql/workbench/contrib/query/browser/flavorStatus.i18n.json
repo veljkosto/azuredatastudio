@@ -12,5 +12,5 @@
 	"changeSqlProvider": "SQL 엔진 공급자 변경",
 	"alreadyConnected": "{0} 엔진을 사용하는 연결이 존재합니다. 변경하려면 연결을 끊거나 연결을 변경하세요.",
 	"noEditor": "현재 활성 텍스트 편집기 없음",
-	"pickSqlProvider": "SQL 언어 공급자 선택"
+	"pickSqlProvider": "언어 공급자 선택"
 }
