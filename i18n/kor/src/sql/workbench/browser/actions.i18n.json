@@ -8,5 +8,6 @@
 	],
 	"manage": "관리",
 	"showDetails": "세부 정보 표시",
-	"configureDashboard": "대시보드를 구성하는 방법 알아보기"
+	"configureDashboardLearnMore": "자세한 정보",
+	"clearSavedAccounts": "저장된 모든 계정 지우기"
 }

@@ -17,12 +17,9 @@
 	"msgInstallPkgStart": "Notebook-Abhängigkeiten werden installiert. Weitere Informationen finden Sie in der Aufgabenansicht.",
 	"msgInstallPkgFinish": "Die Installation von Notebook-Abhängigkeiten ist abgeschlossen.",
 	"msgPythonRunningError": "Eine vorhandene Python-Installation kann nicht überschrieben werden, während Python ausgeführt wird. Schließen Sie alle aktiven Notebooks, bevor Sie fortfahren.",
-	"msgSkipPythonInstall": "Python ist an diesem Speicherort bereits vorhanden. Die Installation wird übersprungen.",
 	"msgWaitingForInstall": "Aktuell wird eine weitere Python-Installation ausgeführt. Es wird auf den Abschluss des Vorgangs gewartet.",
 	"msgDependenciesInstallationFailed": "Fehler beim Installieren von Notebook-Abhängigkeiten: {0}",
 	"msgDownloadPython": "Lokales Python für die Plattform \"{0}\" wird nach \"{1}\" heruntergeladen.",
-	"confirmPackageUpgrade": "Einige installierte Python-Pakete müssen aktualisiert werden. Möchten Sie sie jetzt aktualisieren?",
-	"upgradePackages.pipInstall": "\"{0}\" wird installiert.",
-	"msgInstallStart": "Zum Ausführen von Notebooks erforderliche Pakete werden installiert...",
-	"msgJupyterInstallDone": "... Jupyter-Installation abgeschlossen."
+	"msgPackageRetrievalFailed": "Fehler beim Abrufen der Liste installierter Pakete: {0}",
+	"msgGetPythonUserDirFailed": "Fehler beim Abrufen des Python-Benutzerpfads: {0}"
 }

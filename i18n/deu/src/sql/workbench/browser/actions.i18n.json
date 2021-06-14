@@ -8,5 +8,6 @@
 	],
 	"manage": "Verwalten",
 	"showDetails": "Details anzeigen",
-	"configureDashboard": "Einführung in die Konfiguration des Dashboards"
+	"configureDashboardLearnMore": "Weitere Informationen",
+	"clearSavedAccounts": "Alle gespeicherten Konten löschen"
 }

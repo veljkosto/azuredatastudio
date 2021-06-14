@@ -8,5 +8,6 @@
 	],
 	"errorMessageDialog.ok": "ОК",
 	"errorMessageDialog.close": "Закрыть",
+	"errorMessageDialog.action": "Действие",
 	"copyDetails": "Скопировать сведения"
 }

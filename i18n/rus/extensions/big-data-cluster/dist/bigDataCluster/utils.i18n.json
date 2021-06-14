@@ -36,7 +36,7 @@
 	"endpoint.gateway": "Шлюз для доступа к файлам HDFS, Spark",
 	"endpoint.managementproxy": "Прокси-сервер управления",
 	"endpoint.mgmtproxy": "Прокси-сервер управления",
-	"endpoint.sqlServerEndpoint": "Интерфейс основного экземпляра SQL Server",
+	"endpoint.sqlServerEndpoint": "Интерфейс главного экземпляра SQL Server",
 	"endpoint.grafana": "Панель мониторинга метрик",
 	"endpoint.kibana": "Панель мониторинга поиска по журналам",
 	"endpoint.yarnHistory": "Панель мониторинга для отслеживания и диагностики Spark",

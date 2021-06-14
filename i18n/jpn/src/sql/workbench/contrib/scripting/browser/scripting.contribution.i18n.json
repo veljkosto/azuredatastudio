@@ -13,6 +13,7 @@
 	"scriptAsAlter": "変更としてのスクリプト",
 	"editData": "データの編集",
 	"scriptSelect": "上位 1000 を選択する",
+	"scriptKustoSelect": "10 個",
 	"scriptCreate": "作成としてのスクリプト",
 	"scriptExecute": "実行としてのスクリプト",
 	"scriptAlter": "変更としてのスクリプト",

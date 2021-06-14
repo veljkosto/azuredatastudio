@@ -13,6 +13,7 @@
 	"scriptAsAlter": "Script de modification",
 	"editData": "Modifier les données",
 	"scriptSelect": "Sélectionnez les 1000 premiers",
+	"scriptKustoSelect": "Prendre 10",
 	"scriptCreate": "Script de création",
 	"scriptExecute": "Script d'exécution",
 	"scriptAlter": "Script de modification",

@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Livello di compatibilità",
 	"owner": "Proprietario",
 	"dashboardDatabase": "Personalizza la pagina del dashboard del database",
+	"objectsWidgetTitle": "Cerca",
 	"dashboardDatabaseTabs": "Personalizza le schede del dashboard del database"
 }

@@ -8,5 +8,5 @@
 	],
 	"profiler.settings.viewTemplates": "指定檢視範本",
 	"profiler.settings.sessionTemplates": "指定工作階段範本",
-	"profiler.settings.Filters": "Profiler 篩選條件"
+	"profiler.settings.Filters": "分析工具篩選條件"
 }

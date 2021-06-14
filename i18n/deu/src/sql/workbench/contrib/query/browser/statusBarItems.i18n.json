@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Zeilenanzahl",
 	"rowCount": "{0} Zeilen",
 	"query.status.executing": "Abfrage wird ausgeführt...",
-	"status.query.status": "Ausführungsstatus"
+	"status.query.status": "Ausführungsstatus",
+	"status.query.selection-summary": "Zusammenfassung der Auswahl",
+	"status.query.summaryText": "Durchschnitt: {0}, Anzahl: {1}, Summe: {2}"
 }

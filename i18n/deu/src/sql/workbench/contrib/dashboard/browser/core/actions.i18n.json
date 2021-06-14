@@ -9,11 +9,11 @@
 	"editDashboard": "Bearbeiten",
 	"editDashboardExit": "Beenden",
 	"refreshWidget": "Aktualisieren",
-	"toggleMore": "Weitere ein-/ausblenden",
+	"toggleMore": "Aktionen anzeigen",
 	"deleteWidget": "Widget löschen",
 	"clickToUnpin": "Zum Lösen klicken",
 	"clickToPin": "Zum Anheften klicken",
 	"addFeatureAction.openInstalledFeatures": "Installierte Features öffnen",
-	"collapseWidget": "Reduzieren",
-	"expandWidget": "Erweitern"
+	"collapseWidget": "Widget reduzieren",
+	"expandWidget": "Widget erweitern"
 }

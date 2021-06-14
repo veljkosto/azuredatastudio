@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Учетная запись",
 	"connectionWidget.refreshAzureCredentials": "Обновите учетные данные учетной записи",
 	"connection.azureTenantDropdownLabel": "Клиент Azure AD",
-	"connectionWidget.toggleDatabaseNameDropdown": "Раскрывающийся список для переключения базы данных",
 	"connectionName": "Имя (необязательно)",
 	"advanced": "Дополнительно…",
 	"connectionWidget.invalidAzureAccount": "Необходимо выбрать учетную запись"

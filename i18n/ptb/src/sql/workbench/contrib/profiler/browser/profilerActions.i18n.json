@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "Continuar",
 	"profilerStop.stop": "Parar",
 	"profiler.clear": "Limpar Dados",
+	"profiler.clearDataPrompt": "Tem certeza de que deseja limpar os dados?",
+	"profiler.yes": "Sim",
+	"profiler.no": "Não",
 	"profilerAction.autoscrollOn": "Rolagem Automática: Ativada",
 	"profilerAction.autoscrollOff": "Rolagem Automática: Desativada",
 	"profiler.toggleCollapsePanel": "Alternar Painel Recolhido",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "Encontrar Cadeia de Caracteres Anterior",
 	"profilerAction.newProfiler": "Iniciar Profiler",
 	"profiler.filter": "Filtro...",
-	"profiler.clearFilter": "Limpar Filtro"
+	"profiler.clearFilter": "Limpar Filtro",
+	"profiler.clearFilterPrompt": "Tem certeza de que deseja limpar os filtros?"
 }

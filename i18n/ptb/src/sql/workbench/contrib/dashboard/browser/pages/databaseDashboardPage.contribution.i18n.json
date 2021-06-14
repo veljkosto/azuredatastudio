@@ -17,5 +17,6 @@
 	"compatibilityLevel": "Nível de Compatibilidade",
 	"owner": "Proprietário",
 	"dashboardDatabase": "Personaliza a página do painel de banco de dados",
+	"objectsWidgetTitle": "Pesquisar",
 	"dashboardDatabaseTabs": "Personaliza as guias do painel de banco de dados"
 }

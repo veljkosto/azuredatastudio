@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "Der Titel des Navigationsbereichs, der dem Benutzer angezeigt werden soll.",
 	"dashboard.container.left-nav-bar.container": "Der Container, der in diesem Navigationsbereich angezeigt wird.",
 	"dashboard.container.left-nav-bar": "Die Liste der Dashboardcontainer, die in diesem Navigationsabschnitt angezeigt wird.",
-	"opticon": "Die Eigenschaft \"icon\" kann ausgelassen werden oder muss eine Zeichenfolge oder ein Literal wie \"{dark, light}\" sein.",
 	"navSection.missingTitle.error": "Für die Erweiterung wurde kein Titel im Navigationsbereich angegeben.",
 	"navSection.missingContainer.error": "Für die Anwendung wurde kein Container im Navigationsbereich angegeben.",
 	"navSection.moreThanOneDashboardContainersError": "Es muss genau 1 Dashboardcontainer pro Bereich definiert sein.",

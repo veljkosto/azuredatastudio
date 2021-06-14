@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "Activer SQLCMD",
 	"disablesqlcmdLabel": "Désactiver SQLCMD",
 	"selectDatabase": "Sélectionner une base de données",
-	"listDatabases.toggleDatabaseNameDropdown": "Sélectionner la liste déroulante de bases de données",
 	"changeDatabase.failed": "Le changement de base de données a échoué",
-	"changeDatabase.failedWithError": "Le changement de la base de données {0} a échoué"
+	"changeDatabase.failedWithError": "Le changement de la base de données {0} a échoué",
+	"queryEditor.exportSqlAsNotebook": "Exporter au format Notebook"
 }

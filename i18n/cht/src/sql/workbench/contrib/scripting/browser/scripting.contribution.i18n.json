@@ -13,6 +13,7 @@
 	"scriptAsAlter": "修改指令碼",
 	"editData": "編輯資料",
 	"scriptSelect": "選取前 1000",
+	"scriptKustoSelect": "取用 10 筆",
 	"scriptCreate": "建立指令碼",
 	"scriptExecute": "作為指令碼執行",
 	"scriptAlter": "修改指令碼",

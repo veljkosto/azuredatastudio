@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Numero di righe",
 	"rowCount": "{0} righe",
 	"query.status.executing": "Esecuzione della query...",
-	"status.query.status": "Stato esecuzione"
+	"status.query.status": "Stato esecuzione",
+	"status.query.selection-summary": "Riepilogo selezioni",
+	"status.query.summaryText": "Media: {0}  Conteggio: {1}  Somma: {2}"
 }

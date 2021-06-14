@@ -9,11 +9,11 @@
 	"editDashboard": "Editar",
 	"editDashboardExit": "Salir",
 	"refreshWidget": "Actualizar",
-	"toggleMore": "Alternar más",
+	"toggleMore": "Mostrar acciones",
 	"deleteWidget": "Eliminar widget",
 	"clickToUnpin": "Haga clic para desanclar",
 	"clickToPin": "Haga clic para anclar",
 	"addFeatureAction.openInstalledFeatures": "Abrir características instaladas",
-	"collapseWidget": "Contraer",
-	"expandWidget": "Expandir"
+	"collapseWidget": "Contraer widget",
+	"expandWidget": "Expandir widget"
 }

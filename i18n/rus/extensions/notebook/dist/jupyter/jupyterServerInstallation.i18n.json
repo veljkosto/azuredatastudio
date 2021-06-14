@@ -17,12 +17,9 @@
 	"msgInstallPkgStart": "Идет установка зависимостей Notebook, дополнительные сведения см. в представлении задач",
 	"msgInstallPkgFinish": "Установка зависимостей Notebook завершена",
 	"msgPythonRunningError": "Не удается перезаписать существующую установку Python во время работы Python. Прежде чем продолжить, закройте все активные записные книжки.",
-	"msgSkipPythonInstall": "Python уже существует в указанном расположении. Выполняется пропуск установки.",
 	"msgWaitingForInstall": "Сейчас выполняется другая установка Python. Дождитесь ее завершения.",
 	"msgDependenciesInstallationFailed": "Установка зависимостей Notebook завершилась с ошибкой: {0}",
 	"msgDownloadPython": "Скачивание локального Python для платформы: {0} в {1}",
-	"confirmPackageUpgrade": "Некоторые установленные пакеты Python нужно обновить. Вы хотите обновить их сейчас?",
-	"upgradePackages.pipInstall": "Установка (0)",
-	"msgInstallStart": "Установка требуемых пакетов для запуска Записных книжек…",
-	"msgJupyterInstallDone": "… Установка Jupyter завершена."
+	"msgPackageRetrievalFailed": "Произошла ошибка при попытке получить список установленных пакетов: {0}",
+	"msgGetPythonUserDirFailed": "Обнаружена ошибка при получении пути пользователя Python: {0}"
 }

@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "Включить SQLCMD",
 	"disablesqlcmdLabel": "Отключить SQLCMD",
 	"selectDatabase": "Выберите базу данных",
-	"listDatabases.toggleDatabaseNameDropdown": "Раскрывающийся список для переключения базы данных",
 	"changeDatabase.failed": "Не удалось изменить базу данных",
-	"changeDatabase.failedWithError": "Не удалось изменить базу данных {0}"
+	"changeDatabase.failedWithError": "Не удалось изменить базу данных {0}",
+	"queryEditor.exportSqlAsNotebook": "Экспортировать в виде записной книжки"
 }

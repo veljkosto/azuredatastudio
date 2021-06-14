@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Actualizar",
 	"azure.resource.signin.title": "Azure: iniciar sesión",
 	"azure.resource.selectsubscriptions.title": "Seleccionar suscripciones",
+	"azure.resource.startterminal.title": "Inicio de Cloud Shell",
 	"azure.resource.connectsqlserver.title": "Conectar",
 	"azure.resource.connectsqldb.title": "Añadir a servidores",
+	"azure.resource.view.title": "Azure (versión preliminar)",
+	"azure.tenant.config.filter.description": "Lista de id. de inquilino para ignorar al realizar una consultar relativa a recursos de Azure. Cada elemento es un id. de inquilino.",
 	"accounts.clearTokenCache": "Borrar la memoria caché de tokens de cuentas de Azure",
+	"azure.openInAzurePortal.title": "Abrir en Azure Portal",
+	"config.azureAccountConfigurationSection": "Configuración de la cuenta de Azure",
 	"config.enablePublicCloudDescription": "Si debería habilitarse la integración de la nube pública de Azure",
 	"config.enableUsGovCloudDescription": "Si debería habilitarse la integración de la nube de US Government Azure",
+	"config.enableUsNatCloudDescription": "Indica si se debe habilitar la integración de la nube de Azure nacional de EE. UU.",
 	"config.enableChinaCloudDescription": "Si debería habilitarse la integración de Azure China",
-	"config.enableGermanyCloudDescription": "Si debería habilitarse la integración de Azure Alemania"
+	"config.enableGermanyCloudDescription": "Si debería habilitarse la integración de Azure Alemania",
+	"config.azureAuthMethodConfigurationSection": "Método de autenticación de Azure",
+	"config.azureCodeGrantMethod": "Método de concesión de código",
+	"config.azureDeviceCodeMethod": "Método de código del dispositivo",
+	"config.noSystemKeychain": "Deshabilite la integración de las cadenas de claves del sistema. Las credenciales se almacenarán en un archivo plano en el directorio principal del usuario.",
+	"config.piiLogging": "Indica si se debe registrar la información de identificación personal (PII) en la vista de la consola de forma local."
 }

@@ -9,6 +9,7 @@
 	"createInsightLabel": "Erkenntnisse generieren",
 	"createInsightNoEditor": "Es können keine Erkenntnisse generiert werden, weil der aktive Editor kein SQL-Editor ist.",
 	"myWidgetName": "My-Widget",
+	"configureChartLabel": "Diagramm konfigurieren",
 	"copyChartLabel": "Als Bild kopieren",
 	"chartNotFound": "Das zu speichernde Diagramm wurde nicht gefunden.",
 	"saveImageLabel": "Als Bild speichern",

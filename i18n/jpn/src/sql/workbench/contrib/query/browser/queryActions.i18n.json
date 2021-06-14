@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "SQLCMD を有効にする",
 	"disablesqlcmdLabel": "SQLCMD を無効にする",
 	"selectDatabase": "データベースの選択",
-	"listDatabases.toggleDatabaseNameDropdown": "データベースの選択の切り替えドロップダウン",
 	"changeDatabase.failed": "データベースを変更できませんでした",
-	"changeDatabase.failedWithError": "データベース {0} を変更できませんでした"
+	"changeDatabase.failedWithError": "データベース {0} を変更できませんでした",
+	"queryEditor.exportSqlAsNotebook": "ノートブックとしてエクスポート"
 }

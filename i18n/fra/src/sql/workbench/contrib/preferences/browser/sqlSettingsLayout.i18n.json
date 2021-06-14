@@ -8,10 +8,8 @@
 	],
 	"data": "Données",
 	"connection": "Connexion",
-	"query": "Requête",
+	"queryEditor": "Éditeur de requêtes",
 	"notebook": "Notebook",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "Tableau de bord",
-	"profiler": "Profileur"
+	"profiler": "Profiler"
 }

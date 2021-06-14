@@ -15,5 +15,7 @@
 	"imageAltName": "イメージ",
 	"countAltName": "カウント",
 	"tableAltName": "テーブル",
-	"doughnutAltName": "ドーナツ"
+	"doughnutAltName": "ドーナツ",
+	"charting.failedToGetRows": "グラフを作成するデータセットの行を取得できませんでした。",
+	"charting.unsupportedType": "グラフの種類 '{0}' はサポートされていません。"
 }

@@ -19,7 +19,6 @@
 	"connection.azureAccountDropdownLabel": "Compte",
 	"connectionWidget.refreshAzureCredentials": "Actualiser les informations d'identification du compte",
 	"connection.azureTenantDropdownLabel": "Locataire Azure AD",
-	"connectionWidget.toggleDatabaseNameDropdown": "Sélectionner la liste déroulante de bases de données",
 	"connectionName": "Nom (facultatif)",
 	"advanced": "Avancé...",
 	"connectionWidget.invalidAzureAccount": "Vous devez sélectionner un compte"

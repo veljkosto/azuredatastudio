@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "取消",
 	"generateScriptLabel": "生成脚本",
 	"dialogNextLabel": "下一步",
-	"dialogPreviousLabel": "上一步"
+	"dialogPreviousLabel": "上一步",
+	"dashboardNotInitialized": "选项卡未初始化"
 }

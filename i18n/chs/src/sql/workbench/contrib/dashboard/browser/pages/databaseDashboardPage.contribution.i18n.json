@@ -17,5 +17,6 @@
 	"compatibilityLevel": "兼容级别",
 	"owner": "所有者",
 	"dashboardDatabase": "自定义数据库仪表板页面",
+	"objectsWidgetTitle": "搜索",
 	"dashboardDatabaseTabs": "自定义数据库仪表板选项卡"
 }

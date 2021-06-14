@@ -11,7 +11,7 @@
 	"queryHistory.clearLabel": "Очистить весь журнал",
 	"queryHistory.openQuery": "Открыть запрос",
 	"queryHistory.runQuery": "Выполнить запрос",
-	"queryHistory.toggleCaptureLabel": "Включить или отключить ведение журнала запросов",
-	"queryHistory.disableCapture": "Приостановить ведение журнала запросов",
-	"queryHistory.enableCapture": "Начать ведение журнала запросов"
+	"queryHistory.toggleCaptureLabel": "Включить или отключить ведение Журнала запросов",
+	"queryHistory.disableCapture": "Приостановить ведение Журнала запросов",
+	"queryHistory.enableCapture": "Начать ведение Журнала запросов"
 }

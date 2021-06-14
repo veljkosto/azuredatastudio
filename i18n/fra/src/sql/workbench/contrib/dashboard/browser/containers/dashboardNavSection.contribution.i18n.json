@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "Titre de la section de navigation à montrer à l'utilisateur.",
 	"dashboard.container.left-nav-bar.container": "Conteneur à afficher dans cette section de navigation.",
 	"dashboard.container.left-nav-bar": "Liste des conteneurs de tableau de bord à afficher dans cette section de navigation.",
-	"opticon": "la propriété 'icon' peut être omise, ou doit être une chaîne ou un littéral de type '{dark, light}'",
 	"navSection.missingTitle.error": "Aucun titre dans la section de navigation n'a été spécifié pour l'extension.",
 	"navSection.missingContainer.error": "Aucun conteneur dans la section de navigation n'a été spécifié pour l'extension.",
 	"navSection.moreThanOneDashboardContainersError": "1 seul conteneur de tableau de bord doit être défini par espace.",

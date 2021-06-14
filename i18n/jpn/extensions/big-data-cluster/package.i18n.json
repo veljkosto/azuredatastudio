@@ -8,13 +8,16 @@
 	],
 	"description": "SQL Server ビッグ データ クラスターの管理をサポート",
 	"text.sqlServerBigDataClusters": "SQL Server ビッグ データ クラスター",
-	"command.addController.title": "コントローラーに接続する",
-	"command.deleteController.title": "削除",
+	"command.connectController.title": "既存のコントローラーに接続する",
+	"command.createController.title": "新しいコントローラーの作成",
+	"command.removeController.title": "コントローラーの削除",
 	"command.refreshController.title": "最新の情報に更新",
 	"command.manageController.title": "管理",
 	"command.mount.title": "HDFS のマウント",
 	"command.refreshmount.title": "マウントの更新",
 	"command.deletemount.title": "マウントの削除",
 	"bdc.configuration.title": "ビッグ データ クラスター",
+	"bdc.view.welcome.connect": "SQL ビッグ データ クラスター コントローラーが登録されていません。[詳細] (https://docs.microsoft.com/sql/big-data-cluster/big-data-cluster-overview)\r\n[接続コントローラー] (command:bigDataClusters.command.connectController)",
+	"bdc.view.welcome.loading": "コントローラーを読み込んでいます...",
 	"bdc.ignoreSslVerification.desc": "HDFS、Spark、コントローラーなどの SQL Server ビッグ データ クラスター エンドポイントに対する SSL 検証エラーを無視する (true の場合)"
 }

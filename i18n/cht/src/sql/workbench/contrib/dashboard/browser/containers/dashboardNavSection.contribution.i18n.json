@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "顯示給使用者的導覽區標題。",
 	"dashboard.container.left-nav-bar.container": "顯示在此導覽區的容器。",
 	"dashboard.container.left-nav-bar": "在導覽區顯示儀表板容器清單。",
-	"opticon": "屬性 `icon` 可以省略，否則必須為字串或類似 `{dark, light}` 的常值",
 	"navSection.missingTitle.error": "為延伸模組指定的導覽區段中沒有標題。",
 	"navSection.missingContainer.error": "為延伸模組指定的導覽區段中沒有任何容器。",
 	"navSection.moreThanOneDashboardContainersError": "至少須為每個空間定義剛好 1 個儀表板容器。",

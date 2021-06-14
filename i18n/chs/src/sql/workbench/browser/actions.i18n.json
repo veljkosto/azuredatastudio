@@ -8,5 +8,6 @@
 	],
 	"manage": "管理",
 	"showDetails": "显示详细信息",
-	"configureDashboard": "了解如何配置仪表板"
+	"configureDashboardLearnMore": "了解更多",
+	"clearSavedAccounts": "清除所有保存的帐户"
 }

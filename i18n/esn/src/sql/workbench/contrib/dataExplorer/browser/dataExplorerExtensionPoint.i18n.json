@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "Aporta vistas al editor",
 	"extension.dataExplorer": "Aporta vistas al contenedor del Explorador de datos en la barra de la actividad",
 	"dataExplorer.contributed": "Contribuye vistas al contenedor de vistas aportadas",
-	"ViewsContainerDoesnotExist": "El contenedor de vista \"{0}\" no existe y todas las vistas registradas en él se agregarán al \"Explorador de datos\".",
 	"duplicateView1": "No pueden registrar múltiples vistas con el mismo identificador \"{0}\" en el contenedor de vistas \"{1}\"",
 	"duplicateView2": "Una vista con el identificador \"{0}\" ya está registrada en el contenedor de vista \"{1}\"",
 	"requirearray": "Las vistas deben ser una matriz",

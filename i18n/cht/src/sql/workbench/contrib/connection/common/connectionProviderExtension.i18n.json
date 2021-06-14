@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "提供者的通用識別碼。",
 	"schema.displayName": "提供者的顯示名稱",
+	"schema.notebookKernelAlias": "提供者的筆記本核心別名",
 	"schema.iconPath": "伺服器類型的圖示路徑",
 	"schema.connectionOptions": "連線選項"
 }

@@ -17,7 +17,5 @@
 	"backup.compressBackup": "バックアップの圧縮",
 	"backup.doNotCompress": "バックアップを圧縮しない",
 	"backup.serverCertificate": "サーバー証明書",
-	"backup.asymmetricKey": "非対称キー",
-	"backup.filterBackupFiles": "バックアップ ファイル",
-	"backup.allFiles": "すべてのファイル"
+	"backup.asymmetricKey": "非対称キー"
 }

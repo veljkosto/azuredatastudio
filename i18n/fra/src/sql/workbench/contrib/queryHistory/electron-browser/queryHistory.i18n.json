@@ -9,6 +9,6 @@
 	"queryHistoryConfigurationTitle": "QueryHistory",
 	"queryHistoryCaptureEnabled": "Indique si la capture de l'historique des requêtes est activée. Si la valeur est false, les requêtes exécutées ne sont pas capturées.",
 	"viewCategory": "Voir",
-	"queryHistory": "Historique des requêtes",
-	"miViewQueryHistory": "&&Historique des requêtes"
+	"miViewQueryHistory": "&&Historique des requêtes",
+	"queryHistory": "Historique des requêtes"
 }

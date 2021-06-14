@@ -9,11 +9,11 @@
 	"editDashboard": "编辑",
 	"editDashboardExit": "退出",
 	"refreshWidget": "刷新",
-	"toggleMore": "切换更多",
+	"toggleMore": "显示操作",
 	"deleteWidget": "删除小组件",
 	"clickToUnpin": "单击以取消固定",
 	"clickToPin": "单击以固定",
 	"addFeatureAction.openInstalledFeatures": "打开已安装的功能",
-	"collapseWidget": "折叠",
-	"expandWidget": "扩展"
+	"collapseWidget": "折叠小组件",
+	"expandWidget": "展开小组件"
 }

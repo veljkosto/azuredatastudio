@@ -17,5 +17,6 @@
 	"compatibilityLevel": "互換性レベル",
 	"owner": "所有者",
 	"dashboardDatabase": "データベース ダッシュボード ページをカスタマイズする",
+	"objectsWidgetTitle": "検索",
 	"dashboardDatabaseTabs": "データベース ダッシュボード タブをカスタマイズする"
 }

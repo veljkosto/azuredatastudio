@@ -8,6 +8,7 @@
 	],
 	"schema.providerId": "공급자의 일반 ID",
 	"schema.displayName": "공급자의 표시 이름",
+	"schema.notebookKernelAlias": "공급자의 Notebook 커널 별칭",
 	"schema.iconPath": "서버 유형의 아이콘 경로",
 	"schema.connectionOptions": "연결 옵션"
 }

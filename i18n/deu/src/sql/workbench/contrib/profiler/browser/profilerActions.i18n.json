@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "Fortsetzen",
 	"profilerStop.stop": "Beenden",
 	"profiler.clear": "Daten löschen",
+	"profiler.clearDataPrompt": "Möchten Sie die Daten löschen?",
+	"profiler.yes": "Ja",
+	"profiler.no": "Nein",
 	"profilerAction.autoscrollOn": "Automatisches Scrollen: Ein",
 	"profilerAction.autoscrollOff": "Automatisches Scrollen: Aus",
 	"profiler.toggleCollapsePanel": "Ausgeblendeten Bereich umschalten",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "Vorhergehende Zeichenfolge suchen",
 	"profilerAction.newProfiler": "Profiler starten",
 	"profiler.filter": "Filtern...",
-	"profiler.clearFilter": "Filter löschen"
+	"profiler.clearFilter": "Filter löschen",
+	"profiler.clearFilterPrompt": "Möchten Sie die Filter löschen?"
 }

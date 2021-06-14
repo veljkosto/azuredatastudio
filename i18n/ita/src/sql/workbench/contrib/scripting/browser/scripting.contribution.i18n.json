@@ -13,6 +13,7 @@
 	"scriptAsAlter": "Genera script come ALTER",
 	"editData": "Modifica dati",
 	"scriptSelect": "Genera script come SELECT TOP 1000",
+	"scriptKustoSelect": "Take 10",
 	"scriptCreate": "Genera script come CREATE",
 	"scriptExecute": "Genera script come EXECUTE",
 	"scriptAlter": "Genera script come ALTER",

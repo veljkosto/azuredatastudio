@@ -9,6 +9,7 @@
 	"createInsightLabel": "Criar Insight",
 	"createInsightNoEditor": "Não é possível criar insight, pois o editor ativo não é um Editor SQL",
 	"myWidgetName": "Meu Widget",
+	"configureChartLabel": "Configurar Gráfico",
 	"copyChartLabel": "Copiar como imagem",
 	"chartNotFound": "Não foi possível encontrar o gráfico para salvar",
 	"saveImageLabel": "Salvar como imagem",

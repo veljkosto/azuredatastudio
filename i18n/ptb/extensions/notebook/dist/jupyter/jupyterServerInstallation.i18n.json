@@ -17,12 +17,9 @@
 	"msgInstallPkgStart": "Instalando as dependências do Notebook. Confira a exibição Tarefas para obter mais informações",
 	"msgInstallPkgFinish": "A instalação das dependências do Notebook está concluída",
 	"msgPythonRunningError": "Não é possível substituir uma instalação do Python existente enquanto o Python está em execução. Feche todos os notebooks ativos antes de prosseguir.",
-	"msgSkipPythonInstall": "O Python já existe no local específico. Ignorando a instalação.",
 	"msgWaitingForInstall": "Outra instalação do Python está em andamento no momento. Esperando a conclusão.",
 	"msgDependenciesInstallationFailed": "Falha na instalação das dependências do Notebook com o erro: {0}",
 	"msgDownloadPython": "Baixando o Python local para a plataforma: {0} a {1}",
-	"confirmPackageUpgrade": "Alguns pacotes do Python instalados precisam ser atualizados. Deseja atualizá-los agora?",
-	"upgradePackages.pipInstall": "Instalando {0}",
-	"msgInstallStart": "Instalando os pacotes necessários para executar Notebooks...",
-	"msgJupyterInstallDone": "...Instalação do Jupyter concluída."
+	"msgPackageRetrievalFailed": "Encountered an error when trying to retrieve list of installed packages: {0}",
+	"msgGetPythonUserDirFailed": "Encountered an error when getting Python user path: {0}"
 }

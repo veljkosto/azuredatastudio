@@ -14,6 +14,7 @@
 	"edition": "版本",
 	"computerName": "電腦名稱",
 	"osVersion": "作業系統版本",
+	"explorerWidgetsTitle": "搜尋",
 	"dashboardServer": "自訂伺服器儀表板頁面",
 	"dashboardServerTabs": "自訂伺服器儀表板索引標籤"
 }

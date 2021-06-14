@@ -10,5 +10,7 @@
 	"status.query.rowCount": "行数",
 	"rowCount": "{0} 行",
 	"query.status.executing": "クエリを実行しています...",
-	"status.query.status": "実行状態"
+	"status.query.status": "実行状態",
+	"status.query.selection-summary": "選択の要約",
+	"status.query.summaryText": "平均: {0}  数: {1}  合計: {2}"
 }

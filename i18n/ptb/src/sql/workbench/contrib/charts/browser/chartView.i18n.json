@@ -15,5 +15,7 @@
 	"imageAltName": "Imagem",
 	"countAltName": "Contagem",
 	"tableAltName": "Tabela",
-	"doughnutAltName": "Rosca"
+	"doughnutAltName": "Rosca",
+	"charting.failedToGetRows": "Falha ao obter as linhas do conjunto de dados para o gráfico.",
+	"charting.unsupportedType": "Não há suporte para o tipo de gráfico '{0}'."
 }

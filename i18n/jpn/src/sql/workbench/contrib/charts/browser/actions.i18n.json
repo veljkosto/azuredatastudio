@@ -9,6 +9,7 @@
 	"createInsightLabel": "分析情報の作成",
 	"createInsightNoEditor": "アクティブなエディターが SQL エディターではないため、分析情報を作成できません",
 	"myWidgetName": "マイ ウィジェット",
+	"configureChartLabel": "グラフの構成",
 	"copyChartLabel": "イメージとしてコピー",
 	"chartNotFound": "保存するグラフが見つかりませんでした",
 	"saveImageLabel": "イメージとして保存",

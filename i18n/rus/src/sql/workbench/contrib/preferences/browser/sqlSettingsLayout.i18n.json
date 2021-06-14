@@ -8,10 +8,8 @@
 	],
 	"data": "Данные",
 	"connection": "Подключение",
-	"query": "Запрос",
+	"queryEditor": "Редактор запросов",
 	"notebook": "Записная книжка",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "Панель мониторинга",
 	"profiler": "Профилировщик"
 }

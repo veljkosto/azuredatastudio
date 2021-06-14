@@ -15,5 +15,7 @@
 	"imageAltName": "Image",
 	"countAltName": "Nombre",
 	"tableAltName": "Table",
-	"doughnutAltName": "Anneau"
+	"doughnutAltName": "Anneau",
+	"charting.failedToGetRows": "L'obtention des lignes du jeu de données à afficher dans le graphique a échoué.",
+	"charting.unsupportedType": "Le type de graphique « {0} » n'est pas pris en charge."
 }

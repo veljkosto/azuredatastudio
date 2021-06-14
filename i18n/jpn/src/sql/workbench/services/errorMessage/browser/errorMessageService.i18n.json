@@ -8,5 +8,6 @@
 	],
 	"error": "エラー",
 	"warning": "警告",
-	"info": "情報"
+	"info": "情報",
+	"ignore": "無視する"
 }

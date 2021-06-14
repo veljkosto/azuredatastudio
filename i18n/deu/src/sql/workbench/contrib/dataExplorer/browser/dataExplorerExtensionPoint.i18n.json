@@ -12,7 +12,6 @@
 	"extension.contributes.dataExplorer": "Stellt Sichten für den Editor zur Verfügung.",
 	"extension.dataExplorer": "Stellt Sichten für den Data Explorer-Container in der Aktivitätsleiste zur Verfügung.",
 	"dataExplorer.contributed": "Stellt Sichten für den Container mit bereitgestellten Sichten zur Verfügung.",
-	"ViewsContainerDoesnotExist": "Der Container \"{0}\" mit Sichten ist nicht vorhanden, und alle registrierten Sichten werden \"Data Explorer\" hinzugefügt.",
 	"duplicateView1": "Es können nicht mehrere Sichten mit derselben ID ({0}) im Container \"{1}\" mit Sichten registriert werden.",
 	"duplicateView2": "Im Container \"{1}\" mit Sichten ist bereits eine Sicht mit der ID {0} registriert.",
 	"requirearray": "Sichten müssen als Array vorliegen.",

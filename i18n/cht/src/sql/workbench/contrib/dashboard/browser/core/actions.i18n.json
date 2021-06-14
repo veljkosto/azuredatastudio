@@ -9,11 +9,11 @@
 	"editDashboard": "編輯",
 	"editDashboardExit": "結束",
 	"refreshWidget": "重新整理",
-	"toggleMore": "切換更多",
+	"toggleMore": "顯示動作",
 	"deleteWidget": "刪除小工具",
 	"clickToUnpin": "按一下以取消釘選",
 	"clickToPin": "按一下以釘選",
 	"addFeatureAction.openInstalledFeatures": "開啟已安裝的功能",
-	"collapseWidget": "摺疊",
-	"expandWidget": "展開"
+	"collapseWidget": "摺疊小工具",
+	"expandWidget": "展開小工具"
 }

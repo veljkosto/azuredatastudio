@@ -14,6 +14,7 @@
 	"edition": "エディション",
 	"computerName": "コンピューター名",
 	"osVersion": "OS バージョン",
+	"explorerWidgetsTitle": "検索",
 	"dashboardServer": "サーバー ダッシュ ボード ページをカスタマイズします",
 	"dashboardServerTabs": "サーバー ダッシュボードのタブをカスタマイズします"
 }

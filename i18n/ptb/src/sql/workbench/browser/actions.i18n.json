@@ -8,5 +8,6 @@
 	],
 	"manage": "Gerenciar",
 	"showDetails": "Mostrar Detalhes",
-	"configureDashboard": "Saiba Como Configurar o Painel"
+	"configureDashboardLearnMore": "Saiba Mais",
+	"clearSavedAccounts": "Limpar todas as contas salvas"
 }

@@ -15,5 +15,7 @@
 	"imageAltName": "Immagine",
 	"countAltName": "Conteggio",
 	"tableAltName": "Tabella",
-	"doughnutAltName": "Ad anello"
+	"doughnutAltName": "Ad anello",
+	"charting.failedToGetRows": "Non è stato possibile recuperare le righe per il set di dati da rappresentare nel grafico.",
+	"charting.unsupportedType": "Il tipo di grafico: '{0}' non è supportato."
 }

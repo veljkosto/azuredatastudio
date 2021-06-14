@@ -17,7 +17,5 @@
 	"backup.compressBackup": "백업 압축",
 	"backup.doNotCompress": "백업 압축 안 함",
 	"backup.serverCertificate": "서버 인증서",
-	"backup.asymmetricKey": "비대칭 키",
-	"backup.filterBackupFiles": "백업 파일",
-	"backup.allFiles": "모든 파일"
+	"backup.asymmetricKey": "비대칭 키"
 }

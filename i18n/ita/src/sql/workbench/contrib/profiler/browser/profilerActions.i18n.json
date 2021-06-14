@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "Riprendi",
 	"profilerStop.stop": "Arresta",
 	"profiler.clear": "Cancella dati",
+	"profiler.clearDataPrompt": "Cancellare i dati?",
+	"profiler.yes": "Sì",
+	"profiler.no": "No",
 	"profilerAction.autoscrollOn": "Scorrimento automatico: attivato",
 	"profilerAction.autoscrollOff": "Scorrimento automatico: disattivato",
 	"profiler.toggleCollapsePanel": "Attiva/Disattiva pannello compresso",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "Trova la stringa precedente",
 	"profilerAction.newProfiler": "Avvia profiler",
 	"profiler.filter": "Filtro…",
-	"profiler.clearFilter": "Cancella filtro"
+	"profiler.clearFilter": "Cancella filtro",
+	"profiler.clearFilterPrompt": "Cancellare i filtri?"
 }

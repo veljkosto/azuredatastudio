@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "Aktualisieren",
 	"azure.resource.signin.title": "Azure: Anmelden",
 	"azure.resource.selectsubscriptions.title": "Abonnements auswählen",
+	"azure.resource.startterminal.title": "Cloud Shell starten",
 	"azure.resource.connectsqlserver.title": "Verbinden",
 	"azure.resource.connectsqldb.title": "Zu Servern hinzufügen",
+	"azure.resource.view.title": "Azure (Vorschau)",
+	"azure.tenant.config.filter.description": "Die Liste der Mandanten-IDs, die beim Abfragen von Azure-Ressourcen ignoriert werden sollen. Jedes Element ist eine Mandanten-ID.",
 	"accounts.clearTokenCache": "Tokencache für Azure-Konto löschen",
+	"azure.openInAzurePortal.title": "In Azure-Portal öffnen",
+	"config.azureAccountConfigurationSection": "Azure-Kontokonfiguration",
 	"config.enablePublicCloudDescription": "Hiermit wird festgelegt, ob die Integration der öffentlichen Azure-Cloud aktiviert werden soll.",
 	"config.enableUsGovCloudDescription": "Hiermit wird festgelegt, ob die Integration der Azure-Cloud für US-Behörden (Fairfax) aktiviert werden soll.",
+	"config.enableUsNatCloudDescription": "Hiermit wird festgelegt, ob die Integration der Azure-Cloud (USA, national) aktiviert werden soll.",
 	"config.enableChinaCloudDescription": "Hiermit wird festgelegt, ob die Azure China-Integration aktiviert werden soll.",
-	"config.enableGermanyCloudDescription": "Hiermit wird festgelegt, ob die Azure Deutschland-Integration aktiviert werden soll."
+	"config.enableGermanyCloudDescription": "Hiermit wird festgelegt, ob die Azure Deutschland-Integration aktiviert werden soll.",
+	"config.azureAuthMethodConfigurationSection": "Azure-Authentifizierungsmethode",
+	"config.azureCodeGrantMethod": "Gewährungsmethode über Code",
+	"config.azureDeviceCodeMethod": "Gewährungsmethode über Gerät",
+	"config.noSystemKeychain": "Hiermit wird die Keychain-Systemintegration deaktiviert. Die Anmeldeinformationen werden in einer Flatfile im Basisverzeichnis des Benutzers gespeichert.",
+	"config.piiLogging": "Hiermit wird festgelegt, ob personenbezogene Informationen (PII) lokal in der Konsolenansicht protokolliert werden sollen."
 }

@@ -16,11 +16,22 @@
 	"azure.resource.refresh.title": "刷新",
 	"azure.resource.signin.title": "Azure: 登录",
 	"azure.resource.selectsubscriptions.title": "选择订阅",
+	"azure.resource.startterminal.title": "启动 Cloud Shell",
 	"azure.resource.connectsqlserver.title": "连接",
 	"azure.resource.connectsqldb.title": "添加到服务器",
+	"azure.resource.view.title": "Azure (预览)",
+	"azure.tenant.config.filter.description": "查询 Azure 资源时要忽略的租户 ID 列表。每个元素都是一个租户 ID。",
 	"accounts.clearTokenCache": "清除 Azure 帐户令牌缓存",
+	"azure.openInAzurePortal.title": "在 Azure 门户中打开",
+	"config.azureAccountConfigurationSection": "Azure 帐户配置",
 	"config.enablePublicCloudDescription": "是否应启用 Azure 公有云集成",
 	"config.enableUsGovCloudDescription": "是否应启用美国政府 Azure 云(Fairfax)集成",
+	"config.enableUsNatCloudDescription": "是否应启用美国国家 Azure 云集成",
 	"config.enableChinaCloudDescription": "是否应启用 Azure 中国集成",
-	"config.enableGermanyCloudDescription": "是否应启用 Azure 德国集成"
+	"config.enableGermanyCloudDescription": "是否应启用 Azure 德国集成",
+	"config.azureAuthMethodConfigurationSection": "Azure 身份验证方法",
+	"config.azureCodeGrantMethod": "代码授予方法",
+	"config.azureDeviceCodeMethod": "设备代码方法",
+	"config.noSystemKeychain": "禁用系统密钥链集成。凭据将存储在用户主目录的平面文件中。",
+	"config.piiLogging": "应在控制台视图中本地记录个人身份信息(PII)"
 }

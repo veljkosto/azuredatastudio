@@ -8,5 +8,5 @@
 	],
 	"profiler.settings.viewTemplates": "Spécifie des modèles de vue",
 	"profiler.settings.sessionTemplates": "Spécifie les modèles de session",
-	"profiler.settings.Filters": "Filtres du profileur"
+	"profiler.settings.Filters": "Filtres Profiler"
 }

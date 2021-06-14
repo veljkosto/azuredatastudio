@@ -14,13 +14,17 @@
 	"profilerAction.resumeCapture": "再開",
 	"profilerStop.stop": "停止",
 	"profiler.clear": "データのクリア",
+	"profiler.clearDataPrompt": "データをクリアしますか?",
+	"profiler.yes": "はい",
+	"profiler.no": "いいえ",
 	"profilerAction.autoscrollOn": "自動スクロール: オン",
 	"profilerAction.autoscrollOff": "自動スクロール: オフ",
 	"profiler.toggleCollapsePanel": "折りたたんだパネルを切り替える",
 	"profiler.editColumns": "列の編集",
 	"profiler.findNext": "次の文字列を検索",
 	"profiler.findPrevious": "前の文字列を検索",
-	"profilerAction.newProfiler": "プロファイラーを起動",
+	"profilerAction.newProfiler": "Profiler を起動",
 	"profiler.filter": "フィルター...",
-	"profiler.clearFilter": "フィルターのクリア"
+	"profiler.clearFilter": "フィルターのクリア",
+	"profiler.clearFilterPrompt": "フィルターをクリアしますか?"
 }

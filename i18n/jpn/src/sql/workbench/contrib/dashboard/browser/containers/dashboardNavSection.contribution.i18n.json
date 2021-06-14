@@ -13,7 +13,6 @@
 	"dashboard.container.left-nav-bar.title": "ユーザーに表示するナビゲーション セクションのタイトル。",
 	"dashboard.container.left-nav-bar.container": "このナビゲーション セクションに表示されるコンテナー。",
 	"dashboard.container.left-nav-bar": "このナビゲーション セクションに表示されるダッシュボード コンテナーのリスト。",
-	"opticon": "プロパティ `icon` は省略するか、文字列または `{dark, light}` などのリテラルにする必要があります",
 	"navSection.missingTitle.error": "ナビゲーション セクションに、拡張用に指定されたタイトルはありません。",
 	"navSection.missingContainer.error": "ナビゲーション セクションに、拡張用に指定されたコンテナーはありません。",
 	"navSection.moreThanOneDashboardContainersError": "空間ごとにダッシュボード コンテナーを 1 つだけ定義する必要があります。",

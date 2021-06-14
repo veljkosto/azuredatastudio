@@ -15,5 +15,7 @@
 	"imageAltName": "Bild",
 	"countAltName": "Anzahl",
 	"tableAltName": "Table",
-	"doughnutAltName": "Ring"
+	"doughnutAltName": "Ring",
+	"charting.failedToGetRows": "Fehler beim Einfügen von Zeilen für das Dataset in das Diagramm.",
+	"charting.unsupportedType": "Der Diagrammtyp \"{0}\" wird nicht unterstützt."
 }

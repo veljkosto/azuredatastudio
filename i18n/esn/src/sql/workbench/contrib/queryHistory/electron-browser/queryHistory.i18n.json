@@ -9,6 +9,6 @@
 	"queryHistoryConfigurationTitle": "Historial de consultas",
 	"queryHistoryCaptureEnabled": "Si la captura del historial de consultas está habilitada. De no ser así, las consultas ejecutadas no se capturarán.",
 	"viewCategory": "Vista",
-	"queryHistory": "Historial de consultas",
-	"miViewQueryHistory": "&&Historial de consultas"
+	"miViewQueryHistory": "&&Historial de consultas",
+	"queryHistory": "Historial de consultas"
 }

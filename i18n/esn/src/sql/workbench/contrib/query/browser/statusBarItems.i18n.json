@@ -10,5 +10,7 @@
 	"status.query.rowCount": "Recuento de filas",
 	"rowCount": "{0} filas",
 	"query.status.executing": "Ejecutando consulta...",
-	"status.query.status": "Estado de ejecución"
+	"status.query.status": "Estado de ejecución",
+	"status.query.selection-summary": "Resumen de la selección",
+	"status.query.summaryText": "Promedio: {0}; recuento: {1}; suma: {2}"
 }

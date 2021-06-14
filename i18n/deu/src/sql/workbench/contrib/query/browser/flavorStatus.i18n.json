@@ -12,5 +12,5 @@
 	"changeSqlProvider": "SQL-Engine-Anbieter ändern",
 	"alreadyConnected": "Es besteht eine Verbindung über die Engine \"{0}\". Um die Verbindung zu ändern, trennen oder wechseln Sie die Verbindung.",
 	"noEditor": "Momentan ist kein Text-Editor aktiv.",
-	"pickSqlProvider": "SQL-Sprachanbieter auswählen"
+	"pickSqlProvider": "Sprachanbieter auswählen"
 }

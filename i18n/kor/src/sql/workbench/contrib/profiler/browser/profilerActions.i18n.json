@@ -14,13 +14,17 @@
 	"profilerAction.resumeCapture": "재개",
 	"profilerStop.stop": "중지",
 	"profiler.clear": "데이터 지우기",
+	"profiler.clearDataPrompt": "데이터를 지우시겠습니까?",
+	"profiler.yes": "예",
+	"profiler.no": "아니요",
 	"profilerAction.autoscrollOn": "자동 스크롤: 켜기",
 	"profilerAction.autoscrollOff": "자동 스크롤: 끄기",
 	"profiler.toggleCollapsePanel": "축소된 패널로 전환",
 	"profiler.editColumns": "열 편집",
 	"profiler.findNext": "다음 문자열 찾기",
 	"profiler.findPrevious": "이전 문자열 찾기",
-	"profilerAction.newProfiler": "프로파일러 시작",
+	"profilerAction.newProfiler": "Profiler 시작",
 	"profiler.filter": "필터...",
-	"profiler.clearFilter": "필터 지우기"
+	"profiler.clearFilter": "필터 지우기",
+	"profiler.clearFilterPrompt": "필터를 지우시겠습니까?"
 }

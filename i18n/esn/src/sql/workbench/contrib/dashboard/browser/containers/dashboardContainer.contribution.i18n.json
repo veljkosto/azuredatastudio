@@ -8,7 +8,7 @@
 	],
 	"azdata.extension.contributes.dashboard.container.id": "Identificador único para este contenedor.",
 	"azdata.extension.contributes.dashboard.container.container": "El contenedor que se mostrará en la pestaña.",
-	"azdata.extension.contributes.containers": "Contribuye con uno o varios contenedores de panel para que los usuarios los agreguen a su propio panel.",
+	"azdata.extension.contributes.containers": "Contribuye con uno o varios contenedores de paneles para que los usuarios los agreguen a su propio panel.",
 	"dashboardContainer.contribution.noIdError": "No se ha especificado ningún identificador en el contenedor de paneles para la extensión.",
 	"dashboardContainer.contribution.noContainerError": "No se ha especificado ningún contenedor en el contenedor de paneles para la extensión.",
 	"dashboardContainer.contribution.moreThanOneDashboardContainersError": "Debe definirse exactamente 1 contenedor de paneles por espacio.",

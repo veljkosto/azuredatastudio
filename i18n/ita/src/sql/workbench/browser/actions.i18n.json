@@ -8,5 +8,6 @@
 	],
 	"manage": "Gestisci",
 	"showDetails": "Mostra dettagli",
-	"configureDashboard": "Informazioni su come configurare il dashboard"
+	"configureDashboardLearnMore": "Altre informazioni",
+	"clearSavedAccounts": "Cancella tutti gli account salvati"
 }

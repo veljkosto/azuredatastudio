@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "Abilita SQLCMD",
 	"disablesqlcmdLabel": "Disabilita SQLCMD",
 	"selectDatabase": "Seleziona database",
-	"listDatabases.toggleDatabaseNameDropdown": "Elenco a discesa per attivazione/disattivazione della selezione del database",
 	"changeDatabase.failed": "Non è stato possibile modificare il database",
-	"changeDatabase.failedWithError": "Non è stato possibile modificare il database {0}"
+	"changeDatabase.failedWithError": "Non è stato possibile modificare il database {0}",
+	"queryEditor.exportSqlAsNotebook": "Esporta come notebook"
 }

@@ -8,10 +8,8 @@
 	],
 	"data": "데이터",
 	"connection": "연결",
-	"query": "쿼리",
+	"queryEditor": "쿼리 편집기",
 	"notebook": "Notebook",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "대시보드",
-	"profiler": "프로파일러"
+	"profiler": "Profiler"
 }

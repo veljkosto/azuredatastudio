@@ -14,6 +14,9 @@
 	"profilerAction.resumeCapture": "Возобновить",
 	"profilerStop.stop": "Остановить",
 	"profiler.clear": "Очистить данные",
+	"profiler.clearDataPrompt": "Вы действительно хотите очистить данные?",
+	"profiler.yes": "Да",
+	"profiler.no": "Нет",
 	"profilerAction.autoscrollOn": "Автоматическая прокрутка: вкл",
 	"profilerAction.autoscrollOff": "Автоматическая прокрутка: выкл",
 	"profiler.toggleCollapsePanel": "Переключить свернутую панель",
@@ -22,5 +25,6 @@
 	"profiler.findPrevious": "Найти предыдущую строку",
 	"profilerAction.newProfiler": "Запустить профилировщик",
 	"profiler.filter": "Фильтр…",
-	"profiler.clearFilter": "Очистить фильтр"
+	"profiler.clearFilter": "Очистить фильтр",
+	"profiler.clearFilterPrompt": "Вы действительно хотите очистить фильтры?"
 }

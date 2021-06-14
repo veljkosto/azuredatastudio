@@ -8,10 +8,8 @@
 	],
 	"data": "数据",
 	"connection": "连接",
-	"query": "查询",
+	"queryEditor": "查询编辑器",
 	"notebook": "笔记本",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "仪表板",
 	"profiler": "探查器"
 }

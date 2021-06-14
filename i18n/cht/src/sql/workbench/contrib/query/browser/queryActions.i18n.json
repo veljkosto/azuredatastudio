@@ -17,7 +17,7 @@
 	"enablesqlcmdLabel": "啟用 SQLCMD",
 	"disablesqlcmdLabel": "停用 SQLCMD",
 	"selectDatabase": "選擇資料庫",
-	"listDatabases.toggleDatabaseNameDropdown": "選取資料庫切換下拉式清單",
 	"changeDatabase.failed": "變更資料庫失敗",
-	"changeDatabase.failedWithError": "無法變更資料庫 {0}"
+	"changeDatabase.failedWithError": "無法變更資料庫 {0}",
+	"queryEditor.exportSqlAsNotebook": "匯出為筆記本"
 }

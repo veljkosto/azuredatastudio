@@ -9,9 +9,11 @@
 	"error.no.activedirectory": "Este cluster não dá suporte à autenticação do Windows",
 	"bdc.error.tokenPost": "Erro durante a autenticação",
 	"bdc.error.unauthorized": "Você não tem permissão para fazer logon nesse cluster usando a autenticação do Windows",
+	"bdc.error.getClusterConfig": "Error retrieving cluster config from {0}",
 	"bdc.error.getEndPoints": "Erro ao recuperar os pontos de extremidade de {0}",
 	"bdc.error.getBdcStatus": "Erro ao recuperar o status do BDC de {0}",
 	"bdc.error.mountHdfs": "Erro ao criar a montagem",
+	"bdc.error.statusHdfs": "Error getting mount status",
 	"bdc.error.refreshHdfs": "Erro ao atualizar a montagem",
 	"bdc.error.deleteHdfs": "Erro ao excluir a montagem"
 }

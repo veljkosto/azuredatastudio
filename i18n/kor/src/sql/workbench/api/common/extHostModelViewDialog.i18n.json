@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "취소",
 	"generateScriptLabel": "스크립트 생성",
 	"dialogNextLabel": "다음",
-	"dialogPreviousLabel": "이전"
+	"dialogPreviousLabel": "이전",
+	"dashboardNotInitialized": "탭이 초기화되지 않았습니다."
 }

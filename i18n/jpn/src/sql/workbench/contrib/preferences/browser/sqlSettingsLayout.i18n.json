@@ -8,10 +8,8 @@
 	],
 	"data": "データ",
 	"connection": "接続",
-	"query": "クエリ",
+	"queryEditor": "クエリ エディター",
 	"notebook": "ノートブック",
-	"sql": "SQL",
-	"mssql": "Microsoft SQL Server",
 	"dashboard": "ダッシュボード",
-	"profiler": "プロファイラー"
+	"profiler": "Profiler"
 }

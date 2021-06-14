@@ -13,6 +13,7 @@
 	"scriptAsAlter": "Skripterstellung als ALTER",
 	"editData": "Daten bearbeiten",
 	"scriptSelect": "Oberste 1000 auswählen",
+	"scriptKustoSelect": "10 zurückgeben",
 	"scriptCreate": "Skripterstellung als CREATE",
 	"scriptExecute": "Skripterstellung als EXECUTE",
 	"scriptAlter": "Skripterstellung als ALTER",

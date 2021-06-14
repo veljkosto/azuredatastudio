@@ -10,5 +10,6 @@
 	"dialogCancelLabel": "取消",
 	"generateScriptLabel": "產生指令碼",
 	"dialogNextLabel": "下一個",
-	"dialogPreviousLabel": "上一個"
+	"dialogPreviousLabel": "上一個",
+	"dashboardNotInitialized": "索引標籤未初始化"
 }

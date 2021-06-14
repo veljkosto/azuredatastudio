@@ -13,6 +13,7 @@
 	"scriptAsAlter": "Alter로 스크립트",
 	"editData": "데이터 편집",
 	"scriptSelect": "상위 1,000개 선택",
+	"scriptKustoSelect": "Take 10",
 	"scriptCreate": "Create로 스크립트",
 	"scriptExecute": "Execute로 스크립트",
 	"scriptAlter": "Alter로 스크립트",
