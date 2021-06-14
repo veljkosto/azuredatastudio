@@ -27,6 +27,7 @@
 	"welcomePage.gettingStartedBody": "Lernen Sie die von Azure Data Studio bereitgestellten Funktionen kennen, und erfahren Sie, wie Sie diese optimal nutzen können.",
 	"welcomePage.documentation": "Dokumentation",
 	"welcomePage.documentationBody": "Im Dokumentationscenter finden Sie Schnellstarts, Anleitungen und Referenzdokumentation zu PowerShell, APIs usw.",
+	"welcomePage.videos": "Videos",
 	"welcomePage.videoDescriptionOverview": "Übersicht über Azure Data Studio",
 	"welcomePage.videoDescriptionIntroduction": "Einführung in Azure Data Studio-Notebooks | Verfügbare Daten",
 	"welcomePage.extensions": "Erweiterungen",

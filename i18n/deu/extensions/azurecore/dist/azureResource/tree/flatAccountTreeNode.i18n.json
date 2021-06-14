@@ -8,5 +8,7 @@
 	],
 	"azure.resource.tree.accountTreeNode.titleLoading": "{0}: Wird geladen...",
 	"azure.resource.tree.accountTreeNode.title": "{0} ({1}/{2} Abonnements)",
-	"azure.resource.tree.accountTreeNode.credentialError": "Fehler beim Abrufen der Anmeldeinformationen für das Konto \"{0}\". Wechseln Sie zum Dialogfeld \"Konten\", und aktualisieren Sie das Konto."
+	"azure.resource.tree.accountTreeNode.credentialError": "Fehler beim Abrufen der Anmeldeinformationen für das Konto \"{0}\". Wechseln Sie zum Dialogfeld \"Konten\", und aktualisieren Sie das Konto.",
+	"azure.resource.throttleerror": "Anforderungen von diesem Konto wurden gedrosselt. Wählen Sie eine geringere Anzahl von Abonnements aus, um den Vorgang zu wiederholen.",
+	"azure.resource.tree.loadresourceerror": "Fehler beim Laden von Azure-Ressourcen: {0}"
 }

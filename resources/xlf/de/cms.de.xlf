@@ -424,14 +424,6 @@
       </trans-unit>
     </body>
   </file>
-  <file original="extensions/cms/out/cmsResource/tree/treeProvider" source-language="en" datatype="plaintext" target-language="de">
-    <body>
-      <trans-unit id="cms.resource.tree.treeProvider.loadingLabel">
-        <source xml:lang="en">Loading ...</source>
-        <target state="translated">Wird geladen...</target>
-      </trans-unit>
-    </body>
-  </file>
   <file original="extensions/cms/out/cmsResource/tree/cmsResourceTreeNode" source-language="en" datatype="plaintext" target-language="de">
     <body>
       <trans-unit id="cms.resource.cmsResourceTreeNode.noResourcesLabel">
@@ -448,6 +440,18 @@
       </trans-unit>
     </body>
   </file>
+  <file original="extensions/cms/out/cmsResource/tree/treeProvider" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="cms.resource.tree.treeProvider.loadError">
+        <source xml:lang="en">Unexpected error occurred while loading saved servers {0}</source>
+        <target state="translated">Unerwarteter Fehler beim Laden gespeicherter Server: {0}</target>
+      </trans-unit>
+      <trans-unit id="cms.resource.tree.treeProvider.loadingLabel">
+        <source xml:lang="en">Loading ...</source>
+        <target state="translated">Wird geladen...</target>
+      </trans-unit>
+    </body>
+  </file>
   <file original="extensions/cms/out/cmsResource/cmsResourceCommands" source-language="en" datatype="plaintext" target-language="de">
     <body>
       <trans-unit id="cms.errors.sameCmsServerName">
@@ -455,8 +459,8 @@
         <target state="translated">Die Gruppe zentraler Verwaltungsserver enthält bereits einen registrierten Server namens "{0}".</target>
       </trans-unit>
       <trans-unit id="cms.errors.azureNotAllowed">
-        <source xml:lang="en">Azure SQL Database Servers cannot be used as Central Management Servers</source>
-        <target state="translated">Azure SQL-Datenbank-Server können nicht als zentraler Verwaltungsserver verwendet werden.</target>
+        <source xml:lang="en">Azure SQL Servers cannot be used as Central Management Servers</source>
+        <target state="translated">Azure SQL Server-Instanzen können nicht als zentrale Verwaltungsserver verwendet werden.</target>
       </trans-unit>
       <trans-unit id="cms.confirmDeleteServer">
         <source xml:lang="en">Are you sure you want to delete</source>

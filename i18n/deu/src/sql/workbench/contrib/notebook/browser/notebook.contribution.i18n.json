@@ -17,6 +17,7 @@
 	"notebook.setRichTextViewByDefault": "Rich-Text-Ansichtsmodus für Textzellen standardmäßig festlegen",
 	"notebook.saveConnectionName": "(Vorschau) Speichern Sie den Verbindungsnamen in den Notebook-Metadaten.",
 	"notebook.markdownPreviewLineHeight": "Hiermit wird die in der Notebook-Markdownvorschau verwendete Zeilenhöhe gesteuert. Diese Zahl ist relativ zum Schriftgrad.",
+	"notebook.showRenderedNotebookinDiffEditor": "(Vorschau) Gerendertes Notebook im Diff-Editor anzeigen.",
 	"notebookExplorer.view": "Ansicht",
 	"searchConfigurationTitle": "Notebooks suchen",
 	"exclude": "Konfigurieren Sie Globmuster für das Ausschließen von Dateien und Ordnern aus Volltextsuchen und Quick Open. Alle Globmuster werden von der Einstellung #files.exclude# geerbt. Weitere Informationen zu Globmustern finden Sie [hier](https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options).",

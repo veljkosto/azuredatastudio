@@ -21,6 +21,7 @@
 	"queryEditor.results.copyIncludeHeaders": "Konfigurationsoptionen für das Kopieren von Ergebnissen aus der Ergebnisansicht",
 	"queryEditor.results.copyRemoveNewLine": "Konfigurationsoptionen für das Kopieren mehrzeiliger Ergebnisse aus der Ergebnisansicht",
 	"queryEditor.results.optimizedTable": "(Experimentell) Verwenden Sie eine optimierte Tabelle in der Ergebnisausgabe. Möglicherweise fehlen einige Funktionen oder befinden sich in Bearbeitung.",
+	"queryEditor.inMemoryDataProcessingThreshold": "Steuert die maximale Anzahl von Zeilen, die im Arbeitsspeicher gefiltert und sortiert werden dürfen. Wenn die Zahl überschritten wird, werden die Sortier- und Filterfunktionen deaktiviert.",
 	"queryEditor.messages.showBatchTime": "Gibt an, ob die Ausführungszeit für einzelne Batches angezeigt werden soll.",
 	"queryEditor.messages.wordwrap": "Meldungen zu Zeilenumbrüchen",
 	"queryEditor.chart.defaultChartType": "Dieser Diagrammtyp wird standardmäßig verwendet, wenn der Diagramm-Viewer von Abfrageergebnissen aus geöffnet wird.",
@@ -30,5 +31,5 @@
 	"queryEditor.tabColorMode": "Steuert die Farbe von Registerkarten basierend auf der Servergruppe der aktiven Verbindung.",
 	"queryEditor.showConnectionInfoInTitle": "Legt fest, ob die Verbindungsinformationen für eine Registerkarte im Titel angezeigt werden.",
 	"queryEditor.promptToSaveGeneratedFiles": "Aufforderung zum Speichern generierter SQL-Dateien",
-	"queryShortcutDescription": "Legen Sie die Tastenzuordnung \"workbench.action.query.shortcut{0}\" fest, um den Verknüpfungstext als Prozeduraufruf auszuführen. Im Abfrage-Editor ausgewählter Text wird als Parameter übergeben."
+	"queryShortcutDescription": "Legen Sie \"workbench.action.query.shortcut{0}\" für die Tastenzuordnung fest, um den Verknüpfungstext als Prozeduraufruf oder Abfrageausführung auszuführen. Der ausgewählte Text im Abfrage-Editor wird am Ende der Abfrage als Parameter übergeben, oder Sie können mit \"{arg}\" darauf verweisen."
 }

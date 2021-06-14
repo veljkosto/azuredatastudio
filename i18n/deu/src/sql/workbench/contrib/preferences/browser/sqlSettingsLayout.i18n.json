@@ -11,5 +11,6 @@
 	"queryEditor": "Abfrage-Editor",
 	"notebook": "Notebook",
 	"dashboard": "Dashboard",
-	"profiler": "Profiler"
+	"profiler": "Profiler",
+	"builtinCharts": "Integrierte Diagramme"
 }

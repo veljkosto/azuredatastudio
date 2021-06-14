@@ -20,6 +20,8 @@
 	"untrustLabel": "Nicht vertrauenswürdig",
 	"collapseAllCells": "Zellen reduzieren",
 	"expandAllCells": "Zellen erweitern",
+	"runParameters": "Mit Parametern ausführen",
+	"noParametersCell": "Dieses Notebook kann erst mit Parametern ausgeführt werden, wenn eine Parameterzelle hinzugefügt wird. [Weitere Informationen](https://docs.microsoft.com/sql/azure-data-studio/notebooks/notebooks-parameterization).",
 	"noContextAvailable": "Keine",
 	"newNotebookAction": "Neues Notebook",
 	"notebook.findNext": "Nächste Zeichenfolge suchen",
