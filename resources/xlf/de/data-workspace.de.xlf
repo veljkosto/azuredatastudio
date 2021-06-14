@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="extensions/data-workspace/package" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="extension-displayName">
+        <source xml:lang="en">Data workspace</source>
+        <target state="new">Data workspace</target>
+      </trans-unit>
+      <trans-unit id="extension-description">
+        <source xml:lang="en">Data workspace</source>
+        <target state="new">Data workspace</target>
+      </trans-unit>
+      <trans-unit id="data-workspace-view-container-name">
+        <source xml:lang="en">Projects</source>
+        <target state="new">Projects</target>
+      </trans-unit>
+      <trans-unit id="main-view-name">
+        <source xml:lang="en">Projects</source>
+        <target state="new">Projects</target>
+      </trans-unit>
+      <trans-unit id="new-command">
+        <source xml:lang="en">New</source>
+        <target state="new">New</target>
+      </trans-unit>
+      <trans-unit id="refresh-workspace-command">
+        <source xml:lang="en">Refresh</source>
+        <target state="new">Refresh</target>
+      </trans-unit>
+      <trans-unit id="close-workspace-command">
+        <source xml:lang="en">Close Workspace</source>
+        <target state="new">Close Workspace</target>
+      </trans-unit>
+      <trans-unit id="remove-project-command">
+        <source xml:lang="en">Remove Project</source>
+        <target state="new">Remove Project</target>
+      </trans-unit>
+      <trans-unit id="projects-view-no-workspace-content">
+        <source xml:lang="en">Create new or open existing to get started.
+[Create new](command:projects.new)
+[Open existing](command:projects.openExisting)
+To learn more about projects [read our docs](https://aka.ms/azuredatastudio-projects).</source>
+        <target state="new">Create new or open existing to get started.
+[Create new](command:projects.new)
+[Open existing](command:projects.openExisting)
+To learn more about projects [read our docs](https://aka.ms/azuredatastudio-projects).</target>
+      </trans-unit>
+      <trans-unit id="projects-view-no-project-content">
+        <source xml:lang="en">No projects open in current workspace.
+[Create new](command:projects.new)
+[Open existing](command:projects.openExisting)
+To learn more about projects [read our docs](https://aka.ms/azuredatastudio-projects).
+</source>
+        <target state="new">No projects open in current workspace.
+[Create new](command:projects.new)
+[Open existing](command:projects.openExisting)
+To learn more about projects [read our docs](https://aka.ms/azuredatastudio-projects).
+</target>
+      </trans-unit>
+      <trans-unit id="open-existing-command">
+        <source xml:lang="en">Open existing</source>
+        <target state="new">Open existing</target>
+      </trans-unit>
+      <trans-unit id="projects.defaultProjectSaveLocation">
+        <source xml:lang="en">Full path to folder where new projects are saved by default.</source>
+        <target state="new">Full path to folder where new projects are saved by default.</target>
+      </trans-unit>
+      <trans-unit id="projects.showNotAddedProjectsInWorkspacePrompt">
+        <source xml:lang="en">Always show information message when the current workspace folders contain projects that have not been added to the workspace's projects.</source>
+        <target state="new">Always show information message when the current workspace folders contain projects that have not been added to the workspace's projects.</target>
+      </trans-unit>
+      <trans-unit id="manage-project-command">
+        <source xml:lang="en">Manage</source>
+        <target state="new">Manage</target>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="extensions/data-workspace/dist/common/constants" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="activateExtensionFailed">
+        <source xml:lang="en">Failed to load the project provider extension '{0}'. Error message: {1}</source>
+        <target state="new">Failed to load the project provider extension '{0}'. Error message: {1}</target>
+      </trans-unit>
+      <trans-unit id="UnknownProjectsError">
+        <source xml:lang="en">No provider was found for the following projects: {0}</source>
+        <target state="new">No provider was found for the following projects: {0}</target>
+      </trans-unit>
+      <trans-unit id="SelectProjectFileActionName">
+        <source xml:lang="en">Select</source>
+        <target state="new">Select</target>
+      </trans-unit>
+      <trans-unit id="AllProjectTypes">
+        <source xml:lang="en">All Project Types</source>
+        <target state="new">All Project Types</target>
+      </trans-unit>
+      <trans-unit id="UnknownProjectTypeError">
+        <source xml:lang="en">No provider was found for project type with id: '{0}'</source>
+        <target state="new">No provider was found for project type with id: '{0}'</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceRequiredMessage">
+        <source xml:lang="en">A workspace is required in order to use the project feature.</source>
+        <target state="new">A workspace is required in order to use the project feature.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.openWorkspace">
+        <source xml:lang="en">Open Workspace…</source>
+        <target state="new">Open Workspace…</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.createWorkspaceConfirmation">
+        <source xml:lang="en">A workspace will be created and opened in order to open project. Azure Data Studio will restart and if there is a folder currently open, it will be closed.</source>
+        <target state="new">A workspace will be created and opened in order to open project. Azure Data Studio will restart and if there is a folder currently open, it will be closed.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.enterWorkspaceConfirmation">
+        <source xml:lang="en">To open this workspace, Azure Data Studio will restart. If there is a workspace or folder currently open, it will be closed.</source>
+        <target state="new">To open this workspace, Azure Data Studio will restart. If there is a workspace or folder currently open, it will be closed.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceContainsNotAddedProjects">
+        <source xml:lang="en">The current workspace contains one or more projects that have not been added to the workspace. Use the 'Open existing' dialog to add projects to the projects pane.</source>
+        <target state="new">The current workspace contains one or more projects that have not been added to the workspace. Use the 'Open existing' dialog to add projects to the projects pane.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.launchOpenExistingDialog">
+        <source xml:lang="en">Launch Open existing dialog</source>
+        <target state="new">Launch Open existing dialog</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.doNotShowAgain">
+        <source xml:lang="en">Do not show again</source>
+        <target state="new">Do not show again</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectsFailedToLoad">
+        <source xml:lang="en">Some projects failed to load. Please open console for more information</source>
+        <target state="new">Some projects failed to load. Please open console for more information</target>
+      </trans-unit>
+      <trans-unit id="fileDoesNotExist">
+        <source xml:lang="en">File '{0}' doesn't exist</source>
+        <target state="new">File '{0}' doesn't exist</target>
+      </trans-unit>
+      <trans-unit id="projectNameNull">
+        <source xml:lang="en">Project name is null</source>
+        <target state="new">Project name is null</target>
+      </trans-unit>
+      <trans-unit id="noPreviousData">
+        <source xml:lang="en">Prior {0} for the current project will appear here, please run to see the results.</source>
+        <target state="new">Prior {0} for the current project will appear here, please run to see the results.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.ok">
+        <source xml:lang="en">OK</source>
+        <target state="new">OK</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.cancel">
+        <source xml:lang="en">Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.browse">
+        <source xml:lang="en">Browse</source>
+        <target state="new">Browse</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.open">
+        <source xml:lang="en">Open</source>
+        <target state="new">Open</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.create">
+        <source xml:lang="en">Create</source>
+        <target state="new">Create</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.NewProjectDialogTitle">
+        <source xml:lang="en">Create new project</source>
+        <target state="new">Create new project</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.Type">
+        <source xml:lang="en">Type</source>
+        <target state="new">Type</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectNameTitle">
+        <source xml:lang="en">Name</source>
+        <target state="new">Name</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectNamePlaceholder">
+        <source xml:lang="en">Enter project name</source>
+        <target state="new">Enter project name</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectLocationTitle">
+        <source xml:lang="en">Location</source>
+        <target state="new">Location</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectLocationPlaceholder">
+        <source xml:lang="en">Select location to create project</source>
+        <target state="new">Select location to create project</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.AddProjectToCurrentWorkspace">
+        <source xml:lang="en">This project will be added to the current workspace.</source>
+        <target state="new">This project will be added to the current workspace.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.NewWorkspaceWillBeCreated">
+        <source xml:lang="en">A workspace will be created for this project.</source>
+        <target state="new">A workspace will be created for this project.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceLocationTitle">
+        <source xml:lang="en">Workspace location</source>
+        <target state="new">Workspace location</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectParentDirectoryNotExistError">
+        <source xml:lang="en">The selected project location '{0}' does not exist or is not a directory.</source>
+        <target state="new">The selected project location '{0}' does not exist or is not a directory.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectDirectoryAlreadyExistError">
+        <source xml:lang="en">There is already a directory named '{0}' in the selected location: '{1}'.</source>
+        <target state="new">There is already a directory named '{0}' in the selected location: '{1}'.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceFileInvalidError">
+        <source xml:lang="en">The selected workspace file path '{0}' does not have the required file extension {1}.</source>
+        <target state="new">The selected workspace file path '{0}' does not have the required file extension {1}.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceParentDirectoryNotExistError">
+        <source xml:lang="en">The selected workspace location '{0}' does not exist or is not a directory.</source>
+        <target state="new">The selected workspace location '{0}' does not exist or is not a directory.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspaceFileAlreadyExistsError">
+        <source xml:lang="en">The selected workspace file '{0}' already exists. To add the project to an existing workspace, use the Open Existing dialog to first open the workspace.</source>
+        <target state="new">The selected workspace file '{0}' already exists. To add the project to an existing workspace, use the Open Existing dialog to first open the workspace.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.openExistingDialogTitle">
+        <source xml:lang="en">Open existing</source>
+        <target state="new">Open existing</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.fileNotExistError">
+        <source xml:lang="en">The selected {0} file '{1}' does not exist or is not a file.</source>
+        <target state="new">The selected {0} file '{1}' does not exist or is not a file.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.cloneParentDirectoryNotExistError">
+        <source xml:lang="en">The selected clone path '{0}' does not exist or is not a directory.</source>
+        <target state="new">The selected clone path '{0}' does not exist or is not a directory.</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.project">
+        <source xml:lang="en">Project</source>
+        <target state="new">Project</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspace">
+        <source xml:lang="en">Workspace</source>
+        <target state="new">Workspace</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.locationSelectorTitle">
+        <source xml:lang="en">Location</source>
+        <target state="new">Location</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectFilePlaceholder">
+        <source xml:lang="en">Select project (.sqlproj) file</source>
+        <target state="new">Select project (.sqlproj) file</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.workspacePlaceholder">
+        <source xml:lang="en">Select workspace ({0}) file</source>
+        <target state="new">Select workspace ({0}) file</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.projectAlreadyOpened">
+        <source xml:lang="en">Project '{0}' is already opened.</source>
+        <target state="new">Project '{0}' is already opened.</target>
+      </trans-unit>
+      <trans-unit id="dataworksapce.local">
+        <source xml:lang="en">Local</source>
+        <target state="new">Local</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.remoteGitRepo">
+        <source xml:lang="en">Remote git repository</source>
+        <target state="new">Remote git repository</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.gitRepoUrlTitle">
+        <source xml:lang="en">Git repository URL</source>
+        <target state="new">Git repository URL</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.gitRepoUrlPlaceholder">
+        <source xml:lang="en">Enter remote git repository URL</source>
+        <target state="new">Enter remote git repository URL</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.localClonePathTitle">
+        <source xml:lang="en">Local clone path</source>
+        <target state="new">Local clone path</target>
+      </trans-unit>
+      <trans-unit id="dataworkspace.localClonePathPlaceholder">
+        <source xml:lang="en">Select location to clone repository locally</source>
+        <target state="new">Select location to clone repository locally</target>
+      </trans-unit>
+      <trans-unit id="dataworksapce.refresh">
+        <source xml:lang="en">Refresh</source>
+        <target state="new">Refresh</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

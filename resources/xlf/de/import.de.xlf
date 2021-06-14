@@ -1,5 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="extensions/import/package" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="flatfileimport.configuration.title">
+        <source xml:lang="en">Flat File Import configuration</source>
+        <target state="translated">Flatfile-Importkonfiguration</target>
+      </trans-unit>
+      <trans-unit id="flatfileimport.logDebugInfo">
+        <source xml:lang="en">[Optional] Log debug output to the console (View -&gt; Output) and then select appropriate output channel from the dropdown</source>
+        <target state="translated">[Optional] Protokollieren Sie die Debugausgabe in der Konsole (Ansicht &gt; Ausgabe), und wählen Sie dann in der Dropdownliste den geeigneten Ausgabekanal aus.</target>
+      </trans-unit>
+    </body>
+  </file>
   <file original="extensions/import/out/wizard/pages/summaryPage" source-language="en" datatype="plaintext" target-language="de">
     <body>
       <trans-unit id="flatFileImport.importInformation">

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="extensions/sql-migration/package" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="displayName">
+        <source xml:lang="en">Azure SQL Migration</source>
+        <target state="new">Azure SQL Migration</target>
+      </trans-unit>
+      <trans-unit id="description">
+        <source xml:lang="en">Azure SQL migration description</source>
+        <target state="new">Azure SQL migration description</target>
+      </trans-unit>
+      <trans-unit id="migration-notebook-command-title">
+        <source xml:lang="en">Open Azure SQL migration notebooks</source>
+        <target state="new">Open Azure SQL migration notebooks</target>
+      </trans-unit>
+      <trans-unit id="migration-dashboard-title">
+        <source xml:lang="en">Azure SQL Migration</source>
+        <target state="new">Azure SQL Migration</target>
+      </trans-unit>
+      <trans-unit id="migration-dashboard-tasks">
+        <source xml:lang="en">Migration Tasks</source>
+        <target state="new">Migration Tasks</target>
+      </trans-unit>
+      <trans-unit id="migration-command-category">
+        <source xml:lang="en">Azure SQL Migration</source>
+        <target state="new">Azure SQL Migration</target>
+      </trans-unit>
+      <trans-unit id="start-migration-command">
+        <source xml:lang="en">Migrate to Azure SQL</source>
+        <target state="new">Migrate to Azure SQL</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

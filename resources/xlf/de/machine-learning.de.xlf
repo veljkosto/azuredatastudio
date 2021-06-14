@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="extensions/machine-learning/package" source-language="en" datatype="plaintext" target-language="de">
+    <body>
+      <trans-unit id="displayName">
+        <source xml:lang="en">Machine Learning</source>
+        <target state="new">Machine Learning</target>
+      </trans-unit>
+      <trans-unit id="description">
+        <source xml:lang="en">Machine Learning</source>
+        <target state="new">Machine Learning</target>
+      </trans-unit>
+      <trans-unit id="title.tasks">
+        <source xml:lang="en">Tasks</source>
+        <target state="new">Tasks</target>
+      </trans-unit>
+      <trans-unit id="title.documents">
+        <source xml:lang="en">Documents</source>
+        <target state="new">Documents</target>
+      </trans-unit>
+      <trans-unit id="title.configurations">
+        <source xml:lang="en">Configurations</source>
+        <target state="new">Configurations</target>
+      </trans-unit>
+      <trans-unit id="title.endpoints">
+        <source xml:lang="en">Endpoints</source>
+        <target state="new">Endpoints</target>
+      </trans-unit>
+      <trans-unit id="ml.command.managePackages">
+        <source xml:lang="en">Manage packages in database</source>
+        <target state="new">Manage packages in database</target>
+      </trans-unit>
+      <trans-unit id="ml.command.manageLanguages">
+        <source xml:lang="en">Manage external languages</source>
+        <target state="new">Manage external languages</target>
+      </trans-unit>
+      <trans-unit id="ml.command.predictModel">
+        <source xml:lang="en">Make prediction</source>
+        <target state="new">Make prediction</target>
+      </trans-unit>
+      <trans-unit id="ml.command.manageModels">
+        <source xml:lang="en">Manage models</source>
+        <target state="new">Manage models</target>
+      </trans-unit>
+      <trans-unit id="ml.command.importModel">
+        <source xml:lang="en">Import model</source>
+        <target state="new">Import model</target>
+      </trans-unit>
+      <trans-unit id="ml.configuration.title">
+        <source xml:lang="en">Machine Learning Configurations</source>
+        <target state="new">Machine Learning Configurations</target>
+      </trans-unit>
+      <trans-unit id="ml.pythonPath.description">
+        <source xml:lang="en">Local path to a preexisting Python installation used by Machine Learning.</source>
+        <target state="new">Local path to a preexisting Python installation used by Machine Learning.</target>
+      </trans-unit>
+      <trans-unit id="ml.enablePython.description">
+        <source xml:lang="en">Enable Python package management in database.</source>
+        <target state="new">Enable Python package management in database.</target>
+      </trans-unit>
+      <trans-unit id="ml.enableR.description">
+        <source xml:lang="en">Enable R package management in database.</source>
+        <target state="new">Enable R package management in database.</target>
+      </trans-unit>
+      <trans-unit id="ml.rPath.description">
+        <source xml:lang="en">Local path to a preexisting R installation used by Machine Learning.</source>
+        <target state="new">Local path to a preexisting R installation used by Machine Learning.</target>
+      </trans-unit>
+      <trans-unit id="ml.command.dependencies">
+        <source xml:lang="en">Install Machine Learning Dependencies</source>
+        <target state="new">Install Machine Learning Dependencies</target>
+      </trans-unit>
+      <trans-unit id="ml.command.enableExternalScript">
+        <source xml:lang="en">Enable External script</source>
+        <target state="new">Enable External script</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
