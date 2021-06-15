@@ -22,7 +22,7 @@ const plumber = require('gulp-plumber');
 const fancyLog = require('fancy-log');
 const ansiColors = require('ansi-colors');
 const ext = require('./lib/extensions');
-
+const i18n = require('./lib/i18n'); // {{SQL CARBON EDIT}}
 const extensionsPath = path.join(path.dirname(__dirname), 'extensions');
 // {{SQL CARBON EDIT}}
 const sqlLocalizedExtensions = [
@@ -38,6 +38,7 @@ const sqlLocalizedExtensions = [
 	'sql-assessment',
 	'sql-database-projects'
 ];
+exports.sqlLocalizedExtensions = sqlLocalizedExtensions;
 // {{SQL CARBON EDIT}}
 
 const compilations = glob.sync('**/tsconfig.json', {
@@ -101,6 +102,7 @@ const tasks = compilations.map(function (tsconfigFile) {
 				.pipe(util.loadSourcemaps())
 				.pipe(compilation())
 				.pipe(build ? nlsDev.rewriteLocalizeCalls() : es.through())
+				.pipe(build ? nlsDev.createAdditionalLanguageFiles([...i18n.defaultLanguages, ...i18n.extraLanguages], path.join(root, 'i18n'), 'out') : es.through()) // {{SQL CARBON EDIT}}
 				.pipe(build ? util.stripSourceMappingURL() : es.through())
 				.pipe(sourcemaps.write('.', {
 					sourceMappingURL: !build ? null : f => `${baseUrl}/${f.relative}.map`,
