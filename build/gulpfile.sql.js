@@ -18,6 +18,7 @@ const vsce = require('vsce');
 const vfs = require('vinyl-fs');
 const mkdirp = require('mkdirp');
 const { sqlLocalizedExtensions } = require('./gulpfile.extensions');
+const nlsDev = require('vscode-nls-dev');
 
 gulp.task('fmt', () => formatStagedFiles());
 const formatFiles = (some) => {
@@ -151,7 +152,6 @@ gulp.task('package-rebuild-extensions', task.series(
 
 
 gulp.task('external-translations-import', function () {
-	const nlsDev = require('vscode-nls-dev');
 	return new Promise(function(resolve) {
 		[...i18n.defaultLanguages, ...i18n.extraLanguages].forEach(language => {
 			sqlLocalizedExtensions.forEach(extensionName => {
