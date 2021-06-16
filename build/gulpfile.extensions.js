@@ -111,9 +111,9 @@ const tasks = compilations.map(function (tsconfigFile) {
 					sourceRoot: '../src'
 				}))
 				.pipe(tsFilter.restore)
-				//.pipe(build ? nlsDev.bundleMetaDataFiles(headerId, headerOut) : es.through())
+				.pipe(build ? nlsDev.bundleMetaDataFiles(headerId, headerOut) : es.through())
 				// Filter out *.nls.json file. We needed them only to bundle meta data file.
-				//.pipe(filter(['**', '!**/*.nls.json']))
+				.pipe(filter(['**', '!**/*.nls.json']))
 				.pipe(reporter.end(emitError));
 
 			return es.duplex(input, output);
