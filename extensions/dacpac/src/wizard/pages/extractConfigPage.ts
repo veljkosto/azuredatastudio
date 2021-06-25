@@ -61,7 +61,7 @@ export class ExtractConfigPage extends DacFxConfigPage {
 	}
 
 	private async createFileBrowser(): Promise<azdata.FormComponent> {
-		this.createFileBrowserParts();
+		this.createFileBrowserParts(false);
 
 		// default filepath
 		this.fileTextBox.value = this.generateFilePathFromDatabaseAndTimestamp();

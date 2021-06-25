@@ -47,7 +47,7 @@ export class ImportConfigPage extends DacFxConfigPage {
 	}
 
 	private async createFileBrowser(): Promise<azdata.FormComponent> {
-		this.createFileBrowserParts();
+		this.createFileBrowserParts(true);
 
 		this.fileButton.onDidClick(async (click) => { this.selectionPromise = this.handleFileSelection(); });
 

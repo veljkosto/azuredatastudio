@@ -59,7 +59,7 @@ export class DeployConfigPage extends DacFxConfigPage {
 	}
 
 	private async createFileBrowser(): Promise<azdata.FormComponent> {
-		this.createFileBrowserParts();
+		this.createFileBrowserParts(true);
 
 		this.fileButton.onDidClick(async (click) => {
 			let fileUris = await vscode.window.showOpenDialog(

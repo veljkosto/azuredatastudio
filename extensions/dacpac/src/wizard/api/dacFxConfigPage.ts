@@ -9,7 +9,7 @@ import * as loc from '../../localizedConstants';
 import { DataTierApplicationWizard, Operation } from '../dataTierApplicationWizard';
 import { DacFxDataModel } from './models';
 import { BasePage } from './basePage';
-import { sanitizeStringForFilename, isValidBasename, isValidBasenameErrorMessage } from './utils';
+import { sanitizeStringForFilename, isValidBasename, isValidBasenameErrorMessage, fileExist, directoryExist } from './utils';
 import { defaultSaveLocation } from '../common/fileLocationHelper';
 
 export abstract class DacFxConfigPage extends BasePage {
@@ -162,9 +162,9 @@ export abstract class DacFxConfigPage extends BasePage {
 		return true;
 	}
 
-	protected async createFileBrowserParts() {
+	protected async createFileBrowserParts(isExistingFile: boolean) {
 		this.fileTextBox = this.view.modelBuilder.inputBox().withValidation(
-			component => isValidBasename(component.value)
+			component => this.fileBrowserValidation(component.value, isExistingFile)
 		)
 			.withProps({
 				required: true,
@@ -172,10 +172,15 @@ export abstract class DacFxConfigPage extends BasePage {
 			}).component();
 
 		// Set validation error message if file name is invalid
-		this.fileTextBox.onTextChanged(text => {
-			const errorMessage = isValidBasenameErrorMessage(text);
+		this.fileTextBox.onTextChanged(async (text) => {
+			let errorMessage = isValidBasenameErrorMessage(text);
 			if (errorMessage) {
 				this.fileTextBox.updateProperty('validationErrorMessage', errorMessage);
+			}
+
+			let errorMessage2 = isExistingFile ? loc.fileDoesNotExist : loc.folderDoesNotExist;
+			if (isExistingFile ? await fileExist(text) : await directoryExist(path.dirname(text))) {
+				this.fileTextBox.updateProperty('validationErrorMessage', errorMessage2);
 			}
 		});
 
@@ -185,6 +190,12 @@ export abstract class DacFxConfigPage extends BasePage {
 			ariaLabel: loc.selectFile,
 			iconPath: path.join(this.instance.extensionContextExtensionPath, 'images', 'folder.svg'),
 		}).component();
+	}
+
+
+	async fileBrowserValidation(value: string, isExistingFile: boolean): Promise<boolean> {
+		const exists = isExistingFile ? await fileExist(value) : await directoryExist(path.dirname(value));
+		return exists && isValidBasename(value);
 	}
 
 	protected generateFilePathFromDatabaseAndTimestamp(): string {
