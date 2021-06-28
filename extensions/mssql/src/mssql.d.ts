@@ -548,4 +548,6 @@ export interface SqlMigrationAssessmentResult extends azdata.ResultStatus {
 
 export interface ISqlMigrationService {
 	getAssessments(ownerUri: string): Promise<SqlMigrationAssessmentResult | undefined>;
+	validateWindowsCredentials(username: string, password: string): Promise<azdata.ResultStatus>;
+	validateNetworkShare(path: string, username: string, password: string): Promise<azdata.ResultStatus>;
 }

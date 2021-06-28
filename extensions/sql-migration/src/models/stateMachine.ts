@@ -162,6 +162,23 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		this._stateChangeEventEmitter.fire({ oldState, newState: this.currentState });
 	}
 
+	public async validateWindowsCreds(): Promise<boolean> {
+		if (this._authenticationType === 'SqlAuthentication') {
+			const password = (await azdata.connection.getCredentials(this.sourceConnectionId)).password;
+			if (this._sqlServerPassword !== password) {
+				throw new Error(constants.AUTH_PASSWORD_ERROR(MigrationSourceAuthenticationType.Sql, (await this.getSourceConnectionProfile()).serverName));
+			}
+		} else {
+			await this.migrationService.validateWindowsCredentials(this._sqlServerUsername, this._sqlServerPassword);
+		}
+		return true;
+	}
+
+	public async validateNetworkShare(): Promise<azdata.ResultStatus> {
+		const result = await this.migrationService.validateNetworkShare(this._databaseBackup.networkShare.networkShareLocation, this._databaseBackup.networkShare.windowsUser, this._databaseBackup.networkShare.password);
+		return result;
+	}
+
 	public async getServerAssessments(): Promise<ServerAssessement> {
 		const excludeDbs: string[] = [
 			'master',

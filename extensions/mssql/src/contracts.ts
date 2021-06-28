@@ -1026,5 +1026,23 @@ export interface SqlMigrationAssessmentParams {
 export namespace GetSqlMigrationAssessmentItemsRequest {
 	export const type = new RequestType<SqlAssessmentParams, SqlAssessmentResult, void, void>('migration/getassessments');
 }
+export interface SqlMigrationValidateWindowsCredentialsParams {
+	username: string;
+	password: string;
+}
+
+export namespace SqlMigrationValidateWindowsCredentialsRequest {
+	export const type = new RequestType<SqlMigrationValidateWindowsCredentialsParams, azdata.ResultStatus, void, void>('migration/validateWindowsAccount');
+}
+
+export interface SqlMigrationValidateNetworkShareParams {
+	username: string;
+	password: string;
+	path: string;
+}
+
+export namespace SqlMigrationValidateNetworkShareRequest {
+	export const type = new RequestType<SqlMigrationValidateNetworkShareParams, azdata.ResultStatus, void, void>('migration/validateNetworkFileShare');
+}
 
 // ------------------------------- <Sql Migration> -----------------------------

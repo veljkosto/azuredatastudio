@@ -210,6 +210,48 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			this.migrationStateModel._sqlServerPassword = value;
 		});
 
+		const testWindowsAuthConnection = this._view.modelBuilder.button().withProps({
+			label: constants.TEST_CONNECTION,
+			iconPath: IconPathHelper.testConnection,
+			iconHeight: 15,
+			iconWidth: 15,
+			width: 130,
+			height: 25,
+			CSSStyles: {
+				'margin': '15px 0px 10px 0px'
+			}
+		}).component();
+		testWindowsAuthConnection.onDidClick(async e => {
+			windowsAuthLoadingIndicator.loading = true;
+			windowsAuthInfoBox.updateCssStyles({
+				'display': 'none'
+			});
+			try {
+				const result = await this.migrationStateModel.validateWindowsCreds();
+				if (result) {
+					windowsAuthInfoBox.text = constants.TEST_CONNECTION_SUCCEEDED;
+					windowsAuthInfoBox.style = 'success';
+				}
+			} catch (e) {
+				windowsAuthInfoBox.text = e.toString();
+				windowsAuthInfoBox.style = 'error';
+			}
+			windowsAuthInfoBox.updateCssStyles({
+				'display': 'inline'
+			});
+			windowsAuthLoadingIndicator.loading = false;
+		});
+		const windowsAuthLoadingIndicator = this._view.modelBuilder.loadingComponent().withProps({
+			loading: false
+		}).component();
+		const windowsAuthInfoBox = this._view.modelBuilder.infoBox().withProps({
+			text: 'Success',
+			style: 'error',
+			width: WIZARD_INPUT_COMPONENT_WIDTH,
+			CSSStyles: {
+				'display': 'none'
+			}
+		}).component();
 
 		const networkShareHeading = this._view.modelBuilder.text().withProps({
 			value: constants.DATABASE_BACKUP_NETWORK_SHARE_HEADER_TEXT,
@@ -320,7 +362,48 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 		});
 
 
-
+		const testNetworkShareConnection = this._view.modelBuilder.button().withProps({
+			label: constants.TEST_CONNECTION,
+			iconPath: IconPathHelper.testConnection,
+			iconHeight: 15,
+			iconWidth: 15,
+			width: 130,
+			height: 25,
+			CSSStyles: {
+				'margin': '15px 0px 10px 0px'
+			}
+		}).component();
+		testNetworkShareConnection.onDidClick(async e => {
+			testNetworkLoadingIndicator.loading = true;
+			networkShareConnectionInfoBox.updateCssStyles({
+				'display': 'none'
+			});
+			try {
+				const result = await this.migrationStateModel.validateNetworkShare();
+				if (result) {
+					networkShareConnectionInfoBox.text = constants.TEST_CONNECTION_SUCCEEDED;
+					networkShareConnectionInfoBox.style = 'success';
+				}
+			} catch (e) {
+				networkShareConnectionInfoBox.text = e.toString();
+				networkShareConnectionInfoBox.style = 'error';
+			}
+			networkShareConnectionInfoBox.updateCssStyles({
+				'display': 'inline'
+			});
+			testNetworkLoadingIndicator.loading = false;
+		});
+		const testNetworkLoadingIndicator = this._view.modelBuilder.loadingComponent().withProps({
+			loading: false
+		}).component();
+		const networkShareConnectionInfoBox = this._view.modelBuilder.infoBox().withProps({
+			text: 'Success',
+			style: 'error',
+			width: WIZARD_INPUT_COMPONENT_WIDTH,
+			CSSStyles: {
+				'display': 'none'
+			}
+		}).component();
 
 		const flexContainer = this._view.modelBuilder.flexContainer().withItems(
 			[
@@ -330,6 +413,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 				this._sqlSourceUsernameInput,
 				sqlPasswordLabel,
 				this._sqlSourcepassword,
+				testWindowsAuthConnection,
+				windowsAuthLoadingIndicator,
+				windowsAuthInfoBox,
 				networkShareHeading,
 				networkShareHelpText,
 				networkLocationInputBoxLabel,
@@ -339,6 +425,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 				this._windowsUserAccountText,
 				passwordLabel,
 				this._passwordText,
+				testNetworkShareConnection,
+				testNetworkLoadingIndicator,
+				networkShareConnectionInfoBox
 			]
 		).withLayout({
 			flexFlow: 'column'
@@ -351,9 +440,27 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 
 	private createBlobContainer(): azdata.FlexContainer {
 
+		const azureBlobContainerTitle = this._view.modelBuilder.text().withProps({
+			value: constants.AZURE_STORAGE_BLOB_CONTAINER_DETAILS,
+			width: WIZARD_INPUT_COMPONENT_WIDTH,
+			CSSStyles: {
+				'font-size': '14px',
+				'font-weight': 'bold'
+			}
+		}).component();
+
+		const azureBlobContainerDetails = this._view.modelBuilder.text().withProps({
+			value: constants.AZURE_STORAGE_BLOB_DETAILS,
+			width: WIZARD_INPUT_COMPONENT_WIDTH,
+			CSSStyles: {
+				'font-size': '13px',
+			}
+		}).component();
+
 		const subscriptionLabel = this._view.modelBuilder.text()
 			.withProps({
-				value: constants.DATABASE_BACKUP_BLOB_STORAGE_SUBSCRIPTION_LABEL,
+				value: constants.SUBSCRIPTION,
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				CSSStyles: {
 					'font-size': '13px',
 					'font-weight': 'bold'
@@ -361,12 +468,14 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._blobContainerSubscription = this._view.modelBuilder.inputBox()
 			.withProps({
-				enabled: false
+				enabled: false,
+				width: WIZARD_INPUT_COMPONENT_WIDTH
 			}).component();
 
 		const locationLabel = this._view.modelBuilder.text()
 			.withProps({
 				value: constants.LOCATION,
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				CSSStyles: {
 					'font-size': '13px',
 					'font-weight': 'bold'
@@ -374,16 +483,43 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			}).component();
 		this._blobContainerLocation = this._view.modelBuilder.inputBox()
 			.withProps({
-				enabled: false
+				enabled: false,
+				width: WIZARD_INPUT_COMPONENT_WIDTH,
 			}).component();
+
+		const blobTableTitle = this._view.modelBuilder.text().withProps({
+			value: constants.AZURE_BLOB_TABLE_TITLE,
+			width: WIZARD_INPUT_COMPONENT_WIDTH,
+			CSSStyles: {
+				'font-size': '13px',
+				'font-weight': 'bold'
+			}
+		}).component();
+
+		const refreshTitle = this._view.modelBuilder.button().withProps({
+			iconPath: IconPathHelper.refresh,
+			iconHeight: 16,
+			iconWidth: 16,
+			height: 20,
+			width: 80,
+			label: constants.REFRESH
+		}).component();
+
+		refreshTitle.onDidClick(e => {
+			this.loadblobResourceGroup();
+		});
 
 		const flexContainer = this._view.modelBuilder.flexContainer()
 			.withItems(
 				[
+					azureBlobContainerTitle,
+					azureBlobContainerDetails,
 					subscriptionLabel,
 					this._blobContainerSubscription,
 					locationLabel,
 					this._blobContainerLocation,
+					blobTableTitle,
+					refreshTitle
 				]
 			).withLayout({
 				flexFlow: 'column'
@@ -648,15 +784,15 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 			this._sqlSourceUsernameInput.value = username;
 			this._sqlSourcepassword.value = (await azdata.connection.getCredentials(this.migrationStateModel.sourceConnectionId)).password;
 
+			if (this.migrationStateModel._targetType === MigrationTargetType.SQLMI) {
+				this._existingDatabases = await this.migrationStateModel.getManagedDatabases();
+			}
+
 			this._networkShareTargetDatabaseNames = [];
 			this._blobContainerTargetDatabaseNames = [];
 			this._blobContainerResourceGroupDropdowns = [];
 			this._blobContainerStorageAccountDropdowns = [];
 			this._blobContainerDropdowns = [];
-
-			if (this.migrationStateModel._targetType === MigrationTargetType.SQLMI) {
-				this._existingDatabases = await this.migrationStateModel.getManagedDatabases();
-			}
 			this.migrationStateModel._targetDatabaseNames = [];
 			this.migrationStateModel._databaseBackup.blobs = [];
 			this.migrationStateModel._migrationDbs.forEach((db, index) => {
@@ -793,10 +929,9 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 				data.push(targetRow);
 			});
 			this._blobContainerTargetDatabaseNamesTable.dataValues = data;
-
+			await this.getSubscriptionValues();
 			this.migrationStateModel.refreshDatabaseBackupPage = false;
 		}
-		await this.getSubscriptionValues();
 		this.wizard.registerNavigationValidator((pageChangeInfo) => {
 			if (pageChangeInfo.newPage < pageChangeInfo.lastPage) {
 				return true;
@@ -832,11 +967,13 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 
 					const duplicates: Map<string, number[]> = new Map();
 					for (let i = 0; i < this.migrationStateModel._targetDatabaseNames.length; i++) {
-						const blobContainerId = this.migrationStateModel._databaseBackup.blobs[i].blobContainer.id;
-						if (duplicates.has(blobContainerId)) {
-							duplicates.get(blobContainerId)?.push(i);
-						} else {
-							duplicates.set(blobContainerId, [i]);
+						const blobContainerId = this.migrationStateModel._databaseBackup.blobs[i].blobContainer?.id;
+						if (blobContainerId) {
+							if (duplicates.has(blobContainerId)) {
+								duplicates.get(blobContainerId)?.push(i);
+							} else {
+								duplicates.set(blobContainerId, [i]);
+							}
 						}
 					}
 
@@ -1002,6 +1139,7 @@ export class DatabaseBackupPage extends MigrationWizardPage {
 				dropDown.values = resourceGroupValues;
 				selectDropDownIndex(dropDown, 0);
 			});
+
 		} catch (error) {
 			console.log(error);
 		} finally {

@@ -9,6 +9,7 @@ import { SqlOpsDataClient, ISqlOpsFeature } from 'dataprotocol-client';
 import { ClientCapabilities } from 'vscode-languageclient';
 import * as constants from '../constants';
 import * as contracts from '../contracts';
+import { ResultStatus } from 'azdata';
 
 export class SqlMigrationService implements mssql.ISqlMigrationService {
 	public static asFeature(context: AppContext): ISqlOpsFeature {
@@ -36,6 +37,30 @@ export class SqlMigrationService implements mssql.ISqlMigrationService {
 		}
 		catch (e) {
 			this.client.logFailedRequest(contracts.GetSqlMigrationAssessmentItemsRequest.type, e);
+		}
+
+		return undefined;
+	}
+
+	async validateWindowsCredentials(username: string, password: string): Promise<ResultStatus> {
+		let params: contracts.SqlMigrationValidateWindowsCredentialsParams = { username: username, password: password };
+		try {
+			return this.client.sendRequest(contracts.SqlMigrationValidateWindowsCredentialsRequest.type, params);
+		}
+		catch (e) {
+			this.client.logFailedRequest(contracts.SqlMigrationValidateWindowsCredentialsRequest.type, e);
+		}
+
+		return undefined;
+	}
+
+	async validateNetworkShare(path: string, username: string, password: string): Promise<ResultStatus> {
+		let params: contracts.SqlMigrationValidateNetworkShareParams = { path: path, username: username, password: password };
+		try {
+			return this.client.sendRequest(contracts.SqlMigrationValidateNetworkShareRequest.type, params);
+		}
+		catch (e) {
+			this.client.logFailedRequest(contracts.SqlMigrationValidateNetworkShareRequest.type, e);
 		}
 
 		return undefined;

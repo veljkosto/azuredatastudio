@@ -104,14 +104,24 @@ export const DUPLICATE_NAME_ERROR = localize('sql.migration.unique.name', "Selec
 export function DATABASE_ALREADY_EXISTS_MI(dbName: string, targetName: string): string {
 	return localize('sql.migration.database.already.exists', "Database '{0}' already exists on target Managed Instance '{1}'.", dbName, targetName);
 }
+export const TEST_CONNECTION = localize('sql.migration.test.connection', "Test Connection");
+export function AUTH_PASSWORD_ERROR(authType: MigrationSourceAuthenticationType, serverName: string): string {
+	if (authType === MigrationSourceAuthenticationType.Integrated) {
+		return localize('sql.migration.win.auth.password.error', "The password is incorrect. Make sure you are entering the Windows Account password used for connecting to SQL Server Instance {0}", serverName);
+	} else {
+		return localize('sql.migration.sql.auth.password.error', "The password is incorrect. Make sure you are entering the SQL Authentication password used for connecting to SQL Server Instance {0}", serverName);
+	}
+}
+export const TEST_CONNECTION_SUCCEEDED = localize('sql.migration.validation.succeeded', "Test connection succeeded");
+
+export const AZURE_STORAGE_BLOB_CONTAINER_DETAILS = localize('sql.migration.azure.storage.blob.container.details', "Azure Storage Blob Container details");
+export const AZURE_STORAGE_BLOB_DETAILS = localize('sql.migration.azure.storage.blob.details', "Provide the Azure Storage Blob Container that contains the backups");
+export const AZURE_BLOB_TABLE_TITLE = localize('sql.migration.azure.blob.table.title', "Enter target name and select resource group, storage account and container for the  database(s)");
 export const DATABASE_BACKUP_BLOB_STORAGE_SUBSCRIPTION_LABEL = localize('sql.migration.blob.storage.subscription.label', "Select the subscription that contains the storage account.");
 export const DATABASE_BACKUP_BLOB_STORAGE_ACCOUNT_LABEL = localize('sql.migration.blob.storage.account.label', "Select the storage account that contains the backup files.");
 export const DATABASE_BACKUP_BLOB_STORAGE_ACCOUNT_CONTAINER_LABEL = localize('sql.migration.blob.storage.container.label', "Select the container that contains the backup files.");
 export const DATABASE_BACKUP_BLOB_STORAGE_ACCOUNT_CONTAINER_PLACEHOLDER = localize('sql.migration.blob.storage.container.placeholder', "Select container");
-export const DATABASE_BACKUP_FILE_SHARE_SUBSCRIPTION_LABEL = localize('sql.migration.file.share.subscription.label', "Select the subscription that contains the file share.");
-export const DATABASE_BACKUP_FILE_SHARE_STORAGE_ACCOUNT_LABEL = localize('sql.migration.file.share.storage.account.label', "Select the storage account that contains the file share.");
-export const DATABASE_BACKUP_FILE_SHARE_LABEL = localize('sql.migration.file.share.label', "Select the file share that contains the backup files.");
-export const DATABASE_BACKUP_FILE_SHARE_PLACEHOLDER = localize('sql.migration.file.share.placeholder', "Select share");
+
 export const DATABASE_BACKUP_MIGRATION_MODE_LABEL = localize('sql.migration.database.migration.mode.label', "Migration mode");
 export const DATABASE_BACKUP_MIGRATION_MODE_DESCRIPTION = localize('sql.migration.database.migration.mode.description', "Choose from the following migration modes to migrate to your Azure SQL target based on your downtime requirements.");
 export const DATABASE_BACKUP_MIGRATION_MODE_ONLINE_LABEL = localize('sql.migration.database.migration.mode.online.label', "Online migration");
