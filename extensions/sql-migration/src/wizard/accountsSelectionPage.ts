@@ -46,6 +46,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 
 		this._azureAccountsDropdown = view.modelBuilder.dropDown()
 			.withProps({
+				ariaLabel: constants.ACCOUNTS_SELECTION_PAGE_TITLE,
 				width: WIZARD_INPUT_COMPONENT_WIDTH,
 				editable: true,
 				fireOnTextChange: true,
@@ -145,6 +146,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 		}).component();
 
 		this._accountTenantDropdown = view.modelBuilder.dropDown().withProps({
+			ariaLabel: constants.AZURE_TENANT,
 			width: WIZARD_INPUT_COMPONENT_WIDTH,
 			editable: true,
 			fireOnTextChange: true,
