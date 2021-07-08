@@ -215,6 +215,7 @@ export class RemoteBookDialog {
 				if (assets?.length > 0) {
 					this.bookDropdown.values = ['-'].concat([...new Set(assets.map(asset => asset.book))]);
 				}
+				console.log('end getAssets');
 				this.checkValues();
 			}
 		}
@@ -253,6 +254,7 @@ export class RemoteBookDialog {
 		const assets = await this.controller.getAssets();
 		let filtered_assets = assets.filter(asset => asset.book === this.bookDropdown.value);
 		this.versionDropdown.values = ['-'].concat(filtered_assets.map(asset => asset.version));
+		console.log('end fillVersionDropdown');
 		this.checkValues();
 	}
 
@@ -261,6 +263,7 @@ export class RemoteBookDialog {
 		let filtered_assets = assets.filter(asset => asset.book === this.bookDropdown.value &&
 			asset.version === this.versionDropdown.value);
 		this.languageDropdown.values = ['-'].concat(filtered_assets.map(asset => asset.language));
+		console.log('end fillLanguageDropdown');
 		this.checkValues();
 	}
 
@@ -272,10 +275,15 @@ export class RemoteBookDialog {
 	}
 
 	public checkValues(): void {
+		console.log(`languageDropdown value: ${this.languageDropdown.value}`);
+		console.log(`versionDropdown value: ${this.versionDropdown.value}`);
+		console.log(`bookDropdown value: ${this.bookDropdown.value}`);
 		if (this.languageDropdown.value !== loc.invalidTextPlaceholder && this.versionDropdown.value !== loc.invalidTextPlaceholder &&
 			this.bookDropdown.value !== loc.invalidTextPlaceholder) {
+			console.log('Ok button should be enabled');
 			this.dialog.okButton.enabled = true;
 		} else {
+			console.log('Ok button should be disabled');
 			this.dialog.okButton.enabled = false;
 		}
 	}
@@ -288,6 +296,7 @@ export class RemoteBookDialog {
 	}
 
 	public showErrorMessage(message: string): void {
+		console.log(`Error message: ${message}`);
 		this.dialog.message = {
 			text: message,
 			level: azdata.window.MessageLevel.Error
