@@ -215,8 +215,6 @@ steps:
       codeCoverageTool: Cobertura
       summaryFileLocation: '$(Build.SourcesDirectory)/.build/coverage/cobertura-coverage.xml'
       reportDirectory: '$(Build.SourcesDirectory)/.build/coverage'
-    variables:
-      disable.coverage.autogenerate: true
     continueOnError: true
     condition: and(succeeded(), eq(variables['RUN_TESTS'], 'true'))
 
@@ -224,3 +222,6 @@ steps:
     displayName: 'Component Detection'
     inputs:
       failOnAlert: true
+variables:
+  # Disable auto HTML report generation when publishing coverage results - the reports are broken and we only care about saving the raw report currently
+  disable.coverage.autogenerate: true
