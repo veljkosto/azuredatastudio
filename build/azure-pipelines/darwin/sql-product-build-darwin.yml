@@ -222,6 +222,3 @@ steps:
     displayName: 'Component Detection'
     inputs:
       failOnAlert: true
-variables:
-  # Disable auto HTML report generation when publishing coverage results - the reports are broken and we only care about saving the raw report currently
-  disable.coverage.autogenerate: true
