@@ -215,6 +215,8 @@ steps:
       codeCoverageTool: Cobertura
       summaryFileLocation: '$(Build.SourcesDirectory)/.build/coverage/cobertura-coverage.xml'
       reportDirectory: '$(Build.SourcesDirectory)/.build/coverage'
+    variables:
+      disable.coverage.autogenerate: true
     continueOnError: true
     condition: and(succeeded(), eq(variables['RUN_TESTS'], 'true'))
 
