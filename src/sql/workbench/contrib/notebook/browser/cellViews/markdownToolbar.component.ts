@@ -241,9 +241,10 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 			} else {
 				let linkUrl = linkCalloutResult.insertUnescapedLinkUrl;
 				const isAnchorLink = linkUrl.startsWith('#');
+				const isAbsolutePath = path.isAbsolute(linkUrl);
 				if (!isAnchorLink) {
 					const isFile = URI.parse(linkUrl).scheme === 'file';
-					if (isFile && !path.isAbsolute(linkUrl)) {
+					if (isFile && !isAbsolutePath) {
 						const notebookDirName = path.dirname(this.cellModel?.notebookModel?.notebookUri.fsPath);
 						const relativePath = (linkUrl).replace(/\\/g, path.posix.sep);
 						linkUrl = path.resolve(notebookDirName, relativePath);
@@ -251,7 +252,7 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 				}
 				// Otherwise, re-focus on the output element, and insert the link directly.
 				this.output?.nativeElement?.focus();
-				document.execCommand('insertHTML', false, `<a href="${escape(linkUrl)}">${escape(linkCalloutResult?.insertUnescapedLinkLabel)}</a>`);
+				document.execCommand('insertHTML', false, `<a href="${escape(linkUrl)}" is-absolute=${isAbsolutePath}>${escape(linkCalloutResult?.insertUnescapedLinkLabel)}</a>`);
 				return;
 			}
 		} else if (type === MarkdownButtonType.IMAGE_PREVIEW) {

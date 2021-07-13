@@ -135,6 +135,7 @@ export class HTMLMarkdownConverter {
 				let href = node.href;
 				let notebookLink: URI | undefined;
 				const isAnchorLinkInFile = (node.attributes.href?.nodeValue.startsWith('#') || href.includes('#')) && href.startsWith('file://');
+				const isAbsolutePath = node.attributes['is-absolute']?.nodeValue === 'true' ? true : false;
 				if (isAnchorLinkInFile) {
 					notebookLink = getUriAnchorLink(node, this.notebookUri);
 				} else {
@@ -143,7 +144,7 @@ export class HTMLMarkdownConverter {
 					notebookLink = href ? URI.parse(href) : URI.file(node.title);
 				}
 				const notebookFolder = this.notebookUri ? path.join(path.dirname(this.notebookUri.fsPath), path.sep) : '';
-				if (notebookLink.fsPath !== this.notebookUri.fsPath) {
+				if (notebookLink.fsPath !== this.notebookUri.fsPath && !isAbsolutePath) {
 					let relativePath = findPathRelativeToContent(notebookFolder, notebookLink);
 					if (relativePath) {
 						return `[${node.innerText}](${relativePath})`;
