@@ -252,7 +252,7 @@ export class MarkdownToolbarComponent extends AngularDisposable {
 				}
 				// Otherwise, re-focus on the output element, and insert the link directly.
 				this.output?.nativeElement?.focus();
-				document.execCommand('insertHTML', false, `<a href="${escape(linkUrl)}" is-absolute=${isAbsolutePath}>${escape(linkCalloutResult?.insertUnescapedLinkLabel)}</a>`);
+				document.execCommand('insertHTML', false, `<a href="${escape(linkUrl)}" is-absolute="${isAbsolutePath}">${escape(linkCalloutResult?.insertUnescapedLinkLabel)}</a>`);
 				return;
 			}
 		} else if (type === MarkdownButtonType.IMAGE_PREVIEW) {
