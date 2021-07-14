@@ -417,7 +417,7 @@ export class SchemaCompareDialog {
 			this.formBuilder.addFormItem(this.targetServerComponent, { horizontal: true, titleFontSize: titleFontSize });
 			this.formBuilder.addFormItem(this.targetDatabaseComponent, { horizontal: true, titleFontSize: titleFontSize });
 
-			await this.populateServerDropdown(true);
+			await this.populateServerDropdown(false);
 		});
 
 		// if target is currently a db, show it in the server and db dropdowns
@@ -577,6 +577,9 @@ export class SchemaCompareDialog {
 
 		if (!passivelyPopulate && currentDropdown.value) {
 			await this.populateDatabaseDropdown((currentDropdown.value as ConnectionDropdownValue).connection, isTarget);
+		}
+		else {
+			this.dialog.okButton.enabled = await this.shouldEnableOkayButton();
 		}
 	}
 
