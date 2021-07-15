@@ -108,6 +108,21 @@ const optimizeVSCodeTask = task.define('optimize-vscode', task.series(
 ));
 gulp.task(optimizeVSCodeTask);
 
+// {{SQL CARBON EDIT}} Same as above, but for watch instead of compile.
+const optimizeWatchVSCodeTask = task.define('optimize-watch-vscode', task.series(
+	util.rimraf('out-watch-vscode'),
+	common.optimizeTask({
+		src: 'out',
+		entryPoints: vscodeEntryPoints,
+		resources: vscodeResources,
+		loaderConfig: common.loaderConfig(),
+		out: 'out-watch-vscode',
+		bundleInfo: undefined
+	})
+));
+gulp.task(optimizeWatchVSCodeTask);
+// {{SQL CARBON EDIT}} - End
+
 // {{SQL CARBON EDIT}} Gulp task that imports any relevant ADS XLF found in vscode-translations-export to resources/xlf/en folder.
 
 // List of ADS extension XLF files that we want to put into the English resource folder.

@@ -22,6 +22,9 @@ gulp.task(compileClientTask);
 const watchClientTask = task.define('watch-client', task.series(util.rimraf('out'), compilation.watchTask('out', false)));
 gulp.task(watchClientTask);
 
+const pathToMetadata = './out-watch-vscode/nls.metadata.json';
+const xlfClientTask = task.define('watch-create-client-xlfs', gulp.src(pathToMetadata).pipe(i18n.createXlfFilesForCoreBundle()))
+
 // All
 const compileTask = task.define('compile', task.parallel(monacoTypecheckTask, compileClientTask, compileExtensionsTask, compileExtensionMediaTask));
 gulp.task(compileTask);
