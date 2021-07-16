@@ -287,20 +287,6 @@ export function refreshLangpacks(): Promise<void> {
 				languageId = "zh-hant";
 			}
 
-			//remove extensions not part of ADS.
-			if (fs.existsSync(translationDataFolder)) {
-				let totalExtensions = fs.readdirSync(path.join(translationDataFolder, 'extensions'));
-				for (let extensionTag in totalExtensions) {
-					let extensionFileName = totalExtensions[extensionTag];
-					let xlfPath = path.join(location, `${languageId}`, extensionFileName.replace('.i18n.json', '.xlf'))
-					if (!(fs.existsSync(xlfPath) || VSCODEExtensions.indexOf(extensionFileName.replace('.i18n.json', '')) !== -1)) {
-						let filePath = path.join(translationDataFolder, 'extensions', extensionFileName);
-						rimraf.sync(filePath);
-					}
-				}
-			}
-
-
 			console.log(`Importing translations for ${languageId} from '${location}' to '${translationDataFolder}' ...`);
 			let translationPaths: any = [];
 			gulp.src(path.join(location, languageId, '**', '*.xlf'))
