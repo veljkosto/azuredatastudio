@@ -14,7 +14,6 @@ import { SummaryPage } from './summaryPage';
 import { MigrationModePage } from './migrationModePage';
 import { DatabaseSelectorPage } from './databaseSelectorPage';
 
-
 export const WIZARD_INPUT_COMPONENT_WIDTH = '600px';
 export class WizardController {
 	stateModel: MigrationStateModel;

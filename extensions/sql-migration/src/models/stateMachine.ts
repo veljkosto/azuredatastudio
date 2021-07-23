@@ -146,18 +146,15 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	public _targetType!: MigrationTargetType;
 	public refreshDatabaseBackupPage!: boolean;
 
-<<<<<<< HEAD
 	public resumeAssessment!: boolean;
 	public savedInfo!: SavedInfo;
 	public closedPage!: number;
-=======
 	public excludeDbs: string[] = [
 		'master',
 		'tempdb',
 		'msdb',
 		'model'
 	];
->>>>>>> 6d4608dd8b1 (SQL Assessment Database Selector (#16030))
 
 	constructor(
 		private readonly _extensionContext: vscode.ExtensionContext,
@@ -189,18 +186,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		return finalResult;
 	}
 
-<<<<<<< HEAD
-	public async getServerAssessments(): Promise<ServerAssessment> {
-		const excludeDbs: string[] = [
-			'master',
-			'tempdb',
-			'msdb',
-			'model'
-		];
-
-=======
 	public async getDatabaseAssessments(): Promise<ServerAssessement> {
->>>>>>> 6d4608dd8b1 (SQL Assessment Database Selector (#16030))
 		const ownerUri = await azdata.connection.getUriForConnection(this.sourceConnectionId);
 		// stress test backend & dialog component
 		const assessmentResults = await this.migrationService.getAssessments(
