@@ -85,7 +85,7 @@ export class WizardController {
 
 		this.extensionContext.subscriptions.push(wizard.doneButton.onClick(async (e) => {
 			await stateModel.startMigration();
-		});
+		}));
 		saveAndCloseButton.onClick(() => {
 			// TODO: save stuff according to the page
 			stateModel.saveInfo(serverName, wizard.currentPage);
