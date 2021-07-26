@@ -4,12 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as assert from 'assert';
-import * as marked from 'vs/base/common/marked/marked';
-import { NotebookMarkdownRenderer } from '../../browser/outputs/notebookMarkdown';
+import * as marked from 'sql/base/common/marked/marked';
+import * as vsMarked from 'vs/base/common/marked/marked';
+import * as notebookMarkdown from '../../browser/outputs/notebookMarkdown';
 import { URI } from 'vs/base/common/uri';
 
 suite('NotebookMarkdownRenderer', () => {
-	let notebookMarkdownRenderer = new NotebookMarkdownRenderer();
+	let notebookMarkdownRenderer = new notebookMarkdown.NotebookMarkdownRenderer();
 	test('image rendering conforms to default', () => {
 		const markdown = { value: `![image](someimageurl 'caption')` };
 		const result: HTMLElement = notebookMarkdownRenderer.renderMarkdown(markdown);
@@ -103,4 +104,21 @@ suite('NotebookMarkdownRenderer', () => {
 		result = notebookMarkdownRenderer.renderMarkdown({ value: `![altText](attachment:ads.png)`, isTrusted: true }, { cellAttachments: JSON.parse('{"ads2.png":"image/png"}') });
 		assert.strictEqual(result.innerHTML, `<p><img src="attachment:ads.png" alt="altText"></p>`, 'Cell attachment no image data failed');
 	});
+
+	suite('marked.js compare', () => {
+		test('Header after table and empty line', () => {
+			testMarked(`<table></table>
+ 
+### Heading`);
+		});
+	});
+
+	function testMarked(markdown: string): void {
+		let sqlResult: HTMLElement = notebookMarkdownRenderer.renderMarkdown({ value: markdown, isTrusted: true });
+		let vsResult: HTMLElement = notebookMarkdownRenderer.renderMarkdown({ value: markdown, isTrusted: true },
+			undefined,
+			opts => new vsMarked.Renderer(opts),
+			(src, options, callback) => vsMarked.parse(src, options, callback));
+		assert.strictEqual(sqlResult.innerHTML, vsResult.innerHTML);
+	}
 });
