@@ -53,8 +53,16 @@ export class NotebookMarkdownRenderer {
 	 * gets passed in the correct baseUrl for the notebook's saved location,
 	 * respects the trusted state of a notebook, and allows command links to
 	 * be clickable.
+	 *
+	 * @param options The rendering options
+	 * @param rendererFactory Optional factory to create the Renderer instance to use (for testing)
+	 * @param parser Optional function to use for parsing the markdown (for testing)
 	 */
-	renderMarkdown(markdown: IMarkdownString, options: MarkdownRenderOptionsWithCellAttachments = {}): HTMLElement {
+	renderMarkdown(markdown: IMarkdownString,
+		options: MarkdownRenderOptionsWithCellAttachments = {},
+		rendererFactory?: (opts: marked.MarkedOptions) => marked.Renderer,
+		parser?: (src: string, options?: marked.MarkedOptions, callback?: (error: any | undefined, parseResult: string) => void) => string
+	): HTMLElement {
 		const element = this.createElement(options);
 
 		// signal to code-block render that the element has been created
@@ -65,7 +73,8 @@ export class NotebookMarkdownRenderer {
 		if (!this._baseUrls.some(x => x === notebookFolder)) {
 			this._baseUrls.push(notebookFolder);
 		}
-		const renderer = new marked.Renderer({ baseUrl: notebookFolder });
+		const opts: marked.MarkedOptions = { baseUrl: notebookFolder };
+		const renderer = rendererFactory ? rendererFactory(opts) : new marked.Renderer(opts);
 		renderer.image = (href: string, title: string, text: string) => {
 			const attachment = findAttachmentIfExists(href, options.cellAttachments);
 			// Attachments are already properly formed, so do not need cleaning. Cleaning only takes into account relative/absolute
@@ -178,7 +187,7 @@ export class NotebookMarkdownRenderer {
 			baseUrl: notebookFolder
 		};
 
-		element.innerHTML = marked.parse(markdown.value, markedOptions);
+		element.innerHTML = parser ? parser(markdown.value, markedOptions) : marked.parse(markdown.value, markedOptions);
 		signalInnerHTML!();
 
 		return element;
