@@ -13,7 +13,6 @@ import { SKURecommendations } from './externalContract';
 import * as constants from '../constants/strings';
 import { MigrationLocalStorage } from './migrationLocalStorage';
 import * as nls from 'vscode-nls';
-import { NONAME } from 'node:dns';
 import { deepClone } from '../api/utils';
 const localize = nls.loadMessageBundle();
 
@@ -157,7 +156,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	];
 
 	constructor(
-		private readonly _extensionContext: vscode.ExtensionContext,
+		public extensionContext: vscode.ExtensionContext,
 		private readonly _sourceConnectionId: string,
 		public readonly migrationService: mssql.ISqlMigrationService
 	) {
@@ -186,7 +185,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		return finalResult;
 	}
 
-	public async getDatabaseAssessments(): Promise<ServerAssessement> {
+	public async getDatabaseAssessments(): Promise<ServerAssessment> {
 		const ownerUri = await azdata.connection.getUriForConnection(this.sourceConnectionId);
 		// stress test backend & dialog component
 		const assessmentResults = await this.migrationService.getAssessments(
@@ -236,7 +235,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 	}
 
 	public getExtensionPath(): string {
-		return this._extensionContext.extensionPath;
+		return this.extensionContext.extensionPath;
 	}
 
 	public async getAccountValues(): Promise<azdata.CategoryValue[]> {
@@ -776,7 +775,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 				saveInfo.azureAccount = deepClone(this._azureAccount);
 
 				console.log(`Save Info: ${saveInfo}`);
-				this._extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveInfo);
+				this.extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveInfo);
 		}
 
 	}

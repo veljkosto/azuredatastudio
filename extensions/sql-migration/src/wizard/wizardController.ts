@@ -61,7 +61,7 @@ export class WizardController {
 		wizardSetupPromises.push(...pages.map(p => p.registerWizardContent()));
 		wizardSetupPromises.push(wizard.open());
 
-		this.extensionContext.subscriptions.push(wizard.onPageChanged(async (pageChangeInfo: azdata.window.WizardPageChangeInfo) => {
+		this.stateModel.extensionContext.subscriptions.push(wizard.onPageChanged(async (pageChangeInfo: azdata.window.WizardPageChangeInfo) => {
 			const newPage = pageChangeInfo.newPage;
 			const lastPage = pageChangeInfo.lastPage;
 
@@ -82,7 +82,7 @@ export class WizardController {
 		await Promise.all(wizardSetupPromises);
 		await pages[0].onPageEnter();
 
-		this.extensionContext.subscriptions.push(wizard.doneButton.onClick(async (e) => {
+		this.stateModel.extensionContext.subscriptions.push(wizard.doneButton.onClick(async (e) => {
 			await stateModel.startMigration();
 		}));
 		saveAndCloseButton.onClick(() => {
