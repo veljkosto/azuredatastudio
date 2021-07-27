@@ -678,9 +678,11 @@ export class NotebookEditorOverrideContribution extends Disposable implements IW
 	) {
 		super();
 		this.registerEditorOverrides();
+		this._logService.info(`Registering Notebook editor overrides`);
 		// Refresh the editor overrides whenever the languages change so we ensure we always have
 		// the latest up to date list of extensions for each language
 		this._modeService.onLanguagesMaybeChanged(() => {
+			this._logService.info('Notebook on language change');
 			this.registerEditorOverrides();
 		});
 	}
@@ -690,6 +692,7 @@ export class NotebookEditorOverrideContribution extends Disposable implements IW
 		// List of language IDs to associate the query editor for. These are case sensitive.
 		NotebookEditorInputAssociation.languages.map(lang => {
 			const langExtensions = this._modeService.getExtensions(lang);
+			this._logService.info(`Language Extensions for ${lang} - ${JSON.stringify(langExtensions)}`);
 			if (langExtensions.length === 0) {
 				return;
 			}

@@ -23,6 +23,7 @@ import { ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
 import { registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 import { IExtensionService } from 'vs/workbench/services/extensions/common/extensions';
+import { ILogService } from 'vs/platform/log/common/log';
 
 interface IContributedEditorInput extends IEditorInput {
 	viewType?: string;
@@ -52,7 +53,8 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		@INotificationService private readonly notificationService: INotificationService,
 		@ITelemetryService private readonly telemetryService: ITelemetryService,
 		@IStorageService private readonly storageService: IStorageService,
-		@IExtensionService private readonly extensionService: IExtensionService
+		@IExtensionService private readonly extensionService: IExtensionService,
+		@ILogService private readonly logService: ILogService
 	) {
 		super();
 		// Read in the cache on statup
@@ -75,7 +77,9 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 	async resolveEditorOverride(editor: IEditorInput, options: IEditorOptions | ITextEditorOptions | undefined, group: IEditorGroup): Promise<IEditorInputWithOptionsAndGroup | undefined> {
 		// If it was an override before we await for the extensions to activate and then proceed with overriding or else they won't be registered
 		//if (this.cache && editor.resource && this.resourceMatchesCache(editor.resource)) { // {{SQL CARBON EDIT}} Always wait for extensions so that our language-based overrides (SQL/Notebooks) will always have those registered
+		this.logService.info(`Resolving editor override for ${editor.resource} - before extension activate`);
 		await this.extensionService.whenInstalledExtensionsRegistered();
+		this.logService.info(`Resolving editor override for ${editor.resource} - after extension activate`);
 		//}
 
 		if (options?.override === EditorOverride.DISABLED) {
@@ -224,8 +228,9 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		}
 
 		let contributionPoints = this.findMatchingContributions(resource);
-
+		this.logService.info(`Found contribution points for ${resource} - ${JSON.stringify(contributionPoints)}`);
 		const associationsFromSetting = this.getAssociationsForResource(resource);
+
 		// We only want built-in+ if no user defined setting is found, else we won't override
 		const possibleContributionPoints = contributionPoints.filter(contribPoint => priorityToRank(contribPoint.editorInfo.priority) >= priorityToRank(ContributedEditorPriority.builtin) && contribPoint.editorInfo.id !== DEFAULT_EDITOR_ASSOCIATION.id);
 		// If the user has a setting we use that, else choose the highest priority editor that is built-in+
