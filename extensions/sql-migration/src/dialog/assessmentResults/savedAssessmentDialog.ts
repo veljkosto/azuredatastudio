@@ -64,11 +64,11 @@ export class SavedAssessmentDialog {
 			// load saved assessments here
 			// stateModel.savedAssessment
 			const wizardController = new WizardController(this.stateModel);
-			await wizardController.openWizard();
+			await wizardController.openWizard(this.stateModel.sourceConnectionId);
 		} else {
 			// normal flow
 			const wizardController = new WizardController(this.stateModel);
-			await wizardController.openWizard();
+			await wizardController.openWizard(this.stateModel.sourceConnectionId);
 		}
 		this._isOpen = false;
 	}

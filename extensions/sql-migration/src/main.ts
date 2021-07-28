@@ -14,6 +14,7 @@ import { DashboardWidget } from './dashboard/sqlServerDashboard';
 import { MigrationLocalStorage } from './models/migrationLocalStorage';
 import { MigrationStateModel, SavedInfo } from './models/stateMachine';
 import { SavedAssessmentDialog } from './dialog/assessmentResults/savedAssessmentDialog';
+import { WizardController } from './wizard/wizardController';
 
 class SQLMigration {
 
@@ -97,6 +98,9 @@ class SQLMigration {
 					stateModel.savedInfo = savedInfo;
 					let savedAssessmentDialog = new SavedAssessmentDialog(stateModel);
 					await savedAssessmentDialog.openDialog();
+				} else {
+					const wizardController = new WizardController(stateModel);
+					await wizardController.openWizard(connectionId);
 				}
 			}
 

@@ -72,7 +72,6 @@ export class DatabaseSelectorPage extends MigrationWizardPage {
 		});
 	}
 	public async onPageLeave(): Promise<void> {
-		this.migrationStateModel._databaseAssessment = this.selectedDbs();
 		this.wizard.registerNavigationValidator((pageChangeInfo) => {
 			return true;
 		});
@@ -251,6 +250,7 @@ export class DatabaseSelectorPage extends MigrationWizardPage {
 			this._dbCount.updateProperties({
 				'value': constants.DATABASES_SELECTED(this.selectedDbs().length, this._databaseTableValues.length)
 			});
+			this.migrationStateModel._databaseAssessment = this.selectedDbs();
 		}));
 		const flex = view.modelBuilder.flexContainer().withLayout({
 			flexFlow: 'column',

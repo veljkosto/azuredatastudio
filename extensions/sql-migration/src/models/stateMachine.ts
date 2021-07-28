@@ -98,6 +98,7 @@ export interface SavedInfo {
 	closedPage: number;
 	serverAssessment: ServerAssessment | null;
 	azureAccount: azdata.Account | null;
+	selectedDatabases: string[];
 }
 
 export class MigrationStateModel implements Model, vscode.Disposable {
@@ -741,7 +742,8 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		saveInfo = {
 			closedPage: currentPage,
 			serverAssessment: null,
-			azureAccount: null
+			azureAccount: null,
+			selectedDatabases: []
 		};
 		switch (currentPage) {
 			// Summary
@@ -759,21 +761,27 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			// Migration Mode
 			case 3:
 				console.log('Saving assessment from page: Migration Mode');
+			// Online or Offline Migration
 
 			// SKU Recommendation
 			case 2:
 				console.log('Saving assessment from page: SKU Recommendation');
+				// MI or VM card selection
+				// Databases to migrate selection
+				// Subscription
+				// Location
+				// Resource group
+				// Azure SQL Database Managed Instance
 				saveInfo.serverAssessment = this._assessmentResults;
 				console.log(saveInfo);
-			// Source Configuration
+			// Database Selector
 			case 1:
-				console.log('Saving assessment from page: Source Configuration');
-
+				console.log('Saving assessment from page: Database Selector');
+				saveInfo.selectedDatabases = this._databaseAssessment;
 			// Azure Account
 			case 0:
 				console.log('Saving assessment from page: Azure Account');
 				saveInfo.azureAccount = deepClone(this._azureAccount);
-
 				console.log(`Save Info: ${saveInfo}`);
 				this.extensionContext.globalState.update(`${constants.MEMENTO_STRING}.${serverName}`, saveInfo);
 		}

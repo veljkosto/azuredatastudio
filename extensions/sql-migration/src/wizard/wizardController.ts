@@ -3,6 +3,8 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import * as azdata from 'azdata';
+import * as vscode from 'vscode';
+import * as mssql from '../../../mssql';
 import { MigrationStateModel } from '../models/stateMachine';
 import * as loc from '../constants/strings';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
@@ -22,8 +24,13 @@ export class WizardController {
 		this.stateModel = stateModel;
 	}
 
-	public async openWizard(): Promise<void> {
-		this.createWizard(this.stateModel);
+	public async openWizard(connectionId: string, page?: number): Promise<void> {
+		const api = (await vscode.extensions.getExtension(mssql.extension.name)?.activate()) as mssql.IExtension;
+		if (api) {
+			const stateModel = new MigrationStateModel(this.stateModel.extensionContext, connectionId, api.sqlMigration);
+			this.stateModel.extensionContext.subscriptions.push(stateModel);
+			this.createWizard(stateModel);
+		}
 	}
 
 	private async createWizard(stateModel: MigrationStateModel): Promise<void> {
@@ -53,13 +60,13 @@ export class WizardController {
 
 
 		wizard.pages = pages.map(p => p.getwizardPage());
-		if (this.stateModel.savedInfo.closedPage) {
-			// this did not set the current page
-			wizard.setCurrentPage(this.stateModel.savedInfo.closedPage);
-		}
+
 		const wizardSetupPromises: Thenable<void>[] = [];
 		wizardSetupPromises.push(...pages.map(p => p.registerWizardContent()));
 		wizardSetupPromises.push(wizard.open());
+		if (this.stateModel.resumeAssessment) {
+			wizardSetupPromises.push(wizard.setCurrentPage(this.stateModel.savedInfo.closedPage));
+		}
 
 		this.stateModel.extensionContext.subscriptions.push(wizard.onPageChanged(async (pageChangeInfo: azdata.window.WizardPageChangeInfo) => {
 			const newPage = pageChangeInfo.newPage;

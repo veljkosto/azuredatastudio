@@ -36,7 +36,7 @@ export const COLLECTING_SOURCE_CONFIGURATIONS_ERROR = (error: string = ''): stri
 
 export const SKU_RECOMMENDATION_PAGE_TITLE = localize('sql.migration.wizard.sku.title', "Azure SQL Target");
 export const SKU_RECOMMENDATION_ALL_SUCCESSFUL = (databaseCount: number): string => {
-	return localize('sql.migration.wizard.sku.all', "Based on the assessment results, all {0} of your database(s) in online state can be migrated to Azure SQL.", databaseCount);
+	return localize('sql.migration.wizard.sku.all', "Based on the assessment results, all {0} of your databases in online state can be migrated to Azure SQL.", databaseCount);
 };
 export const SKU_RECOMMENDATION_SOME_SUCCESSFUL = (migratableCount: number, databaseCount: number): string => {
 	return localize('sql.migration.wizard.sku.some', "Based on the results of our source configuration scans, {0} out of {1} of your databases can be migrated to Azure SQL.", migratableCount, databaseCount);
@@ -52,11 +52,11 @@ export const SUBSCRIPTION_SELECTION_PAGE_TITLE = localize('sql.migration.wizard.
 export const SUBSCRIPTION_SELECTION_AZURE_ACCOUNT_TITLE = localize('sql.migration.wizard.subscription.azure.account.title', "Azure Account");
 export const SUBSCRIPTION_SELECTION_AZURE_SUBSCRIPTION_TITLE = localize('sql.migration.wizard.subscription.azure.subscription.title', "Azure Subscription");
 export const SUBSCRIPTION_SELECTION_AZURE_PRODUCT_TITLE = localize('sql.migration.wizard.subscription.azure.product.title', "Azure Product");
-export const SKU_RECOMMENDATION_VIEW_ASSESSMENT_MI = localize('sql.migration.sku.recommendation.view.assessment.mi', "View assessment results and select one or more  database(s) to migrate to Azure SQL Managed Instance (PaaS)");
-export const SKU_RECOMMENDATION_VIEW_ASSESSMENT_VM = localize('sql.migration.sku.recommendation.view.assessment.vm', "View assessment results and select one or more  database(s) to migrate to SQL Server on Azure Virtual Machine (IaaS)");
+export const SKU_RECOMMENDATION_VIEW_ASSESSMENT_MI = localize('sql.migration.sku.recommendation.view.assessment.mi', "View assessment results and select one or more  databases to migrate to Azure SQL Managed Instance (PaaS)");
+export const SKU_RECOMMENDATION_VIEW_ASSESSMENT_VM = localize('sql.migration.sku.recommendation.view.assessment.vm', "View assessment results and select one or more  databases to migrate to SQL Server on Azure Virtual Machine (IaaS)");
 export const VIEW_SELECT_BUTTON_LABEL = localize('sql.migration.view.select.button.label', "View/Select");
 export function TOTAL_DATABASES_SELECTED(selectedDbCount: number, totalDbCount: number): string {
-	return localize('total.databases.selected', "{0} of {1} Database(s) selected.", selectedDbCount, totalDbCount);
+	return localize('total.databases.selected', "{0} of {1} Databases selected.", selectedDbCount, totalDbCount);
 }
 export const SELECT_TARGET_TO_CONTINUE = localize('sql.migration.select.target.to.continue', "Please select a target to continue");
 export const SELECT_DATABASE_TO_MIGRATE = localize('sql.migration.select.database.to.migrate', "Please select databases to migrate");
@@ -264,7 +264,7 @@ export const AZURE_ACCOUNT_LINKED = localize('sql.migration.summary.azure.accoun
 export const MIGRATION_TARGET = localize('sql.migration.summary.migration.target', "Migration target");
 export const SUMMARY_MI_TYPE = localize('sql.migration.summary.mi.type', "Azure SQL Managed Instance");
 export const SUMMARY_VM_TYPE = localize('sql.migration.summary.vm.type', "SQL Server on Azure Virtual Machine");
-export const SUMMARY_DATABASE_COUNT_LABEL = localize('sql.migration.summary.database.count', "Database(s) to be migrated");
+export const SUMMARY_DATABASE_COUNT_LABEL = localize('sql.migration.summary.database.count', "Databases to be migrated");
 export const SUMMARY_AZURE_STORAGE_SUBSCRIPTION = localize('sql.migration.summary.azure.storage.subscription', "Azure storage subscription");
 export const SUMMARY_AZURE_STORAGE = localize('sql.migration.summary.azure.storage', "Azure storage");
 export const SUMMARY_IR_NODE = localize('sql.migration.ir.node', "Integration Runtime node");
@@ -274,7 +274,7 @@ export const BLOB_CONTAINER_RESOURCE_GROUP = localize('sql.migration.blob.contai
 export const BLOB_CONTAINER_STORAGE_ACCOUNT = localize('sql.migration.blob.container.storage.account.label', "Blob container storage account");
 export const FILE_SHARE = localize('sql.migration.file.share.title', "File Share");
 export const MIGRATION_STARTED = localize('sql.migration.started.notification', "Migration in progress");
-export const SOURCE_DATABASES = localize('sql.migration.source.databases', "Source Database(s)");
+export const SOURCE_DATABASES = localize('sql.migration.source.databases', "Source Databases");
 export const MODE = localize('sql.migration.mode', "Mode");
 export const BACKUP_LOCATION = localize('sql.migration.backup.location', "Backup Location");
 export const AZURE_STORAGE_ACCOUNT_TO_UPLOAD_BACKUPS = localize('sql.migration.azure.storage.account.to.upload.backups', "Azure Storage Account to Upload Backups");
@@ -473,7 +473,7 @@ export const USERNAME = localize('sql.migration.username', "Username");
 export const SIZE = localize('sql.migration.size', "Size (MB)");
 export const LAST_BACKUP = localize('sql.migration.last.backup', "Last backup");
 export const DATABASE_FOR_MIGRATION = localize('sql.migration.database.migration', "Databases for migration");
-export const DATABASE_MIGRATE_TEXT = localize('sql.migrate.text', "Select database(s) that you want to migrate to Azure SQL");
+export const DATABASE_MIGRATE_TEXT = localize('sql.migrate.text', "Select databases that you want to migrate to Azure SQL");
 export const OFFLINE_CAPS = localize('sql.migration.offline.caps', "OFFLINE");
 
 //Assessment Dialog
