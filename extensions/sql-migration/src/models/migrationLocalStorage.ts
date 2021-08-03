@@ -16,7 +16,7 @@ export class MigrationLocalStorage {
 	}
 
 	public static async getMigrationsBySourceConnections(connectionProfile: azdata.connection.ConnectionProfile, refreshStatus?: boolean): Promise<MigrationContext[]> {
-
+		const undefinedSessionId = '{undefined}';
 		const result: MigrationContext[] = [];
 		const validMigrations: MigrationContext[] = [];
 
@@ -31,7 +31,8 @@ export class MigrationLocalStorage {
 						migration.migrationContext = await getMigrationStatus(
 							migration.azureAccount,
 							migration.subscription,
-							migration.migrationContext
+							migration.migrationContext,
+							migration.sessionId ?? undefinedSessionId
 						);
 						migration.migrationContext.properties.sourceDatabaseName = sourceDatabase;
 						migration.migrationContext.properties.backupConfiguration = backupConfiguration;
@@ -39,7 +40,8 @@ export class MigrationLocalStorage {
 							migration.asyncOperationResult = await getMigrationAsyncOperationDetails(
 								migration.azureAccount,
 								migration.subscription,
-								migration.asyncUrl
+								migration.asyncUrl,
+								migration.sessionId ?? undefinedSessionId
 							);
 						}
 					}

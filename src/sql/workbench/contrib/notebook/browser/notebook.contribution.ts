@@ -335,6 +335,11 @@ configurationRegistry.registerConfiguration({
 			'default': 200,
 			'minimum': 10,
 			'description': localize('notebook.maxRichTextUndoHistory', "The maximum number of changes stored in the undo history for the notebook Rich Text editor.")
+		},
+		'notebook.useAbsoluteFilePaths': {
+			'type': 'boolean',
+			'default': false,
+			'description': localize('notebook.useAbsoluteFilePaths', "Use absolute file paths when linking to other notebooks.")
 		}
 	}
 });
@@ -678,6 +683,7 @@ export class NotebookEditorOverrideContribution extends Disposable implements IW
 	) {
 		super();
 		this.registerEditorOverrides();
+
 		this._logService.info(`Registering Notebook editor overrides`);
 		// Refresh the editor overrides whenever the languages change so we ensure we always have
 		// the latest up to date list of extensions for each language
