@@ -5,16 +5,18 @@
 
 import * as vscode from 'vscode';
 import * as constants from '../common/constants';
-import { IGenerateScriptSettings, IPublishSettings } from '../models/IPublishSettings';
 import { Project } from '../models/project';
 import { PublishProfile, readPublishProfile } from '../models/publishProfile/publishProfile';
 import { promptForPublishProfile } from './publishDatabaseDialog';
-import { getVscodeMssqlApi } from '../common/utils';
+import { getDefaultPublishDeploymentOptions, getVscodeMssqlApi } from '../common/utils';
+import { IConnectionInfo } from 'vscode-mssql';
+import { ProjectsController } from '../controllers/projectController';
+import { IDeploySettings } from '../models/IDeploySettings';
 
 /**
  * Create flow for Publishing a database using only VS Code-native APIs such as QuickPick
  */
-export async function launchPublishDatabaseQuickpick(project: Project): Promise<void> {
+export async function launchPublishDatabaseQuickpick(project: Project, projectController: ProjectsController): Promise<void> {
 
 	// 1. Select publish settings file (optional)
 	// Create custom quickpick so we can control stuff like displaying the loading indicator
@@ -73,15 +75,19 @@ export async function launchPublishDatabaseQuickpick(project: Project): Promise<
 
 	// 2. Select connection
 	const vscodeMssqlApi = await getVscodeMssqlApi();
+	let connectionProfile: IConnectionInfo | undefined = undefined;
+	let connectionUri: string = '';
 	let dbs: string[] | undefined = undefined;
 	while (!dbs) {
-		const connectionProfile = await vscodeMssqlApi.promptForConnection(true);
+		connectionProfile = await vscodeMssqlApi.promptForConnection(true);
 		if (!connectionProfile) {
+			// User cancelled
 			return;
 		}
 		// Get the list of databases now to validate that the connection is valid and re-prompt them if it isn't
 		try {
-			dbs = await vscodeMssqlApi.listDatabases(connectionProfile);
+			connectionUri = await vscodeMssqlApi.connect(connectionProfile);
+			dbs = await vscodeMssqlApi.listDatabases(connectionUri);
 		} catch (err) {
 			// no-op, the mssql extension handles showing the error to the user. We'll just go
 			// back and prompt the user for a connection again
@@ -188,17 +194,13 @@ export async function launchPublishDatabaseQuickpick(project: Project): Promise<
 
 	// TODO@chgagnon: Get deployment options
 	// 6. Generate script/publish
-	let settings: IPublishSettings | IGenerateScriptSettings = {
+	let settings: IDeploySettings = {
 		databaseName: databaseName,
-		serverName: '', // TODO@chgagnon: Get from connection profile
-		connectionUri: '', // TODO@chgagnon: Get from connection profile
-		sqlCmdVariables: undefined, // this.getSqlCmdVariablesForPublish(),
-		deploymentOptions: undefined, // await this.getDeploymentOptions(),
-		profileUsed: true, // this.profileUsed,
+		serverName: connectionProfile!.server,
+		connectionUri: connectionUri,
+		sqlCmdVariables: sqlCmdVariables,
+		deploymentOptions: await getDefaultPublishDeploymentOptions(project),
+		profileUsed: !!publishProfile
 	};
-
-	// TODO@chgagnon Consolidate creation of the settings into one place
-	if (action === constants.publish) {
-		(settings as IPublishSettings).upgradeExisting = true;
-	}
+	await projectController.publishOrScriptProject(project, settings, action === constants.publish);
 }
