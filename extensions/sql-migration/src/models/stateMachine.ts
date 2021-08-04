@@ -98,7 +98,7 @@ export interface SavedInfo {
 	closedPage: number;
 	serverAssessment: ServerAssessment | null;
 	azureAccount: azdata.Account | null;
-	selectedDatabases: string[];
+	selectedDatabases: azdata.DeclarativeTableCellValue[][];
 }
 
 export class MigrationStateModel implements Model, vscode.Disposable {
@@ -155,6 +155,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		'msdb',
 		'model'
 	];
+	public databaseSelectorTableValues!: azdata.DeclarativeTableCellValue[][];
 
 	constructor(
 		public extensionContext: vscode.ExtensionContext,
@@ -191,6 +192,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		// stress test backend & dialog component
 		const assessmentResults = await this.migrationService.getAssessments(
 			ownerUri,
+			// on save and close databaseAssessment is undefined
 			this._databaseAssessment
 		);
 		const dbAssessments = assessmentResults?.assessmentResult.databases.filter(d => !this.excludeDbs.includes(d.name)).map(d => {
@@ -777,7 +779,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			// Database Selector
 			case 1:
 				console.log('Saving assessment from page: Database Selector');
-				saveInfo.selectedDatabases = this._databaseAssessment;
+				saveInfo.selectedDatabases = this.databaseSelectorTableValues;
 			// Azure Account
 			case 0:
 				console.log('Saving assessment from page: Azure Account');

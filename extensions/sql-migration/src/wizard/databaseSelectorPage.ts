@@ -244,13 +244,17 @@ export class DatabaseSelectorPage extends MigrationWizardPage {
 				]
 			}
 		).component();
-
-		await this._databaseSelectorTable.setDataValues(this._databaseTableValues);
+		if (this.migrationStateModel.resumeAssessment) {
+			await this._databaseSelectorTable.setDataValues(this.migrationStateModel.savedInfo.selectedDatabases);
+		} else {
+			await this._databaseSelectorTable.setDataValues(this._databaseTableValues);
+		}
 		this._disposables.push(this._databaseSelectorTable.onDataChanged(() => {
 			this._dbCount.updateProperties({
 				'value': constants.DATABASES_SELECTED(this.selectedDbs().length, this._databaseTableValues.length)
 			});
 			this.migrationStateModel._databaseAssessment = this.selectedDbs();
+			this.migrationStateModel.databaseSelectorTableValues = <azdata.DeclarativeTableCellValue[][]>this._databaseSelectorTable.dataValues;
 		}));
 		const flex = view.modelBuilder.flexContainer().withLayout({
 			flexFlow: 'column',

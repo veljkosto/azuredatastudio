@@ -199,8 +199,16 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 		} finally {
 			this._azureAccountsDropdown.loading = false;
 		}
-
-		selectDropDownIndex(this._azureAccountsDropdown, 0);
+		// Choose dropdown to select here
+		if (this.migrationStateModel.resumeAssessment) {
+			this._azureAccountsDropdown.values.forEach((account, index) => {
+				if (account.name === this.migrationStateModel.savedInfo.azureAccount?.displayInfo.userId) {
+					selectDropDownIndex(this._azureAccountsDropdown, index);
+				}
+			});
+		} else {
+			selectDropDownIndex(this._azureAccountsDropdown, 0);
+		}
 	}
 
 	public async onPageEnter(): Promise<void> {

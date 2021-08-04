@@ -27,9 +27,7 @@ export class WizardController {
 	public async openWizard(connectionId: string, page?: number): Promise<void> {
 		const api = (await vscode.extensions.getExtension(mssql.extension.name)?.activate()) as mssql.IExtension;
 		if (api) {
-			const stateModel = new MigrationStateModel(this.stateModel.extensionContext, connectionId, api.sqlMigration);
-			this.stateModel.extensionContext.subscriptions.push(stateModel);
-			this.createWizard(stateModel);
+			this.createWizard(this.stateModel);
 		}
 	}
 
