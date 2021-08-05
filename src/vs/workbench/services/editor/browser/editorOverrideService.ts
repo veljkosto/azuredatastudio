@@ -213,8 +213,10 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		const findMatchingContribPoint = (contributionPoints: ContributionPoints, viewType: string) => {
 			return contributionPoints.find((contribPoint) => {
 				if (contribPoint.options && contribPoint.options.canSupportResource !== undefined) {
+					this.logService.info(`findContrib canSupportResource ${viewType} ${contribPoint.editorInfo.id} ${contribPoint.options.canSupportResource(resource)}`);
 					return contribPoint.editorInfo.id === viewType && contribPoint.options.canSupportResource(resource);
 				}
+				this.logService.info(`findContrib id ${viewType} ${contribPoint.editorInfo.id}`);
 				return contribPoint.editorInfo.id === viewType;
 			});
 		};
@@ -230,12 +232,12 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		let contributionPoints = this.findMatchingContributions(resource);
 		this.logService.info(`Found contribution points for ${resource} - ${JSON.stringify(contributionPoints)}`);
 		const associationsFromSetting = this.getAssociationsForResource(resource);
-
+		this.logService.info(`Associations from setting ${JSON.stringify(associationsFromSetting)}`);
 		// We only want built-in+ if no user defined setting is found, else we won't override
 		const possibleContributionPoints = contributionPoints.filter(contribPoint => priorityToRank(contribPoint.editorInfo.priority) >= priorityToRank(ContributedEditorPriority.builtin) && contribPoint.editorInfo.id !== DEFAULT_EDITOR_ASSOCIATION.id);
 		// If the user has a setting we use that, else choose the highest priority editor that is built-in+
 		const selectedViewType = associationsFromSetting[0]?.viewType || possibleContributionPoints[0]?.editorInfo.id;
-
+		this.logService.info(`Possible contribution points ${JSON.stringify(possibleContributionPoints)}`);
 		let conflictingDefault = false;
 		if (associationsFromSetting.length === 0 && possibleContributionPoints.length > 1) {
 			conflictingDefault = true;
