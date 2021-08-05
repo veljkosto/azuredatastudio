@@ -200,7 +200,7 @@ export class AccountsSelectionPage extends MigrationWizardPage {
 			this._azureAccountsDropdown.loading = false;
 		}
 		// Choose dropdown to select here
-		if (this.migrationStateModel.resumeAssessment) {
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 0) {
 			this._azureAccountsDropdown.values.forEach((account, index) => {
 				if (account.name === this.migrationStateModel.savedInfo.azureAccount?.displayInfo.userId) {
 					selectDropDownIndex(this._azureAccountsDropdown, index);

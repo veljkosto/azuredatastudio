@@ -244,7 +244,7 @@ export class DatabaseSelectorPage extends MigrationWizardPage {
 				]
 			}
 		).component();
-		if (this.migrationStateModel.resumeAssessment) {
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 1) {
 			await this._databaseSelectorTable.setDataValues(this.migrationStateModel.savedInfo.selectedDatabases);
 		} else {
 			await this._databaseSelectorTable.setDataValues(this._databaseTableValues);
