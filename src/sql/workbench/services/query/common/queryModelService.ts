@@ -5,7 +5,7 @@
 
 import * as GridContentEvents from 'sql/workbench/services/query/common/gridContentEvents';
 import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
-import { ICellValue, ResultSetSubset } from 'sql/workbench/services/query/common/query';
+import { ICellValue, ResultSetSubset, BatchSummary } from 'sql/workbench/services/query/common/query';
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { IQueryModelService, IQueryEvent } from 'sql/workbench/services/query/common/queryModel';
 
@@ -185,6 +185,16 @@ export class QueryModelService implements IQueryModelService {
 	 */
 	public async runQuery(uri: string, range: IRange, runOptions?: azdata.ExecutionPlanOptions): Promise<void> {
 		return this.doRunQuery(uri, range, false, runOptions);
+	}
+
+	public restoreResults(uri: string, newBatchSet: BatchSummary[]): void {
+		let queryRunner: QueryRunner | undefined;
+		let info: QueryInfo;
+		if (!this._queryInfoMap.has(uri)) {
+			info = this.initQueryRunner(uri);
+			queryRunner = info.queryRunner!;
+		}
+		queryRunner.batchSets = newBatchSet;
 	}
 
 	/**

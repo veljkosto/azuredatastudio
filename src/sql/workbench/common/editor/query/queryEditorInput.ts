@@ -320,7 +320,7 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		this.state.executing = false;
 	}
 
-	public restoreState(range?: IRange, executePlanOptions?: ExecutionPlanOptions): void {
+	public restoreState(): void {
 		this.state.resultsVisible = true;
 	}
 
