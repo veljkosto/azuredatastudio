@@ -19,6 +19,7 @@ import { startsWith } from 'vs/base/common/strings';
 import { IRange } from 'vs/editor/common/core/range';
 import { AbstractTextResourceEditorInput } from 'vs/workbench/common/editor/textResourceEditorInput';
 import { IQueryEditorConfiguration } from 'sql/platform/query/common/query';
+import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
 
 const MAX_SIZE = 13;
 
@@ -202,6 +203,10 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		await this.queryModelService.renameQuery(newUri, this.uri);
 	}
 
+	protected getQueryRunner(): QueryRunner {
+		return this.queryModelService.getQueryRunner(this.uri);
+	}
+
 	// Forwarding resource functions to the inline sql file editor
 	public override isDirty(): boolean { return this._text.isDirty(); }
 	public get resource(): URI { return this._text.resource; }
@@ -293,6 +298,9 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 				this.runQuery(range, { displayActualQueryPlan: true });
 			}
 		}
+		else if (this.text['batchSets']) {
+			this.restoreState();
+		}
 		this._onDidChangeLabel.fire();
 	}
 
@@ -310,6 +318,10 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 
 	public onQueryComplete(): void {
 		this.state.executing = false;
+	}
+
+	public restoreState(range?: IRange, executePlanOptions?: ExecutionPlanOptions): void {
+		this.state.resultsVisible = true;
 	}
 
 	/**

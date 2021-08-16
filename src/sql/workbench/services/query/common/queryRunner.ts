@@ -114,6 +114,13 @@ export default class QueryRunner extends Disposable {
 	/**
 	 * For public use only, for private use, directly access the member
 	 */
+	public set batchSets(newBatchSet: BatchSummary[]) {
+		this._batchSets = newBatchSet;
+	}
+
+	/**
+	 * For public use only, for private use, directly access the member
+	 */
 	public get messages(): IQueryMessage[] {
 		return this._messages.slice(0);
 	}
