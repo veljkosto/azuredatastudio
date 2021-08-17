@@ -18,9 +18,10 @@ import * as path from 'path';
 import { loremIpsum } from 'lorem-ipsum';
 
 type AllIssues = { [key: string]: NotebookIssues };
-type NotebookIssues = { spaceDifferences: number, issues: CellIssue[] };
+type NotebookIssues = { nbGuid: string, spaceDifferences: number, issues: CellIssue[] };
 // Note - we use single character names here so that it's easier to do side-by-side comparison (the exact names don't matter much, we just want them to be the same length)
 type CellIssue = {
+	cellGuid: string, // The guid of the cell
 	o: string, // original text
 	m: string, // modified lorem-ipsum-ified text
 	s: string, // original sql parse result
@@ -68,7 +69,7 @@ suite('LivesiteRepo', function (): void {
 				// console.log(`Found ${notebook.cells.length} cells total`);
 				const textCells = notebook.cells.filter(c => c.cell_type === CellTypes.Markdown);
 				// console.log(`Found ${textCells.length} text cells`);
-				textCells.forEach(cell => {
+				textCells.forEach((cell, index) => {
 					const cellSource = typeof cell.source === 'string' ? cell.source : cell.source.join('\n');
 					const result = testMarked(cellSource);
 					try {
@@ -77,7 +78,7 @@ suite('LivesiteRepo', function (): void {
 						// The assert failed so log that this cell failed
 						const relativePath = path.relative(nbDir, fullPath);
 						if (allIssues[relativePath] === undefined) {
-							allIssues[relativePath] = { issues: [], spaceDifferences: 0 };
+							allIssues[relativePath] = { nbGuid: notebook.metadata['azdata_notebook_guid'], issues: [], spaceDifferences: 0 };
 						}
 						if (ex?.toString()?.includes('Lines skipped')) {
 							// Ignore space-only differences
@@ -97,7 +98,7 @@ suite('LivesiteRepo', function (): void {
 								return value;
 							});
 							const modifiedResult = testMarked(modified);
-							allIssues[relativePath].issues.push({ o: result.originalText, m: modified, s: result.sqlResult, v: result.vsCodeResult, ms: modifiedResult.sqlResult, mv: modifiedResult.vsCodeResult });
+							allIssues[relativePath].issues.push({ cellGuid: cell.metadata?.azdata_cell_guid ?? index.toString(), o: result.originalText, m: modified, s: result.sqlResult, v: result.vsCodeResult, ms: modifiedResult.sqlResult, mv: modifiedResult.vsCodeResult });
 							console.log(ex);
 						}
 					}
@@ -127,8 +128,8 @@ suite('LivesiteRepo', function (): void {
 	 * This test is for checking whether there are any differences in the generated output for a given markdown string between
 	 * the two versions of marked.js.
 	 */
-	test.skip('compare marked.js', () => {
-		const result = testMarked(''); // test markdown string goes here
+	const result = testMarked(''); // test markdown string goes here
+	test('compare marked.js', () => {
 		console.log(escapeCharacters(result.sqlResult)); // This outputs the escaped value from the sql marked.js parser - which should be used as the expected baseline value in actual tests
 		assert.strictEqual(result.sqlResult, result.vsCodeResult);
 	});
