@@ -205,7 +205,7 @@ export default class QueryRunner extends Disposable {
 		}
 	}
 
-	private handleSuccessRunQueryResult() {
+	public handleSuccessRunQueryResult() {
 		// this isn't exact, but its the best we can do
 		this._queryStartTime = new Date();
 		// The query has started, so lets fire up the result pane

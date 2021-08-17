@@ -195,6 +195,7 @@ export class QueryModelService implements IQueryModelService {
 			queryRunner = info.queryRunner!;
 		}
 		queryRunner.batchSets = newBatchSet;
+		queryRunner.handleSuccessRunQueryResult();
 	}
 
 	/**

@@ -299,7 +299,7 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 			}
 		}
 		else if (this.text['batchSets']) {
-			this.restoreState();
+			this.restoreResults();
 		}
 		this._onDidChangeLabel.fire();
 	}
@@ -320,7 +320,8 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		this.state.executing = false;
 	}
 
-	public restoreState(): void {
+	public restoreResults(): void {
+		this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
 		this.state.resultsVisible = true;
 	}
 
