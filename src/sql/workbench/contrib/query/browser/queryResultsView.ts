@@ -300,11 +300,22 @@ export class QueryResultsView extends Disposable {
 		this._input = input;
 		this.runnerDisposables.clear();
 
-		[this.resultsTab, this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
+		if (!input['gridPanelState']) {
+			[this.resultsTab, this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
+		} else {
+			[this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
+		}
 		this.dynamicModelViewTabs.forEach(t => t.clear());
 
 		if (input) {
-			this.resultsTab.view.state = input.state.gridPanelState;
+			if (!input['gridPanelState']) {
+				this.resultsTab.view.state = input.state.gridPanelState;
+			}
+			else {
+				input.state.gridPanelState = input['gridPanelState'];
+				this.resultsTab.view.state = input.state.gridPanelState;
+				input['gridPanelState'] = undefined;
+			}
 			this.qpTab.view.setState(input.state.queryPlanState);
 			this.topOperationsTab.view.setState(input.state.topOperationsState);
 			this.chartTab.view.state = input.state.chartState;
@@ -333,6 +344,17 @@ export class QueryResultsView extends Disposable {
 		this._input = undefined;
 		this.runnerDisposables.clear();
 		this.resultsTab.clear();
+		this.messagesTab.clear();
+		this.qpTab.clear();
+		this.topOperationsTab.clear();
+		this.chartTab.clear();
+		this.dynamicModelViewTabs.forEach(t => t.clear());
+	}
+
+	clearInputWithoutResultsTab() {
+		this._input = undefined;
+		this.runnerDisposables.clear();
+		//this.resultsTab.clear();
 		this.messagesTab.clear();
 		this.qpTab.clear();
 		this.topOperationsTab.clear();

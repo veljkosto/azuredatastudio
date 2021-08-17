@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
-import { ICellValue, IQueryMessage, ResultSetSubset, BatchSummary } from 'sql/workbench/services/query/common/query';
+import { ICellValue, IQueryMessage, ResultSetSubset } from 'sql/workbench/services/query/common/query'; //BatchSummary should be added for restoreResults
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
 import { Event } from 'vs/base/common/event';
@@ -59,8 +59,7 @@ export interface IQueryModelService {
 	runQueryString(uri: string, selection: string | undefined): void;
 	cancelQuery(input: QueryRunner | string): void;
 	disposeQuery(uri: string): void;
-	renameQuery(newUri: string, oldUri: string);
-	restoreResults(uri: string, newBatchSet: BatchSummary[])
+	//restoreResults(uri: string, newBatchSet: BatchSummary[])
 	isRunningQuery(uri: string): boolean;
 
 	getDataService(uri: string): DataService;

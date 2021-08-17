@@ -88,6 +88,12 @@ export class QueryEditorState extends Disposable {
 		return this._resultsVisible;
 	}
 
+	public resultsVisibleWithoutFire(val: boolean) {
+		if (val !== this._resultsVisible) {
+			this._resultsVisible = val;
+		}
+	}
+
 	public set executing(val: boolean) {
 		if (val !== this._executing) {
 			this._executing = val;
@@ -199,10 +205,6 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		}
 	}
 
-	protected async renameQuery(newUri: string): Promise<void> {
-		await this.queryModelService.renameQuery(newUri, this.uri);
-	}
-
 	protected getQueryRunner(): QueryRunner {
 		return this.queryModelService.getQueryRunner(this.uri);
 	}
@@ -299,7 +301,7 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 			}
 		}
 		else if (this.text['batchSets']) {
-			this.restoreResults();
+			//this.restoreResults();
 		}
 		this._onDidChangeLabel.fire();
 	}
@@ -320,10 +322,10 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		this.state.executing = false;
 	}
 
-	public restoreResults(): void {
-		this.state.resultsVisible = true;
-		this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
-	}
+	// public restoreResults(): void {
+	// 	this.state.resultsVisible = true;
+	// 	this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
+	// }
 
 	/**
 	 * Get the color that should be displayed

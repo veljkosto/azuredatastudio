@@ -141,6 +141,11 @@ export class QueryResultsEditor extends EditorPane {
 		super.clearInput();
 	}
 
+	clearInputExceptResults() {
+		this.resultsView.clearInputWithoutResultsTab();
+		super.clearInput();
+	}
+
 	public chart(dataId: { batchId: number, resultId: number }) {
 		this.resultsView.chartData(dataId);
 	}

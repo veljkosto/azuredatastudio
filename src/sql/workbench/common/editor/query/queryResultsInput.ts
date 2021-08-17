@@ -14,7 +14,7 @@ import { QueryModelViewState } from 'sql/workbench/common/editor/query/modelView
 import { URI } from 'vs/base/common/uri';
 
 export class ResultsViewState {
-	public readonly gridPanelState: GridPanelState = new GridPanelState();
+	public gridPanelState: GridPanelState = new GridPanelState();
 	public readonly chartState: ChartState = new ChartState();
 	public readonly queryPlanState: QueryPlanState = new QueryPlanState();
 	public readonly topOperationsState = new TopOperationsState();

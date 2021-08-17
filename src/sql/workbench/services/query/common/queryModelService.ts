@@ -5,7 +5,7 @@
 
 import * as GridContentEvents from 'sql/workbench/services/query/common/gridContentEvents';
 import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
-import { ICellValue, ResultSetSubset, BatchSummary, CompleteBatchSummary } from 'sql/workbench/services/query/common/query';
+import { ICellValue, ResultSetSubset } from 'sql/workbench/services/query/common/query'; //BatchSummary, CompleteBatchSummary should be added for restoreResults.
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { IQueryModelService, IQueryEvent } from 'sql/workbench/services/query/common/queryModel';
 
@@ -187,18 +187,18 @@ export class QueryModelService implements IQueryModelService {
 		return this.doRunQuery(uri, range, false, runOptions);
 	}
 
-	public async restoreResults(uri: string, newBatchSet: BatchSummary[]): Promise<void> {
-		let queryRunner: QueryRunner | undefined;
-		let info: QueryInfo;
-		if (!this._queryInfoMap.has(uri)) {
-			info = this.initQueryRunner(uri);
-			queryRunner = info.queryRunner!;
-		}
-		queryRunner.batchSets = newBatchSet;
-		let completedBatchSets: CompleteBatchSummary[] = queryRunner.batchSets as CompleteBatchSummary[];
-		await queryRunner.handleSuccessRunQueryResult();
-		queryRunner.handleQueryComplete(completedBatchSets);
-	}
+	// public async restoreResults(uri: string, newBatchSet: BatchSummary[]): Promise<void> {
+	// 	let queryRunner: QueryRunner | undefined;
+	// 	let info: QueryInfo;
+	// 	if (!this._queryInfoMap.has(uri)) {
+	// 		info = this.initQueryRunner(uri);
+	// 		queryRunner = info.queryRunner!;
+	// 	}
+	// 	queryRunner.batchSets = newBatchSet;
+	// 	let completedBatchSets: CompleteBatchSummary[] = queryRunner.batchSets as CompleteBatchSummary[];
+	// 	await queryRunner.handleSuccessRunQueryResult();
+	// 	queryRunner.handleQueryComplete(completedBatchSets);
+	// }
 
 	/**
 	 * Run the current SQL statement for the given URI
@@ -419,25 +419,6 @@ export class QueryModelService implements IQueryModelService {
 		// remove our info map
 		if (this._queryInfoMap.has(ownerUri)) {
 			this._queryInfoMap.delete(ownerUri);
-		}
-	}
-
-	public async renameQuery(newUri: string, oldUri: string): Promise<void> {
-		// Get existing query runner
-		let queryRunner = this.internalGetQueryRunner(oldUri);
-		if (queryRunner) {
-			await queryRunner.renameQuery(newUri, oldUri);
-		}
-		// remove the old key and set new key with same query info as old uri.
-		if (this._queryInfoMap.has(oldUri)) {
-			let info = this._queryInfoMap.get(oldUri);
-			if (info) {
-				info.queryRunner.uri = newUri;
-				info.dataService.uri = newUri;
-			}
-			this._queryInfoMap.set(newUri, info);
-
-			this._queryInfoMap.delete(oldUri);
 		}
 	}
 

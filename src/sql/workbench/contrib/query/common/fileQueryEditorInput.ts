@@ -28,6 +28,9 @@ export class FileQueryEditorInput extends QueryEditorInput {
 		@IConfigurationService configurationService: IConfigurationService
 	) {
 		super(description, text, results, connectionManagementService, queryModelService, configurationService);
+		if (text['gridPanelState']) {
+			results['gridPanelState'] = text['gridPanelState'];
+		}
 	}
 
 	public override resolve(): Promise<ITextFileEditorModel | BinaryEditorModel> {

@@ -1003,8 +1003,4 @@ declare module 'azdata' {
 	export interface VisualizationOptions {
 		type: VisualizationType;
 	}
-
-	export interface QueryProvider {
-		renameQuery(newUri: string, oldUri: string): Thenable<void>;
-	}
 }
