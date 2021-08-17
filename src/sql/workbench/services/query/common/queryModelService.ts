@@ -5,7 +5,7 @@
 
 import * as GridContentEvents from 'sql/workbench/services/query/common/gridContentEvents';
 import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
-import { ICellValue, ResultSetSubset, BatchSummary } from 'sql/workbench/services/query/common/query';
+import { ICellValue, ResultSetSubset, BatchSummary, CompleteBatchSummary } from 'sql/workbench/services/query/common/query';
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { IQueryModelService, IQueryEvent } from 'sql/workbench/services/query/common/queryModel';
 
@@ -187,7 +187,7 @@ export class QueryModelService implements IQueryModelService {
 		return this.doRunQuery(uri, range, false, runOptions);
 	}
 
-	public restoreResults(uri: string, newBatchSet: BatchSummary[]): void {
+	public async restoreResults(uri: string, newBatchSet: BatchSummary[]): Promise<void> {
 		let queryRunner: QueryRunner | undefined;
 		let info: QueryInfo;
 		if (!this._queryInfoMap.has(uri)) {
@@ -195,7 +195,9 @@ export class QueryModelService implements IQueryModelService {
 			queryRunner = info.queryRunner!;
 		}
 		queryRunner.batchSets = newBatchSet;
-		queryRunner.handleSuccessRunQueryResult();
+		let completedBatchSets: CompleteBatchSummary[] = queryRunner.batchSets as CompleteBatchSummary[];
+		await queryRunner.handleSuccessRunQueryResult();
+		queryRunner.handleQueryComplete(completedBatchSets);
 	}
 
 	/**

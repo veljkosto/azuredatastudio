@@ -321,8 +321,8 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 	}
 
 	public restoreResults(): void {
-		this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
 		this.state.resultsVisible = true;
+		this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
 	}
 
 	/**
