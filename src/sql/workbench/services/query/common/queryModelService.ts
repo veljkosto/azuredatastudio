@@ -5,7 +5,7 @@
 
 import * as GridContentEvents from 'sql/workbench/services/query/common/gridContentEvents';
 import QueryRunner from 'sql/workbench/services/query/common/queryRunner';
-import { ICellValue, ResultSetSubset, BatchSummary, CompleteBatchSummary } from 'sql/workbench/services/query/common/query'; //BatchSummary, CompleteBatchSummary should be added for restoreResults.
+import { ICellValue, ResultSetSubset, BatchSummary } from 'sql/workbench/services/query/common/query'; //BatchSummary, CompleteBatchSummary should be added for restoreResults.
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { IQueryModelService, IQueryEvent } from 'sql/workbench/services/query/common/queryModel';
 

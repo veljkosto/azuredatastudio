@@ -10,7 +10,7 @@ import { Event } from 'vs/base/common/event';
 import { QueryInfo } from 'sql/workbench/services/query/common/queryModelService';
 import { DataService } from 'sql/workbench/services/query/common/dataService';
 import { IRange } from 'vs/editor/common/core/range';
-import { ICellValue } from 'sql/workbench/services/query/common/query';
+import { ICellValue, BatchSummary } from 'sql/workbench/services/query/common/query';
 export class TestQueryModelService implements IQueryModelService {
 	_serviceBrand: any;
 	onRunQueryUpdate: Event<string>;
@@ -52,6 +52,9 @@ export class TestQueryModelService implements IQueryModelService {
 		throw new Error('Method not implemented.');
 	}
 	refreshResultsets(uri: string): void {
+		throw new Error('Method not implemented.');
+	}
+	restoreResults(uri: string, newBatchSet: BatchSummary[]): void {
 		throw new Error('Method not implemented.');
 	}
 	sendGridContentEvent(uri: string, eventName: string): void {
