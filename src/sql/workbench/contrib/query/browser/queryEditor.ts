@@ -348,12 +348,7 @@ export class QueryEditor extends EditorPane {
 			// Remember view settings if input changes
 			this.saveQueryEditorViewState(this.input);
 			this.currentTextEditor.clearInput();
-			if (!newInput.text['gridPanelState']) {
-				this.resultsEditor.clearInput();
-			}
-			else {
-				this.resultsEditor.clearInputExceptResults();
-			}
+			this.resultsEditor.clearInput();
 		}
 
 		// If we're switching editor types switch out the views
@@ -379,14 +374,7 @@ export class QueryEditor extends EditorPane {
 
 		this.inputDisposables.clear();
 		this.inputDisposables.add(this.input.state.onChange(c => this.updateState(c)));
-		if (newInput.text['gridPanelState']) {
-			this.updateState({ connectingChange: true, connectedChange: true, executingChange: true, resultsVisibleChange: false, sqlCmdModeChanged: true });
-			newInput.text['gridPanelState'] = undefined;
-			this.input.state.resultsVisibleWithoutFire(true);
-		}
-		else {
-			this.updateState({ connectingChange: true, connectedChange: true, executingChange: true, resultsVisibleChange: true, sqlCmdModeChanged: true });
-		}
+		this.updateState({ connectingChange: true, connectedChange: true, executingChange: true, resultsVisibleChange: true, sqlCmdModeChanged: true });
 		const editorViewState = this.loadTextEditorViewState(this.input.resource);
 
 		if (editorViewState && editorViewState.resultsHeight && this.splitview.length > 1) {

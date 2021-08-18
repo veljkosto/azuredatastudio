@@ -301,7 +301,7 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 			}
 		}
 		else if (this.text['batchSets']) {
-			//this.restoreResults();
+			this.restoreResults();
 		}
 		this._onDidChangeLabel.fire();
 	}
@@ -322,10 +322,14 @@ export abstract class QueryEditorInput extends EditorInput implements IConnectab
 		this.state.executing = false;
 	}
 
-	// public restoreResults(): void {
-	// 	this.state.resultsVisible = true;
-	// 	this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
-	// }
+	public restoreResults(): void {
+		this.state.resultsVisible = true;
+		this.queryModelService.restoreResults(this.uri, this.text['batchSets']);
+		let resultsView = this.results['ResultsViewRef'];
+		resultsView.onHide();
+		resultsView.onShow();
+		this.results['ResultsViewRef'] = undefined;
+	}
 
 	/**
 	 * Get the color that should be displayed

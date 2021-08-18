@@ -300,22 +300,11 @@ export class QueryResultsView extends Disposable {
 		this._input = input;
 		this.runnerDisposables.clear();
 
-		if (!input['gridPanelState']) {
-			[this.resultsTab, this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
-		} else {
-			[this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
-		}
+		[this.resultsTab, this.messagesTab, this.qpTab, this.topOperationsTab, this.chartTab].forEach(t => t.clear());
 		this.dynamicModelViewTabs.forEach(t => t.clear());
 
 		if (input) {
-			if (!input['gridPanelState']) {
-				this.resultsTab.view.state = input.state.gridPanelState;
-			}
-			else {
-				input.state.gridPanelState = input['gridPanelState'];
-				this.resultsTab.view.state = input.state.gridPanelState;
-				input['gridPanelState'] = undefined;
-			}
+			this.resultsTab.view.state = input.state.gridPanelState;
 			this.qpTab.view.setState(input.state.queryPlanState);
 			this.topOperationsTab.view.setState(input.state.topOperationsState);
 			this.chartTab.view.state = input.state.chartState;
@@ -336,6 +325,10 @@ export class QueryResultsView extends Disposable {
 					}
 				});
 				this.runnerDisposables.add(disposable);
+				if (input['batchSets']) {
+					input['batchSets'] = undefined;
+					input['ResultsViewRef'] = this.resultsTab.view;
+				}
 			}
 		}
 	}

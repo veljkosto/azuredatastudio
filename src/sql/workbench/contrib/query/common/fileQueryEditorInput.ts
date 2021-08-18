@@ -28,8 +28,8 @@ export class FileQueryEditorInput extends QueryEditorInput {
 		@IConfigurationService configurationService: IConfigurationService
 	) {
 		super(description, text, results, connectionManagementService, queryModelService, configurationService);
-		if (text['gridPanelState']) {
-			results['gridPanelState'] = text['gridPanelState'];
+		if (text['batchSets']) {
+			this.results['batchSets'] = text['batchSets'];
 		}
 	}
 

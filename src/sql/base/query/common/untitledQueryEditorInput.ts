@@ -44,15 +44,13 @@ export class UntitledQueryEditorInput extends QueryEditorInput implements IEncod
 
 	override async save(group: GroupIdentifier, options?: ISaveOptions): Promise<IEditorInput | undefined> {
 		let preProcessed = await this.text.saveAs(group, options);
-		preProcessed['gridPanelState'] = this.results.state.gridPanelState;
-		//preProcessed['batchSets'] = this.getQueryRunner().batchSets; //For restoreResults in QueryModelService/QueryRunner if that is to be used.
+		preProcessed['batchSets'] = this.getQueryRunner().batchSets; //For restoreResults in QueryModelService/QueryRunner if that is to be used.
 		return preProcessed;
 	}
 
 	override async saveAs(group: GroupIdentifier, options?: ISaveOptions): Promise<IEditorInput | undefined> {
 		let preProcessed = await this.text.saveAs(group, options);
-		preProcessed['gridPanelState'] = this.results.state.gridPanelState;
-		//preProcessed['batchSets'] = this.getQueryRunner().batchSets; //For restoreResults in QueryModelService/QueryRunner if that is to be used.
+		preProcessed['batchSets'] = this.getQueryRunner().batchSets; //For restoreResults in QueryModelService/QueryRunner if that is to be used.
 		return preProcessed;
 	}
 
