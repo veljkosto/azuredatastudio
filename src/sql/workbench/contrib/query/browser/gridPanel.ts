@@ -352,6 +352,8 @@ export abstract class GridTableBase<T> extends Disposable implements IView {
 
 	private _state: GridTableState;
 
+	private lastGoodResult;
+
 	private scrolled = false;
 	private visible = false;
 
@@ -766,6 +768,11 @@ export abstract class GridTableBase<T> extends Disposable implements IView {
 
 	private loadData(offset: number, count: number): Thenable<T[]> {
 		return this.gridDataProvider.getRowData(offset, count).then(response => {
+			if (!this.lastGoodResult) {
+				this.lastGoodResult = response;
+			} else {
+				response = this.lastGoodResult;
+			}
 			if (!response) {
 				return [];
 			}
