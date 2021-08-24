@@ -69,7 +69,6 @@ export const databaseReferencesNodeName = localize('databaseReferencesNodeName',
 export const sqlConnectionStringFriendly = localize('sqlConnectionStringFriendly', "SQL connection string");
 export const yesString = localize('yesString', "Yes");
 export const noString = localize('noString', "No");
-export const noStringDefault = localize('noStringDefault', "No (default)");
 export const okString = localize('okString', "Ok");
 export const selectString = localize('selectString', "Select");
 export const dacpacFiles = localize('dacpacFiles', "dacpac Files");

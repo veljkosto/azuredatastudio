@@ -101,6 +101,10 @@ async function addProjectReference(otherProjectsInWorkspace: vscode.Uri[]): Prom
 
 	// 7. Prompt suppress unresolved ref errors
 	const suppressErrors = await promptSuppressUnresolvedRefErrors();
+	if (suppressErrors === undefined) {
+		// User cancelled
+		return;
+	}
 	referenceSettings.suppressMissingDependenciesErrors = suppressErrors;
 
 	return referenceSettings;
@@ -123,7 +127,10 @@ async function addSystemDatabaseReference(project: Project): Promise<ISystemData
 
 	// 4. Prompt suppress unresolved ref errors
 	const suppressErrors = await promptSuppressUnresolvedRefErrors();
-
+	if (suppressErrors === undefined) {
+		// User cancelled
+		return;
+	}
 	return {
 		databaseName: dbName,
 		systemDb: getSystemDatabase(selectedSystemDb),
@@ -164,7 +171,10 @@ async function addDacpacReference(): Promise<IDacpacReferenceSettings | undefine
 
 	// 5. Prompt suppress unresolved ref errors
 	const suppressErrors = await promptSuppressUnresolvedRefErrors();
-
+	if (suppressErrors === undefined) {
+		// User cancelled
+		return;
+	}
 	return {
 		databaseName: dbServerValues.dbName,
 		dacpacFileLocation: dacPacLocation,
@@ -229,11 +239,11 @@ async function promptServerVar(): Promise<string> {
 		}) ?? '';
 }
 
-async function promptSuppressUnresolvedRefErrors(): Promise<boolean> {
-	const selectedOption = await vscode.window.showQuickPick(
-		[constants.noStringDefault, constants.yesString],
+async function promptSuppressUnresolvedRefErrors(): Promise<boolean | undefined> {
+	const selectedOption = await vscode.window.showQuickPick<vscode.QuickPickItem & { value: boolean }>(
+		[{ label: constants.noString, value: false }, { label: constants.yesString, value: true }],
 		{ title: constants.suppressMissingDependenciesErrors, ignoreFocusOut: true, });
-	return selectedOption === constants.yesString ? true : false;
+	return selectedOption?.value;
 }
 
 async function promptDbServerValues(location: string, defaultDbName: string): Promise<DbServerValues | undefined> {
