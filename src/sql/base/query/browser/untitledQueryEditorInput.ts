@@ -14,9 +14,9 @@ import { UntitledTextEditorInput } from 'vs/workbench/services/untitled/common/u
 import { IUntitledTextEditorModel } from 'vs/workbench/services/untitled/common/untitledTextEditorModel';
 import { EncodingMode, IEncodingSupport } from 'vs/workbench/services/textfile/common/textfiles';
 import { EditorInputCapabilities, GroupIdentifier, ISaveOptions, IEditorInput } from 'vs/workbench/common/editor';
-import { FileQueryEditorInput } from 'sql/workbench/contrib/query/common/fileQueryEditorInput';
+import { FileQueryEditorInput } from 'sql/workbench/contrib/query/browser/fileQueryEditorInput';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
-import { FileEditorInput } from 'vs/workbench/contrib/files/common/editors/fileEditorInput';
+import { FileEditorInput } from 'vs/workbench/contrib/files/browser/editors/fileEditorInput';
 
 export class UntitledQueryEditorInput extends QueryEditorInput implements IEncodingSupport {
 
