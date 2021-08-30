@@ -6,7 +6,7 @@
 import * as azdata from 'azdata';
 import * as vscode from 'vscode';
 import { MigrationWizardPage } from '../models/migrationWizardPage';
-import { MigrationStateModel, MigrationTargetType, StateChangeEvent } from '../models/stateMachine';
+import { MigrationStateModel, MigrationTargetType, ServerAssessment, StateChangeEvent } from '../models/stateMachine';
 import { AssessmentResultsDialog } from '../dialog/assessmentResults/assessmentResultsDialog';
 import * as constants from '../constants/strings';
 import { EOL } from 'os';
@@ -248,8 +248,13 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			label: constants.VIEW_SELECT_BUTTON_LABEL,
 			width: 100
 		}).component();
+		let serverName = '';
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.serverName) {
+			serverName = this.migrationStateModel.serverName;
+		} else {
+			serverName = (await this.migrationStateModel.getSourceConnectionProfile()).serverName;
+		}
 
-		const serverName = (await this.migrationStateModel.getSourceConnectionProfile()).serverName;
 		let miDialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, constants.ASSESSMENT_TILE(serverName), this, MigrationTargetType.SQLMI);
 		let vmDialog = new AssessmentResultsDialog('ownerUri', this.migrationStateModel, constants.ASSESSMENT_TILE(serverName), this, MigrationTargetType.SQLVM);
 
@@ -429,13 +434,16 @@ export class SKURecommendationPage extends MigrationWizardPage {
 		this._assessmentLoader.loading = true;
 		const serverName = (await this.migrationStateModel.getSourceConnectionProfile()).serverName;
 		this._igComponent.value = constants.ASSESSMENT_COMPLETED(serverName);
-		try {
-			await this.migrationStateModel.getDatabaseAssessments();
-			this._detailsComponent.value = constants.SKU_RECOMMENDATION_ALL_SUCCESSFUL(this.migrationStateModel._assessmentResults.databaseAssessments.length);
-		} catch (e) {
-			console.log(e);
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 2 && this.migrationStateModel._assessmentResults) {
+			// console.log("info not loaded correctly");
+		} else {
+			try {
+				await this.migrationStateModel.getDatabaseAssessments();
+				this._detailsComponent.value = constants.SKU_RECOMMENDATION_ALL_SUCCESSFUL(this.migrationStateModel._assessmentResults.databaseAssessments.length);
+			} catch (e) {
+				console.log(e);
+			}
 		}
-
 		this.refreshCardText();
 		this._assessmentLoader.loading = false;
 	}
@@ -446,13 +454,22 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			this._resourceDropdown.loading = true;
 			try {
 				this._managedInstanceSubscriptionDropdown.values = await this.migrationStateModel.getSubscriptionsDropdownValues();
-				selectDropDownIndex(this._managedInstanceSubscriptionDropdown, 0);
 			} catch (e) {
 				console.log(e);
 			} finally {
 				this._managedInstanceSubscriptionDropdown.loading = false;
 				this._resourceDropdown.loading = false;
 			}
+			if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 2 && this._managedInstanceSubscriptionDropdown.values) {
+				this._managedInstanceSubscriptionDropdown.values.forEach((subscription, index) => {
+					if (subscription === this.migrationStateModel.savedInfo?.subscription?.name) {
+						selectDropDownIndex(this._managedInstanceSubscriptionDropdown, index);
+					}
+				});
+			} else {
+				selectDropDownIndex(this._managedInstanceSubscriptionDropdown, 0);
+			}
+
 		}
 	}
 
@@ -469,6 +486,26 @@ export class SKURecommendationPage extends MigrationWizardPage {
 		} finally {
 			this._azureResourceGroupDropdown.loading = false;
 			this._azureLocationDropdown.loading = false;
+		}
+
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 2 && this._azureResourceGroupDropdown.values) {
+			this._azureResourceGroupDropdown.values.forEach((resourceGroup, index) => {
+				if (resourceGroup === this.migrationStateModel.savedInfo?.resourceGroup?.resourceGroup) {
+					selectDropDownIndex(this._azureResourceGroupDropdown, index);
+				}
+			});
+		} else {
+			selectDropDownIndex(this._azureResourceGroupDropdown, 0);
+		}
+
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 2 && this._azureLocationDropdown.values) {
+			this._azureLocationDropdown.values.forEach((location, index) => {
+				if (location === this.migrationStateModel.savedInfo?.location) {
+					selectDropDownIndex(this._azureLocationDropdown, index);
+				}
+			});
+		} else {
+			selectDropDownIndex(this._azureLocationDropdown, 0);
 		}
 	}
 
@@ -538,15 +575,29 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			return true;
 		});
 		this.wizard.nextButton.enabled = false;
-		if (!this.migrationStateModel._assessmentResults) {
-			await this.constructDetails();
+		if (this.migrationStateModel.resumeAssessment && this.migrationStateModel.savedInfo.closedPage >= 2) {
+			this.migrationStateModel._assessmentResults = <ServerAssessment>this.migrationStateModel.savedInfo.serverAssessment;
+			// need to call register content here, but with what view?
+			this.registerWizardContent();
+			this.registerContent(this._view);
+			this.refreshCardText();
+			this._assessmentComponent.updateCssStyles({
+				display: 'none'
+			});
+			this._formContainer.component().updateCssStyles({
+				display: 'block'
+			});
+		} else {
+			if (!this.migrationStateModel._assessmentResults) {
+				await this.constructDetails();
+			}
 		}
-		this._assessmentComponent.updateCssStyles({
-			display: 'none'
-		});
-		this._formContainer.component().updateCssStyles({
-			display: 'block'
-		});
+		// this._assessmentComponent.updateCssStyles({
+		// 	display: 'none'
+		// });
+		// this._formContainer.component().updateCssStyles({
+		// 	display: 'block'
+		// });
 
 		this.populateSubscriptionDropdown();
 		this.wizard.nextButton.enabled = true;
@@ -583,7 +634,8 @@ export class SKURecommendationPage extends MigrationWizardPage {
 			this.migrationStateModel._migrationDbs = this.migrationStateModel._vmDbs;
 		}
 
-		this._azureResourceGroupDropdown.display = (!this._rbg.selectedCardId) ? 'none' : 'inline';
+		// azureResourceGroupDropdown is undefined when continuing from a saved assessment
+		this._azureResourceGroupDropdown.display = (!this._rbg.selectedCardId!) ? 'none' : 'inline';
 		this._targetContainer.display = (this.migrationStateModel._migrationDbs.length === 0) ? 'none' : 'inline';
 
 

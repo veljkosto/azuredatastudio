@@ -99,6 +99,11 @@ export interface SavedInfo {
 	serverAssessment: ServerAssessment | null;
 	azureAccount: azdata.Account | null;
 	selectedDatabases: azdata.DeclarativeTableCellValue[][];
+	migrationTargetType: MigrationTargetType | null;
+	migrationDatabases: azdata.DeclarativeTableCellValue[][];
+	subscription: azureResource.AzureResourceSubscription | null;
+	location: azureResource.AzureLocation | null;
+	resourceGroup: azureResource.AzureResourceResourceGroup | null;
 }
 
 export class MigrationStateModel implements Model, vscode.Disposable {
@@ -155,6 +160,7 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 		'msdb',
 		'model'
 	];
+	public serverName!: string;
 	public databaseSelectorTableValues!: azdata.DeclarativeTableCellValue[][];
 
 	constructor(
@@ -745,7 +751,12 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			closedPage: currentPage,
 			serverAssessment: null,
 			azureAccount: null,
-			selectedDatabases: []
+			selectedDatabases: [],
+			migrationTargetType: null,
+			migrationDatabases: [],
+			subscription: null,
+			location: null,
+			resourceGroup: null
 		};
 		switch (currentPage) {
 			// Summary
@@ -768,12 +779,12 @@ export class MigrationStateModel implements Model, vscode.Disposable {
 			// SKU Recommendation
 			case 2:
 				console.log('Saving assessment from page: SKU Recommendation');
-				// MI or VM card selection
+				saveInfo.migrationTargetType = this._targetType;
+
 				// Databases to migrate selection
-				// Subscription
-				// Location
-				// Resource group
-				// Azure SQL Database Managed Instance
+				saveInfo.subscription = this._targetSubscription;
+				saveInfo.location = this._location;
+				saveInfo.resourceGroup = this._resourceGroup;
 				saveInfo.serverAssessment = this._assessmentResults;
 				console.log(saveInfo);
 			// Database Selector

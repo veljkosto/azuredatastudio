@@ -96,6 +96,7 @@ class SQLMigration {
 				let savedInfo = this.checkSavedInfo(serverName);
 				if (savedInfo) {
 					stateModel.savedInfo = savedInfo;
+					stateModel.serverName = serverName;
 					let savedAssessmentDialog = new SavedAssessmentDialog(stateModel);
 					await savedAssessmentDialog.openDialog();
 				} else {
