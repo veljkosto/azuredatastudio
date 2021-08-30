@@ -170,6 +170,8 @@
 			"mssql.connectionOptions.packetSize.description": "Größe der Netzwerkpakete (in Byte), die bei der Kommunikation mit einer Instanz von SQL Server verwendet werden",
 			"mssql.connectionOptions.typeSystemVersion.displayName": "Typsystemversion",
 			"mssql.connectionOptions.typeSystemVersion.description": "Gibt an, welches Servertypsystem der Anbieter über den DataReader offenlegt.",
+			"mssql.connectionOptions.groupName.source": "Guten Morgen!",
+			"mssql.connectionOptions.groupName.security": "Guten Tag!",
 			"databasesListProperties.name": "Name",
 			"databasesListProperties.status": "Status",
 			"databasesListProperties.size": "Größe (MB)",
