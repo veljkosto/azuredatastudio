@@ -16,14 +16,15 @@ import { TelemetryReporter } from './telemetry';
 export class WorkspaceTreeDataProvider implements vscode.TreeDataProvider<WorkspaceTreeItem>{
 	constructor(private _workspaceService: IWorkspaceService) {
 		this._workspaceService.onDidWorkspaceProjectsChange(() => {
-			this.refresh();
+			return this.refresh();
 		});
 	}
 
 	private _onDidChangeTreeData: vscode.EventEmitter<void | WorkspaceTreeItem | null | undefined> | undefined = new vscode.EventEmitter<WorkspaceTreeItem | undefined | void>();
 	readonly onDidChangeTreeData?: vscode.Event<void | WorkspaceTreeItem | null | undefined> | undefined = this._onDidChangeTreeData?.event;
 
-	refresh(): void {
+	async refresh(): Promise<void> {
+		await this._workspaceService.getProjectsInWorkspace(undefined, true);
 		this._onDidChangeTreeData?.fire();
 	}
 
@@ -38,7 +39,7 @@ export class WorkspaceTreeDataProvider implements vscode.TreeDataProvider<Worksp
 		}
 		else {
 			// if the element is undefined return the project tree items
-			const projects = await this._workspaceService.getProjectsInWorkspace();
+			const projects = await this._workspaceService.getProjectsInWorkspace(undefined, false);
 			await vscode.commands.executeCommand('setContext', 'isProjectsViewEmpty', projects.length === 0);
 			const unknownProjects: string[] = [];
 			const treeItems: WorkspaceTreeItem[] = [];
@@ -76,7 +77,7 @@ export class WorkspaceTreeDataProvider implements vscode.TreeDataProvider<Worksp
 			}
 
 			if (errorCount > 0) {
-				vscode.window.showErrorMessage(ProjectsFailedToLoad);
+				void vscode.window.showErrorMessage(ProjectsFailedToLoad);
 			}
 
 			TelemetryReporter.sendMetricsEvent(typeMetric, 'OpenWorkspaceProjectTypes');
@@ -88,7 +89,7 @@ export class WorkspaceTreeDataProvider implements vscode.TreeDataProvider<Worksp
 				'OpenWorkspaceProjectsHandled');
 
 			if (unknownProjects.length > 0) {
-				vscode.window.showErrorMessage(UnknownProjectsError(unknownProjects));
+				void vscode.window.showErrorMessage(UnknownProjectsError(unknownProjects));
 			}
 
 			return treeItems;

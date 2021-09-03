@@ -267,7 +267,7 @@ export class TestConnectionManagementService implements IConnectionManagementSer
 	}
 
 	getServerInfo(profileId: string): azdata.ServerInfo {
-		return undefined!;
+		return undefined;
 	}
 
 	getConnectionString(connectionId: string): Thenable<string> {
@@ -308,5 +308,9 @@ export class TestConnectionManagementService implements IConnectionManagementSer
 
 	getConnection(uri: string): ConnectionProfile {
 		return undefined!;
+	}
+
+	refreshAzureAccountTokenIfNecessary(uri: string): Promise<boolean> {
+		return undefined;
 	}
 }

@@ -846,6 +846,7 @@ describe('BooksTreeViewTests', function () {
 				});
 
 				it('should remove book on closeBook', async () => {
+					await bookTreeViewProvider.openBook(rootFolderPath);
 					let length: number = bookTreeViewProvider.books.length;
 					await bookTreeViewProvider.closeBook(bookTreeViewProvider.books[0].bookItems[0]);
 					should(bookTreeViewProvider.books.length).equal(length - 1, 'Failed to remove the book on close');

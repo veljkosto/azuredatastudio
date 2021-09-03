@@ -559,6 +559,8 @@ export class CellModel extends Disposable implements ICellModel {
 				return false;
 			}
 			this._outputCounter = 0;
+			// Hide IntelliSense suggestions list when running cell to match SSMS behavior
+			this._commandService.executeCommand('hideSuggestWidget');
 			this._telemetryService?.createActionEvent(TelemetryKeys.TelemetryView.Notebook, TelemetryKeys.NbTelemetryAction.RunCell)
 				.withAdditionalProperties({ cell_language: kernel.name })
 				.send();
@@ -593,6 +595,7 @@ export class CellModel extends Disposable implements ICellModel {
 						}, false);
 						this.setFuture(future as FutureInternal);
 						this.fireExecutionStateChanged();
+						this.notebookModel.onCellChange(this, NotebookChangeType.CellExecutionStarted);
 						this._notebookService?.notifyCellExecutionStarted();
 						// For now, await future completion. Later we should just track and handle cancellation based on model notifications
 						let result: nb.IExecuteReplyMsg = <nb.IExecuteReplyMsg><any>await future.done;
@@ -920,6 +923,9 @@ export class CellModel extends Disposable implements ICellModel {
 				}
 			}
 		};
+
+		this.sendChangeToNotebook(NotebookChangeType.CellAwaitingInput);
+
 		return handler();
 	}
 

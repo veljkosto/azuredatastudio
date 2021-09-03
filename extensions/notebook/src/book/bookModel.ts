@@ -48,7 +48,7 @@ export class BookModel {
 	public watchTOC(): void {
 		fs.watchFile(this.tableOfContentsPath, async (curr, prev) => {
 			if (curr.mtime > prev.mtime) {
-				this.reinitializeContents();
+				this.reinitializeContents().catch(err => console.error('Error reinitializing book contents ', err));
 			}
 		});
 	}
@@ -126,7 +126,7 @@ export class BookModel {
 		}
 
 		if (await fs.pathExists(this._tableOfContentsPath)) {
-			vscode.commands.executeCommand('setContext', 'bookOpened', true);
+			void vscode.commands.executeCommand('setContext', 'bookOpened', true);
 			this.watchTOC();
 		} else {
 			this._errorMessage = loc.missingTocError;
@@ -186,12 +186,13 @@ export class BookModel {
 				const config = yaml.safeLoad(fileContents.toString());
 				fileContents = await fsPromises.readFile(this._tableOfContentsPath, 'utf-8');
 				let tableOfContents: any = yaml.safeLoad(fileContents.toString());
+				const parsedTOC: IJupyterBookToc = { sections: this.parseJupyterSections(this._bookVersion, tableOfContents) };
 				let book: BookTreeItem = new BookTreeItem({
 					version: this._bookVersion,
 					title: config.title,
 					contentPath: this._tableOfContentsPath,
 					root: this.bookPath,
-					tableOfContents: { sections: this.parseJupyterSections(this._bookVersion, tableOfContents) },
+					tableOfContents: parsedTOC,
 					page: tableOfContents,
 					type: BookTreeItemType.Book,
 					treeItemCollapsibleState: collapsibleState,
@@ -226,7 +227,6 @@ export class BookModel {
 	}
 
 	public async getSections(element: BookTreeItem): Promise<BookTreeItem[]> {
-		let tableOfContents: IJupyterBookToc = element.tableOfContents;
 		let sections: JupyterBookSection[] = element.sections;
 		let root: string = element.root;
 		let book: BookTreeItemFormat = element.book;
@@ -237,7 +237,7 @@ export class BookModel {
 					title: sections[i].title,
 					contentPath: undefined,
 					root: root,
-					tableOfContents: tableOfContents,
+					tableOfContents: element.tableOfContents,
 					page: sections[i],
 					type: BookTreeItemType.ExternalLink,
 					treeItemCollapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
@@ -263,7 +263,7 @@ export class BookModel {
 						title: sections[i].title ? sections[i].title : sections[i].file,
 						contentPath: pathToNotebook,
 						root: root,
-						tableOfContents: tableOfContents,
+						tableOfContents: element.tableOfContents,
 						page: sections[i],
 						type: BookTreeItemType.Notebook,
 						treeItemCollapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
@@ -295,7 +295,7 @@ export class BookModel {
 						title: sections[i].title ? sections[i].title : sections[i].file,
 						contentPath: pathToMarkdown,
 						root: root,
-						tableOfContents: tableOfContents,
+						tableOfContents: element.tableOfContents,
 						page: sections[i],
 						type: BookTreeItemType.Markdown,
 						treeItemCollapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
@@ -322,11 +322,11 @@ export class BookModel {
 					treeItems.push(markdown);
 				} else {
 					this._errorMessage = loc.missingFileError(sections[i].title, book.title);
-					vscode.window.showErrorMessage(this._errorMessage);
+					void vscode.window.showErrorMessage(this._errorMessage);
 				}
 			}
 		}
-		element.children = treeItems;
+		element.hasChildren = treeItems.length > 0;
 		this.bookItems = treeItems;
 		return treeItems;
 	}

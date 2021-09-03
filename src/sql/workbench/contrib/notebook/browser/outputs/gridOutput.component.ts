@@ -3,7 +3,7 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { OnInit, Component, Input, Inject, ViewChild, ElementRef } from '@angular/core';
+import { OnInit, Component, Input, Inject, ViewChild, ElementRef, ChangeDetectorRef, forwardRef } from '@angular/core';
 import * as azdata from 'azdata';
 
 import { IGridDataProvider, getResultsString } from 'sql/workbench/services/query/common/gridDataProvider';
@@ -23,7 +23,7 @@ import { localize } from 'vs/nls';
 import { IAction } from 'vs/base/common/actions';
 import { AngularDisposable } from 'sql/base/browser/lifecycle';
 import { IMimeComponent } from 'sql/workbench/contrib/notebook/browser/outputs/mimeRegistry';
-import { ICellModel } from 'sql/workbench/services/notebook/browser/models/modelInterfaces';
+import { CellExecutionState, ICellModel } from 'sql/workbench/services/notebook/browser/models/modelInterfaces';
 import { MimeModel } from 'sql/workbench/services/notebook/browser/outputs/mimemodel';
 import { GridTableState } from 'sql/workbench/common/editor/query/gridTableState';
 import { GridTableBase } from 'sql/workbench/contrib/query/browser/gridPanel';
@@ -40,7 +40,6 @@ import { IQueryModelService } from 'sql/workbench/services/query/common/queryMod
 import { ActionsOrientation } from 'vs/base/browser/ui/actionbar/actionbar';
 import { values } from 'vs/base/common/collections';
 import { URI } from 'vs/base/common/uri';
-import { assign } from 'vs/base/common/objects';
 import { QueryResultId } from 'sql/workbench/services/notebook/browser/models/cell';
 import { equals } from 'vs/base/common/arrays';
 import { IDisposableDataProvider } from 'sql/base/common/dataProvider';
@@ -51,7 +50,9 @@ import * as TelemetryKeys from 'sql/platform/telemetry/common/telemetryKeys';
 
 @Component({
 	selector: GridOutputComponent.SELECTOR,
-	template: `<div #output class="notebook-cellTable"></div>`
+	template: `
+	<loading-spinner [loading]="loading"></loading-spinner>
+	<div #output class="notebook-cellTable"></div>`
 })
 export class GridOutputComponent extends AngularDisposable implements IMimeComponent, OnInit {
 	public static readonly SELECTOR: string = 'grid-output';
@@ -66,12 +67,17 @@ export class GridOutputComponent extends AngularDisposable implements IMimeCompo
 	private _batchId: number | undefined;
 	private _id: number | undefined;
 	private _layoutCalledOnce: boolean = false;
+	private _incrementalGridRenderingEnabled: boolean;
+	private _isLoading: boolean = false;
 
 	constructor(
+		@Inject(forwardRef(() => ChangeDetectorRef)) private _changeRef: ChangeDetectorRef,
 		@Inject(IInstantiationService) private instantiationService: IInstantiationService,
-		@Inject(IThemeService) private readonly themeService: IThemeService
+		@Inject(IThemeService) private readonly themeService: IThemeService,
+		@Inject(IConfigurationService) private configurationService: IConfigurationService
 	) {
 		super();
+		this._incrementalGridRenderingEnabled = this.configurationService.getValue('notebook.enableIncrementalGridRendering');
 	}
 
 	@Input() set bundleOptions(value: MimeModel.IOptions) {
@@ -102,6 +108,17 @@ export class GridOutputComponent extends AngularDisposable implements IMimeCompo
 		this._cellOutput = value;
 	}
 
+	get loading(): boolean {
+		return this._isLoading;
+	}
+
+	@Input() set loading(isLoading: boolean) {
+		this._isLoading = isLoading;
+		if (!(this._changeRef['destroyed'])) {
+			this._changeRef.detectChanges();
+		}
+	}
+
 	async ngOnInit() {
 		if (this.cellModel) {
 			let outputId: QueryResultId = this.cellModel.getOutputId(this._cellOutput);
@@ -114,9 +131,20 @@ export class GridOutputComponent extends AngularDisposable implements IMimeCompo
 					this.updateResult(e.resultSet, e.rows);
 				}
 			}));
+			if (this._cellModel.executionState === CellExecutionState.Running || !this._incrementalGridRenderingEnabled) {
+				await this.renderGrid();
+			} else {
+				this.loading = true;
+				// setTimeout adds the renderGrid call to a queue that gets called after all current tasks get executed -
+				// this allows the rest of the notebook to render first before rendering grids incrementally.
+				setTimeout(async () => {
+					await this.renderGrid();
+					this.loading = false;
+				});
+			}
 		}
-		await this.renderGrid();
 	}
+
 
 	async renderGrid(): Promise<void> {
 		if (!this._bundleOptions || !this._cellModel || !this.mimeType) {
@@ -452,7 +480,7 @@ export class DataResourceDataProvider implements IGridDataProvider {
 			return result;
 		};
 
-		let serializeRequestParams: SerializeDataParams = <SerializeDataParams>assign(serializer.getBasicSaveParameters(format), <Partial<SerializeDataParams>>{
+		let serializeRequestParams: SerializeDataParams = <SerializeDataParams>Object.assign(serializer.getBasicSaveParameters(format), <Partial<SerializeDataParams>>{
 			saveFormat: format,
 			columns: columns,
 			filePath: filePath.fsPath,

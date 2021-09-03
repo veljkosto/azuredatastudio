@@ -123,7 +123,7 @@ export class CreateProjectFromDatabaseDialog {
 
 			let formModel = this.formBuilder.component();
 			await view.initializeModel(formModel);
-			this.selectConnectionButton?.focus();
+			await this.selectConnectionButton?.focus();
 			this.initDialogComplete?.resolve();
 		});
 	}
@@ -209,7 +209,7 @@ export class CreateProjectFromDatabaseDialog {
 
 	private async updateConnectionComponents(connectionTextboxValue: string, connectionId: string, databaseName?: string) {
 		this.sourceConnectionTextBox!.value = connectionTextboxValue;
-		this.sourceConnectionTextBox!.updateProperty('title', connectionTextboxValue);
+		void this.sourceConnectionTextBox!.updateProperty('title', connectionTextboxValue);
 
 		// populate database dropdown with the databases for this connection
 		if (connectionId) {
@@ -249,7 +249,7 @@ export class CreateProjectFromDatabaseDialog {
 
 		this.projectNameTextBox.onTextChanged(() => {
 			this.projectNameTextBox!.value = this.projectNameTextBox!.value?.trim();
-			this.projectNameTextBox!.updateProperty('title', this.projectNameTextBox!.value);
+			void this.projectNameTextBox!.updateProperty('title', this.projectNameTextBox!.value);
 			this.tryEnableCreateButton();
 		});
 
@@ -269,18 +269,18 @@ export class CreateProjectFromDatabaseDialog {
 
 		this.projectLocationTextBox = view.modelBuilder.inputBox().withProps({
 			value: '',
-			ariaLabel: constants.projectLocationLabel,
+			ariaLabel: constants.location,
 			placeHolder: constants.projectLocationPlaceholderText,
 			width: cssStyles.createProjectFromDatabaseTextboxWidth
 		}).component();
 
 		this.projectLocationTextBox.onTextChanged(() => {
-			this.projectLocationTextBox!.updateProperty('title', this.projectLocationTextBox!.value);
+			void this.projectLocationTextBox!.updateProperty('title', this.projectLocationTextBox!.value);
 			this.tryEnableCreateButton();
 		});
 
 		const projectLocationLabel = view.modelBuilder.text().withProps({
-			value: constants.projectLocationLabel,
+			value: constants.location,
 			requiredIndicator: true,
 			width: cssStyles.createProjectFromDatabaseLabelWidth
 		}).component();
@@ -312,7 +312,7 @@ export class CreateProjectFromDatabaseDialog {
 			}
 
 			this.projectLocationTextBox!.value = folderUris[0].fsPath;
-			this.projectLocationTextBox!.updateProperty('title', folderUris[0].fsPath);
+			void this.projectLocationTextBox!.updateProperty('title', folderUris[0].fsPath);
 		});
 
 		return browseFolderButton;
@@ -353,34 +353,21 @@ export class CreateProjectFromDatabaseDialog {
 	}
 
 	public async handleCreateButtonClick(): Promise<void> {
+		const azdataApi = getAzdataApi()!;
+		const connectionUri = await azdataApi!.connection.getUriForConnection(this.connectionId!);
 		const model: ImportDataModel = {
-			serverId: this.connectionId!,
+			connectionUri: connectionUri,
 			database: <string>this.sourceDatabaseDropDown!.value,
 			projName: this.projectNameTextBox!.value!,
 			filePath: this.projectLocationTextBox!.value!,
 			version: '1.0.0.0',
-			extractTarget: this.mapExtractTargetEnum(<string>this.folderStructureDropDown!.value)
+			extractTarget: mapExtractTargetEnum(<string>this.folderStructureDropDown!.value)
 		};
 
-		getAzdataApi()!.window.closeDialog(this.dialog);
+		azdataApi!.window.closeDialog(this.dialog);
 		await this.createProjectFromDatabaseCallback!(model);
 
 		this.dispose();
-	}
-
-	private mapExtractTargetEnum(inputTarget: any): mssql.ExtractTarget {
-		if (inputTarget) {
-			switch (inputTarget) {
-				case constants.file: return mssql.ExtractTarget['file'];
-				case constants.flat: return mssql.ExtractTarget['flat'];
-				case constants.objectType: return mssql.ExtractTarget['objectType'];
-				case constants.schema: return mssql.ExtractTarget['schema'];
-				case constants.schemaObjectType: return mssql.ExtractTarget['schemaObjectType'];
-				default: throw new Error(constants.invalidInput(inputTarget));
-			}
-		} else {
-			throw new Error(constants.extractTargetRequired);
-		}
 	}
 
 	async validate(): Promise<boolean> {
@@ -413,5 +400,20 @@ export class CreateProjectFromDatabaseDialog {
 			text: message,
 			level: getAzdataApi()!.window.MessageLevel.Error
 		};
+	}
+}
+
+export function mapExtractTargetEnum(inputTarget: string): mssql.ExtractTarget {
+	if (inputTarget) {
+		switch (inputTarget) {
+			case constants.file: return mssql.ExtractTarget.file;
+			case constants.flat: return mssql.ExtractTarget.flat;
+			case constants.objectType: return mssql.ExtractTarget.objectType;
+			case constants.schema: return mssql.ExtractTarget.schema;
+			case constants.schemaObjectType: return mssql.ExtractTarget.schemaObjectType;
+			default: throw new Error(constants.invalidInput(inputTarget));
+		}
+	} else {
+		throw new Error(constants.extractTargetRequired);
 	}
 }
