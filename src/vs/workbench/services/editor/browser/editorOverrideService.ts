@@ -257,10 +257,10 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		const findMatchingEditor = (editors: RegisteredEditors, viewType: string) => {
 			return editors.find((editor) => {
 				if (editor.options && editor.options.canSupportResource !== undefined) {
-					this.logService.info(`findMatchingEditor canSupportResource ${viewType} ${contribPoint.editorInfo.id} ${contribPoint.options.canSupportResource(resource)}`);
+					this.logService.info(`findMatchingEditor canSupportResource ${viewType} ${editor.editorInfo.id} ${editor.options.canSupportResource(resource)}`);
 					return editor.editorInfo.id === viewType && editor.options.canSupportResource(resource);
 				}
-				this.logService.info(`findMatchingEditor id ${viewType} ${contribPoint.editorInfo.id}`);
+				this.logService.info(`findMatchingEditor id ${viewType} ${editor.editorInfo.id}`);
 				return editor.editorInfo.id === viewType;
 			});
 		};
@@ -274,7 +274,7 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		}
 
 		let editors = this.findMatchingEditors(resource);
-		this.logService.info(`Found matching editors for ${resource} - ${JSON.stringify(contributionPoints)}`);
+		this.logService.info(`Found matching editors for ${resource} - ${JSON.stringify(editors)}`);
 		const associationsFromSetting = this.getAssociationsForResource(resource);
 		this.logService.info(`Associations from setting ${JSON.stringify(associationsFromSetting)}`);
 		// We only want built-in+ if no user defined setting is found, else we won't override
@@ -283,7 +283,7 @@ export class EditorOverrideService extends Disposable implements IEditorOverride
 		const selectedViewType = possibleEditors[0]?.editorInfo.priority === ContributedEditorPriority.exclusive ?
 			possibleEditors[0]?.editorInfo.id :
 			associationsFromSetting[0]?.viewType || possibleEditors[0]?.editorInfo.id;
-		this.logService.info(`Possible contribution points ${JSON.stringify(possibleContributionPoints)}`);
+		this.logService.info(`Possible editors ${JSON.stringify(possibleEditors)} selected editor ${selectedViewType}`);
 		let conflictingDefault = false;
 		if (associationsFromSetting.length === 0 && possibleEditors.length > 1) {
 			conflictingDefault = true;
