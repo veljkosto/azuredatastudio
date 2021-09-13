@@ -35,6 +35,7 @@ import { ILogService } from 'vs/platform/log/common/log';
 import { TableCellClickEventArgs } from 'sql/base/browser/ui/table/plugins/tableColumn';
 import { HyperlinkCellValue, HyperlinkColumn } from 'sql/base/browser/ui/table/plugins/hyperlinkColumn.plugin';
 import { IContextViewService } from 'vs/platform/contextview/browser/contextView';
+import { IInputBoxCellActionEventArgs, InputBoxCellValue, InputboxSelectColumn } from 'sql/base/browser/ui/table/plugins/inputboxColumn.plugin';
 
 export enum ColumnSizingMode {
 	ForceFit = 0,	// all columns will be sized to fit in viewable space, no horiz scroll bar
@@ -47,11 +48,12 @@ enum ColumnType {
 	checkBox = 1,
 	button = 2,
 	icon = 3,
-	hyperlink = 4
+	hyperlink = 4,
+	inputbox = 5
 }
 
-type TableCellInputDataType = string | azdata.IconColumnCellValue | azdata.ButtonColumnCellValue | azdata.HyperlinkColumnCellValue | undefined;
-type TableCellDataType = string | CssIconCellValue | ButtonCellValue | HyperlinkCellValue | undefined;
+type TableCellInputDataType = string | azdata.IconColumnCellValue | azdata.ButtonColumnCellValue | azdata.HyperlinkColumnCellValue | azdata.InputBoxColumnCellValue | undefined;
+type TableCellDataType = string | CssIconCellValue | ButtonCellValue | HyperlinkCellValue | InputBoxCellValue | undefined;
 
 @Component({
 	selector: 'modelview-table',
@@ -68,12 +70,15 @@ export default class TableComponent extends ComponentBase<azdata.TableComponentP
 	private _checkboxColumns: CheckboxSelectColumn<{}>[] = [];
 	private _buttonColumns: ButtonColumn<{}>[] = [];
 	private _hyperlinkColumns: HyperlinkColumn<{}>[] = [];
+	private _inputboxColumns: InputboxSelectColumn<{}>[] = [];
 	private _pluginsRegisterStatus: boolean[] = [];
 	private _filterPlugin: HeaderFilter<Slick.SlickData>;
 	private _onCheckBoxChanged = new Emitter<ICheckboxCellActionEventArgs>();
 	private _onButtonClicked = new Emitter<TableCellClickEventArgs<{}>>();
+	private _onInputBoxValueChanged = new Emitter<IInputBoxCellActionEventArgs>();
 	public readonly onCheckBoxChanged: vsEvent<ICheckboxCellActionEventArgs> = this._onCheckBoxChanged.event;
 	public readonly onButtonClicked: vsEvent<TableCellClickEventArgs<{}>> = this._onButtonClicked.event;
+	public readonly onInputBoxValueChanged: vsEvent<IInputBoxCellActionEventArgs> = this._onInputBoxValueChanged.event;
 	private _iconCssMap: { [iconKey: string]: string } = {};
 
 	@ViewChild('table', { read: ElementRef }) private _inputContainer: ElementRef;
@@ -101,6 +106,8 @@ export default class TableComponent extends ComponentBase<azdata.TableComponentP
 					mycolumns.push(TableComponent.createIconColumn(col));
 				} else if (col.type === ColumnType.hyperlink) {
 					this.createHyperlinkPlugin(col);
+				} else if (col.type === ColumnType.inputbox) {
+					this.createInputBoxPlugin(col);
 				}
 				else if (col.value) {
 					mycolumns.push(TableComponent.createTextColumn(col as azdata.TableColumn));
@@ -354,7 +361,7 @@ export default class TableComponent extends ComponentBase<azdata.TableComponentP
 
 		Object.keys(this._checkboxColumns).forEach(col => this.registerPlugins(col, this._checkboxColumns[col]));
 		Object.keys(this._buttonColumns).forEach(col => this.registerPlugins(col, this._buttonColumns[col]));
-		Object.keys(this._hyperlinkColumns).forEach(col => this.registerPlugins(col, this._hyperlinkColumns[col]));
+		Object.keys(this._inputboxColumns).forEach(col => this.registerPlugins(col, this._inputboxColumns[col]));
 
 		if (this.headerFilter === true) {
 			this.registerFilterPlugin();
@@ -482,6 +489,34 @@ export default class TableComponent extends ComponentBase<azdata.TableComponentP
 			}));
 		}
 	}
+
+	private createInputBoxPlugin(col: azdata.TableColumn) {
+		const name = col.value;
+		if (!this._inputboxColumns[col.value]) {
+			const inputboxColumn = new InputboxSelectColumn({
+				title: col.value,
+				toolTip: col.toolTip,
+				width: col.width,
+				cssClass: col.cssClass,
+				headerCssClass: col.headerCssClass,
+			});
+
+			this._inputboxColumns[col.value] = inputboxColumn;
+
+			this._register(inputboxColumn.onChange((state) => {
+				this.fireEvent({
+					eventType: ComponentEventType.onCellAction,
+					args: {
+						row: state.row,
+						column: state.column,
+						value: state.value
+					}
+				});
+			}));
+		}
+	}
+
+
 
 	private registerPlugins(col: string, plugin: CheckboxSelectColumn<{}> | ButtonColumn<{}> | HyperlinkColumn<{}>): void {
 

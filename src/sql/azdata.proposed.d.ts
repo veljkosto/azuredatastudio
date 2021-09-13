@@ -865,9 +865,16 @@ declare module 'azdata' {
 		url?: string;
 	}
 
+	export interface InputBoxColumnCellValue {
+		value?: string;
+		placeholder?: string;
+		enable?: boolean;
+	}
+
 	export enum ColumnType {
 		icon = 3,
-		hyperlink = 4
+		hyperlink = 4,
+		inputbox = 5
 	}
 
 	export interface TableColumn {
