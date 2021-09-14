@@ -29,5 +29,9 @@ export class MainController {
 			let dialog = new CreateSessionDialog(ownerUri, providerType, templates);
 			dialog.showDialog();
 		});
+
+		vscode.commands.executeCommand('profiler.openCreateSessionDialog');
+
+		vscode.window.showInformationMessage('loading profiler');
 	}
 }

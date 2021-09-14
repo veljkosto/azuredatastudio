@@ -34,6 +34,8 @@ import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
 import { CATEGORIES } from 'vs/workbench/common/actions';
 import { EditorExtensions } from 'vs/workbench/common/editor';
 
+import * as panel from 'vs/workbench/browser/panel';
+
 // Register Service
 registerSingleton(IOutputService, OutputService);
 
@@ -62,6 +64,8 @@ const VIEW_CONTAINER: ViewContainer = Registry.as<IViewContainersRegistry>(ViewC
 	storageId: OUTPUT_VIEW_ID,
 	hideIfEmpty: true,
 }, ViewContainerLocation.Panel, { donotRegisterOpenCommand: true });
+
+Registry.as<panel.PanelRegistry>(panel.Extensions.Panels).setDefaultPanelId(OUTPUT_VIEW_ID);
 
 Registry.as<IViewsRegistry>(ViewContainerExtensions.ViewsRegistry).registerViews([{
 	id: OUTPUT_VIEW_ID,

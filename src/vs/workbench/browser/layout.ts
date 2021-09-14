@@ -400,17 +400,19 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			if (newStatusbarHiddenValue !== this.state.statusBar.hidden) {
 				this.setStatusBarHidden(newStatusbarHiddenValue, skipLayout);
 			}
+			this.setStatusBarHidden(true, skipLayout);
 
 			// Activitybar visibility
-			const newActivityBarHiddenValue = !this.configurationService.getValue<boolean>(Settings.ACTIVITYBAR_VISIBLE);
-			if (newActivityBarHiddenValue !== this.state.activityBar.hidden) {
-				this.setActivityBarHidden(newActivityBarHiddenValue, skipLayout);
-			}
+			// const newActivityBarHiddenValue = !this.configurationService.getValue<boolean>(Settings.ACTIVITYBAR_VISIBLE);
+			// if (newActivityBarHiddenValue !== this.state.activityBar.hidden) {
+			// 	this.setActivityBarHidden(newActivityBarHiddenValue, skipLayout);
+			// }
+			this.setActivityBarHidden(true, skipLayout);
 		}
 
 		// Menubar visibility
-		const newMenubarVisibility = getMenuBarVisibility(this.configurationService);
-		this.setMenubarVisibility(newMenubarVisibility, !!skipLayout);
+		const newMenubarVisibility = 'hidden'; //getMenuBarVisibility(this.configurationService);
+		this.setMenubarVisibility(newMenubarVisibility, false);
 
 		// Centered Layout
 		this.centerEditorLayout(this.state.editor.centered, skipLayout);
@@ -500,10 +502,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.state.menuBar.visibility = getMenuBarVisibility(this.configurationService);
 
 		// Activity bar visibility
-		this.state.activityBar.hidden = !this.configurationService.getValue<string>(Settings.ACTIVITYBAR_VISIBLE);
+		this.state.activityBar.hidden = true; //!this.configurationService.getValue<string>(Settings.ACTIVITYBAR_VISIBLE);
 
 		// Sidebar visibility
-		this.state.sideBar.hidden = this.storageService.getBoolean(Storage.SIDEBAR_HIDDEN, StorageScope.WORKSPACE, this.contextService.getWorkbenchState() === WorkbenchState.EMPTY);
+		this.state.sideBar.hidden = true; // this.storageService.getBoolean(Storage.SIDEBAR_HIDDEN, StorageScope.WORKSPACE, this.contextService.getWorkbenchState() === WorkbenchState.EMPTY);
 
 		// Sidebar position
 		this.state.sideBar.position = (this.configurationService.getValue<string>(Settings.SIDEBAR_POSITION) === 'right') ? Position.RIGHT : Position.LEFT;
@@ -536,7 +538,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.state.editor.editorsToOpen = this.resolveEditorsToOpen(fileService);
 
 		// Panel visibility
-		this.state.panel.hidden = this.storageService.getBoolean(Storage.PANEL_HIDDEN, StorageScope.WORKSPACE, true);
+		this.state.panel.hidden = true; //this.storageService.getBoolean(Storage.PANEL_HIDDEN, StorageScope.WORKSPACE, true);
 
 		// Whether or not the panel was last maximized
 		this.state.panel.wasLastMaximized = this.storageService.getBoolean(Storage.PANEL_LAST_IS_MAXIMIZED, StorageScope.WORKSPACE, false);

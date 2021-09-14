@@ -25,7 +25,7 @@ import 'vs/workbench/browser/actions/navigationActions';
 import 'vs/workbench/browser/actions/windowActions';
 import 'vs/workbench/browser/actions/workspaceActions';
 import 'vs/workbench/browser/actions/workspaceCommands';
-import 'vs/workbench/browser/actions/quickAccessActions';
+// import 'vs/workbench/browser/actions/quickAccessActions';
 
 //#endregion
 
@@ -259,15 +259,15 @@ registerSingleton(IDataGridProviderService, DataGridProviderService);
 import 'vs/workbench/services/editor/browser/editorOverrideService';
 
 // Telemetry
-import 'vs/workbench/contrib/telemetry/browser/telemetry.contribution';
+// import 'vs/workbench/contrib/telemetry/browser/telemetry.contribution';
 
-// Preferences
+// // Preferences
 import 'vs/workbench/contrib/preferences/browser/preferences.contribution';
 import 'vs/workbench/contrib/preferences/browser/keybindingsEditorContribution';
 import 'vs/workbench/contrib/preferences/browser/preferencesSearch';
 
-// Performance
-import 'vs/workbench/contrib/performance/browser/performance.contribution';
+// // Performance
+// import 'vs/workbench/contrib/performance/browser/performance.contribution';
 
 // Notebook
 import 'vs/workbench/contrib/notebook/browser/notebook.contribution';
@@ -275,8 +275,8 @@ import 'vs/workbench/contrib/notebook/browser/notebook.contribution';
 // Testing
 import 'vs/workbench/contrib/testing/browser/testing.contribution';
 
-// Logs
-import 'vs/workbench/contrib/logs/common/logs.contribution';
+// // Logs
+// import 'vs/workbench/contrib/logs/common/logs.contribution';
 
 // Quickaccess
 import 'vs/workbench/contrib/quickaccess/browser/quickAccess.contribution';
@@ -313,7 +313,7 @@ import 'vs/workbench/contrib/debug/browser/debugViewlet';
 */
 
 // Markers
-import 'vs/workbench/contrib/markers/browser/markers.contribution';
+// import 'vs/workbench/contrib/markers/browser/markers.contribution';
 
 // Comments
 import 'vs/workbench/contrib/comments/browser/comments.contribution';
@@ -332,7 +332,7 @@ import 'vs/workbench/contrib/externalUriOpener/common/externalUriOpener.contribu
 
 // Extensions Management
 import 'vs/workbench/contrib/extensions/browser/extensions.contribution';
-import 'vs/workbench/contrib/extensions/browser/extensionsViewlet';
+// import 'vs/workbench/contrib/extensions/browser/extensionsViewlet';
 
 // Output View
 import 'vs/workbench/contrib/output/browser/output.contribution';
@@ -345,8 +345,8 @@ import 'vs/workbench/contrib/externalTerminal/browser/externalTerminal.contribut
 import 'vs/workbench/contrib/terminal/browser/terminal.contribution';
 import 'vs/workbench/contrib/terminal/browser/terminalView';
 
-// Relauncher
-import 'vs/workbench/contrib/relauncher/browser/relauncher.contribution';
+// // Relauncher
+// import 'vs/workbench/contrib/relauncher/browser/relauncher.contribution';
 
 // Tasks
 import 'vs/workbench/contrib/tasks/browser/task.contribution';
@@ -371,41 +371,41 @@ import 'vs/workbench/contrib/snippets/browser/insertSnippet';
 import 'vs/workbench/contrib/snippets/browser/configureSnippets';
 import 'vs/workbench/contrib/snippets/browser/tabCompletion';
 
-// Formatter Help
-import 'vs/workbench/contrib/format/browser/format.contribution';
+// // Formatter Help
+// import 'vs/workbench/contrib/format/browser/format.contribution';
 
 // Themes
 import 'vs/workbench/contrib/themes/browser/themes.contribution';
 
-// Update
-import 'vs/workbench/contrib/update/browser/update.contribution';
+// // Update
+// import 'vs/workbench/contrib/update/browser/update.contribution';
 
-// Watermark
-import 'vs/workbench/contrib/watermark/browser/watermark';
+// // Watermark
+// import 'vs/workbench/contrib/watermark/browser/watermark';
 
 // Surveys
-import 'vs/workbench/contrib/surveys/browser/nps.contribution';
-import 'vs/workbench/contrib/surveys/browser/ces.contribution';
-import 'vs/workbench/contrib/surveys/browser/languageSurveys.contribution';
+// import 'vs/workbench/contrib/surveys/browser/nps.contribution';
+// import 'vs/workbench/contrib/surveys/browser/ces.contribution';
+// import 'vs/workbench/contrib/surveys/browser/languageSurveys.contribution';
 
-// Welcome
-import 'vs/workbench/contrib/welcome/overlay/browser/welcomeOverlay';
-import 'vs/workbench/contrib/welcome/page/browser/welcomePage.contribution';
-import 'vs/workbench/contrib/welcome/gettingStarted/browser/gettingStarted.contribution';
-import 'vs/workbench/contrib/welcome/walkThrough/browser/walkThrough.contribution';
+// // Welcome
+// import 'vs/workbench/contrib/welcome/overlay/browser/welcomeOverlay';
+// import 'vs/workbench/contrib/welcome/page/browser/welcomePage.contribution';
+// import 'vs/workbench/contrib/welcome/gettingStarted/browser/gettingStarted.contribution';
+// import 'vs/workbench/contrib/welcome/walkThrough/browser/walkThrough.contribution';
 
 // Call Hierarchy
-import 'vs/workbench/contrib/callHierarchy/browser/callHierarchy.contribution';
+// import 'vs/workbench/contrib/callHierarchy/browser/callHierarchy.contribution';
 
-// Outline
-import 'vs/workbench/contrib/codeEditor/browser/outline/documentSymbolsOutline';
-import 'vs/workbench/contrib/outline/browser/outline.contribution';
+// // Outline
+// import 'vs/workbench/contrib/codeEditor/browser/outline/documentSymbolsOutline';
+// import 'vs/workbench/contrib/outline/browser/outline.contribution';
 
-// Experiments
-import 'vs/workbench/contrib/experiments/browser/experiments.contribution';
+// // Experiments
+// import 'vs/workbench/contrib/experiments/browser/experiments.contribution';
 
-// Send a Smile
-import 'vs/workbench/contrib/feedback/browser/feedback.contribution';
+// // Send a Smile
+// import 'vs/workbench/contrib/feedback/browser/feedback.contribution';
 
 // User Data Sync
 import 'vs/workbench/contrib/userDataSync/browser/userDataSync.contribution';
@@ -413,8 +413,8 @@ import 'vs/workbench/contrib/userDataSync/browser/userDataSync.contribution';
 // Code Actions
 import 'vs/workbench/contrib/codeActions/common/codeActions.contribution';
 
-// Welcome
-import 'vs/workbench/contrib/welcome/common/viewsWelcome.contribution';
+// // Welcome
+// import 'vs/workbench/contrib/welcome/common/viewsWelcome.contribution';
 
 // Timeline
 import 'vs/workbench/contrib/timeline/browser/timeline.contribution';

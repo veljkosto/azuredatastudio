@@ -82,12 +82,12 @@ import { ISqlOAuthService } from 'sql/platform/oAuth/common/sqlOAuthService';
 import { SqlOAuthService } from 'sql/platform/oAuth/electron-browser/sqlOAuthServiceImpl';
 import { IClipboardService as sqlIClipboardService } from 'sql/platform/clipboard/common/clipboardService';
 import { ClipboardService as sqlClipboardService } from 'sql/platform/clipboard/electron-browser/clipboardService';
-import { IQueryHistoryService } from 'sql/workbench/services/queryHistory/common/queryHistoryService';
-import { QueryHistoryService } from 'sql/workbench/services/queryHistory/common/queryHistoryServiceImpl';
+// import { IQueryHistoryService } from 'sql/workbench/services/queryHistory/common/queryHistoryService';
+// import { QueryHistoryService } from 'sql/workbench/services/queryHistory/common/queryHistoryServiceImpl';
 
 registerSingleton(ISqlOAuthService, SqlOAuthService);
 registerSingleton(sqlIClipboardService, sqlClipboardService);
-registerSingleton(IQueryHistoryService, QueryHistoryService);
+// registerSingleton(IQueryHistoryService, QueryHistoryService);
 // {{SQL CARBON EDIT}} - End
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -142,13 +142,13 @@ import 'vs/workbench/contrib/extensions/electron-browser/extensions.contribution
 
 // {{SQL CARBON EDIT}}
 // getting started
-import 'sql/workbench/update/electron-browser/gettingStarted.contribution';
+// import 'sql/workbench/update/electron-browser/gettingStarted.contribution';
 
 // query history
-import 'sql/workbench/contrib/queryHistory/electron-browser/queryHistory.contribution';
+// import 'sql/workbench/contrib/queryHistory/electron-browser/queryHistory.contribution';
 
 // CLI
-import 'sql/workbench/contrib/commandLine/electron-browser/commandLine.contribution';
+// import 'sql/workbench/contrib/commandLine/electron-browser/commandLine.contribution';
 
 //getting started
-import 'sql/workbench/contrib/welcome/gettingStarted/electron-browser/gettingStarted.contribution';
+// import 'sql/workbench/contrib/welcome/gettingStarted/electron-browser/gettingStarted.contribution';

@@ -275,7 +275,7 @@ export const VIEW_CONTAINER: ViewContainer = viewContainerRegistry.registerViewC
 	storageId: 'workbench.explorer.views.state',
 	icon: explorerViewIcon,
 	alwaysUseContainerInfo: true,
-	order: 10, // {{SQL CARBON EDIT}} change order
+	order: 0, // {{SQL CARBON EDIT}} change order
 	openCommandActionDescriptor: {
 		id: VIEWLET_ID,
 		title: localize('explore', "Explorer"),
@@ -283,7 +283,7 @@ export const VIEW_CONTAINER: ViewContainer = viewContainerRegistry.registerViewC
 		keybindings: { primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KEY_E },
 		order: 0
 	},
-}, ViewContainerLocation.Sidebar); // {{SQL CARBON EDIT}} not default
+}, ViewContainerLocation.Sidebar, { isDefault: true }); // {{SQL CARBON EDIT}} not default
 
 const viewsRegistry = Registry.as<IViewsRegistry>(Extensions.ViewsRegistry);
 viewsRegistry.registerViewWelcomeContent(EmptyView.ID, {
