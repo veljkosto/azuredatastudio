@@ -75,6 +75,8 @@ export class QueryEditor extends EditorPane {
 	private splitviewContainer: HTMLElement;
 	private splitview: SplitView;
 
+	private spinnerElement: HTMLElement;
+
 	private inputDisposables = this._register(new DisposableStore());
 
 	private resultsVisible = false;
@@ -183,6 +185,9 @@ export class QueryEditor extends EditorPane {
 		this.taskbar = this._register(new Taskbar(taskbarContainer, {
 			actionViewItemProvider: action => this._getActionItemForAction(action),
 		}));
+
+		// Create spinner for cancelling queries in MSSQL.
+		this.spinnerElement = Taskbar.createTaskbarSpinner();
 
 		// Create Actions for the toolbar
 		this._runQueryAction = this.instantiationService.createInstance(actions.RunQueryAction, this);
@@ -318,10 +323,13 @@ export class QueryEditor extends EditorPane {
 				if (providerId === 'MSSQL') {
 					content.push({ element: separator },
 						{ action: this._estimatedQueryPlanAction },
-						{ action: this._toggleSqlcmdMode }
+						{ action: this._toggleSqlcmdMode },
 					);
 
 					content.push({ action: this._exportAsNotebookAction });
+					content.push({ element: separator },
+						{ element: this.spinnerElement }
+					);
 				}
 			} else {
 				content = [
@@ -671,4 +679,19 @@ export class QueryEditor extends EditorPane {
 	public chart(dataId: { batchId: number, resultId: number }): void {
 		this.resultsEditor.chart(dataId);
 	}
+
+	/**
+	 * Hide the spinner element to show that something was happening, hidden by default
+	 */
+	public hideSpinner(): void {
+		this.spinnerElement.style.visibility = 'hidden';
+	}
+
+	/**
+	 * Show the spinner element that shows something is happening, hidden by default
+	 */
+	public showSpinner(): void {
+		this.spinnerElement.style.visibility = 'visible';
+	}
+
 }

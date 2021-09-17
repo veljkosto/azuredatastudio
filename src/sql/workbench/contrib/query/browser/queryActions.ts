@@ -283,7 +283,9 @@ export class CancelQueryAction extends QueryTaskbarAction {
 				this.logService.error('editor input was null');
 				return;
 			}
+			this.editor.showSpinner();
 			this.queryModelService.cancelQuery(this.editor.input.uri);
+			this.editor.hideSpinner();
 		}
 	}
 }
