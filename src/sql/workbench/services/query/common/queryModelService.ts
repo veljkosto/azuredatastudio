@@ -392,11 +392,7 @@ export class QueryModelService implements IQueryModelService {
 		// TODO indicate on the status bar that the query is being canceled
 
 		// Cancel the query
-		queryRunner.cancelQuery().then(success => {
-			this._onRunQueryComplete.fire(queryRunner!.uri);
-			// fire extensibility API event
-			this._fireQueryEvent(queryRunner!.uri, 'complete', 0);
-		}, error => {
+		queryRunner.cancelQuery().then(success => undefined, error => {
 			// On error, show error message and notify that the query is complete so that buttons and other status indicators
 			// can be correct
 			this._notificationService.notify({
