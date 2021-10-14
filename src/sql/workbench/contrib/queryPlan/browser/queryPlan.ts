@@ -5,13 +5,14 @@
 
 import 'vs/css!./media/qp';
 import * as QP from 'html-query-plan';
-
 import { IPanelView, IPanelTab } from 'sql/base/browser/ui/panel/panel';
-
 import { Dimension, clearNode } from 'vs/base/browser/dom';
 import { localize } from 'vs/nls';
 import { dispose } from 'vs/base/common/lifecycle';
 import { QueryPlanState } from 'sql/workbench/common/editor/query/queryPlanState';
+
+import * as azdataGraphModule from 'azdataGraph';
+let azdataGraph = azdataGraphModule();
 
 export class QueryPlanTab implements IPanelTab {
 	public readonly title = localize('queryPlanTitle', "Query Plan");
@@ -33,18 +34,27 @@ export class QueryPlanTab implements IPanelTab {
 
 export class QueryPlanView implements IPanelView {
 	private qp?: QueryPlan;
-	private xml?: string;
+	// private xml?: string;
 	private container = document.createElement('div');
 	private _state?: QueryPlanState;
 
 	public render(container: HTMLElement): void {
-		container.appendChild(this.container);
-		this.container.style.overflow = 'scroll';
-		if (!this.qp) {
-			this.qp = new QueryPlan(this.container);
-			if (this.xml) {
-				this.qp.xml = this.xml;
-			}
+
+		let queryGraph: azdataQueryPlan = new azdataGraph.azdataQueryPlan();
+		queryGraph.isEnabled();
+		queryGraph.init();
+
+		let graph = new azdataGraph.mxGraph(container);
+		let parent = graph.getDefaultParent();
+		graph.getModel().beginUpdate();
+		try {
+			let v1 = graph.insertVertex(parent, null, 'Container', 20, 20, 200, 200,
+				'shape=swimlane;startSize=20;');
+			v1.geometry.alternateBounds = new azdataGraph.mxRectangle(0, 0, 110, 70);
+			graph.insertVertex(v1, null, 'Hello,', 10, 40, 120, 80);
+		}
+		finally {
+			graph.getModel().endUpdate();
 		}
 	}
 
@@ -67,9 +77,10 @@ export class QueryPlanView implements IPanelView {
 	public showPlan(xml: string) {
 		if (this.qp) {
 			this.qp.xml = xml;
-		} else {
-			this.xml = xml;
 		}
+		// } else {
+		// 	this.xml = xml;
+		// }
 		if (this.state) {
 			this.state.xml = xml;
 		}
