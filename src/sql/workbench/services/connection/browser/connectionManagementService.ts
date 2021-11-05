@@ -42,7 +42,7 @@ import { ILogService } from 'vs/platform/log/common/log';
 import * as interfaces from 'sql/platform/connection/common/interfaces';
 import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 import { Memento, MementoObject } from 'vs/workbench/common/memento';
-import { INotificationService } from 'vs/platform/notification/common/notification';
+import { INotificationService, Severity } from 'vs/platform/notification/common/notification';
 import { entries } from 'sql/base/common/collections';
 import { values } from 'vs/base/common/collections';
 import { IAdsTelemetryService } from 'sql/platform/telemetry/common/telemetry';
@@ -72,6 +72,7 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 	private _mementoObj: MementoObject;
 	private _connectionStore: ConnectionStore;
 	private _connectionStatusManager: ConnectionStatusManager;
+	private _connectionsGotUnsupportedVersionWarning: string[] = [];
 
 	private static readonly CONNECTION_MEMENTO = 'ConnectionManagement';
 	private static readonly _azureResources: AzureResource[] =
@@ -306,6 +307,11 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 			// Fill in the Azure account token if needed and open the connection dialog if it fails
 			let tokenFillSuccess = await this.fillInOrClearToken(newConnection);
 
+			// If there is no authentication type set, set it using configuration
+			if (!newConnection.authenticationType || newConnection.authenticationType === '') {
+				newConnection.authenticationType = this.getDefaultAuthenticationTypeId();
+			}
+
 			// If the password is required and still not loaded show the dialog
 			if ((!foundPassword && this._connectionStore.isPasswordRequired(newConnection) && !newConnection.password) || !tokenFillSuccess) {
 				return this.showConnectionDialogOnError(connection, owner, { connected: false, errorMessage: undefined, callStack: undefined, errorCode: undefined }, options);
@@ -466,6 +472,9 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 		if (!tokenFillSuccess) {
 			throw new Error(nls.localize('connection.noAzureAccount', "Failed to get Azure account token for connection"));
 		}
+		if (options.saveTheConnection) {
+			connection.options.originalDatabase = connection.databaseName;
+		}
 		return this.createNewConnection(uri, connection).then(async connectionResult => {
 			if (connectionResult && connectionResult.connected) {
 				// The connected succeeded so add it to our active connections now, optionally adding it to the MRU based on
@@ -623,27 +632,20 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 	}
 
 	private focusDashboard(profile: interfaces.IConnectionProfile): boolean {
-		let found: boolean = false;
+		const matchingEditor = this._editorService.editors.find(editor => {
+			return editor instanceof DashboardInput && DashboardInput.profileMatches(profile, editor.connectionProfile);
+		}) as DashboardInput;
 
-		this._editorService.editors.map(editor => {
-			if (editor instanceof DashboardInput) {
-				if (DashboardInput.profileMatches(profile, editor.connectionProfile)) {
-					editor.connectionProfile.connectionName = profile.connectionName;
-					editor.connectionProfile.databaseName = profile.databaseName;
-					this._editorService.openEditor(editor)
-						.then(() => {
-							if (!profile.databaseName || Utils.isMaster(profile)) {
-								this._angularEventing.sendAngularEvent(editor.uri, AngularEventType.NAV_SERVER);
-							} else {
-								this._angularEventing.sendAngularEvent(editor.uri, AngularEventType.NAV_DATABASE);
-							}
-							found = true;
-						}, errors.onUnexpectedError);
-				}
-			}
-		});
+		if (matchingEditor) {
+			matchingEditor.connectionProfile.connectionName = profile.connectionName;
+			matchingEditor.connectionProfile.databaseName = profile.databaseName;
+			this._editorService.openEditor(matchingEditor).then(() => {
+				const target = !profile.databaseName || Utils.isServerConnection(profile) ? AngularEventType.NAV_SERVER : AngularEventType.NAV_DATABASE;
+				this._angularEventing.sendAngularEvent(matchingEditor.uri, target);
+			}, errors.onUnexpectedError);
+		}
 
-		return found;
+		return !!matchingEditor;
 	}
 
 	public closeDashboard(uri: string): void {
@@ -790,6 +792,11 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 	public getDefaultProviderId(): string | undefined {
 		let defaultProvider = WorkbenchUtils.getSqlConfigValue<string>(this._configurationService, Constants.defaultEngine);
 		return defaultProvider && this._providers.has(defaultProvider) ? defaultProvider : undefined;
+	}
+
+	public getDefaultAuthenticationTypeId(): string {
+		let defaultAuthenticationType = WorkbenchUtils.getSqlConfigValue<string>(this._configurationService, Constants.defaultAuthenticationType);
+		return defaultAuthenticationType;
 	}
 
 	/**
@@ -1035,6 +1042,23 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 			if (this._connectionStatusManager.isDefaultTypeUri(info.ownerUri)) {
 				this._connectionGlobalStatus.setStatusToConnected(info.connectionSummary);
 			}
+
+			const connectionUniqueId = connection.connectionProfile.getConnectionInfoId();
+			if (info.isSupportedVersion === false
+				&& this._connectionsGotUnsupportedVersionWarning.indexOf(connectionUniqueId) === -1
+				&& this._configurationService.getValue<boolean>('connection.showUnsupportedServerVersionWarning')) {
+				const warningMessage = nls.localize('connection.unsupportedServerVersionWarning', "The server version is not supported by Azure Data Studio, you may still connect to it but some features in Azure Data Studio might not work as expected.");
+				this._connectionsGotUnsupportedVersionWarning.push(connectionUniqueId);
+				this._notificationService.prompt(Severity.Warning,
+					`${warningMessage} ${info.unsupportedVersionMessage ?? ''}`, [
+					{
+						label: nls.localize('connection.neverShowUnsupportedVersionWarning', "Don't show again"),
+						run: () => {
+							this._configurationService.updateValue('connection.showUnsupportedServerVersionWarning', false).catch(e => errors.onUnexpectedError(e));
+						}
+					}
+				]);
+			}
 		} else {
 			connection.connectHandler(false, info.errorMessage, info.errorNumber, info.messages);
 			this._telemetryService.createErrorEvent(TelemetryKeys.TelemetryView.Shell, TelemetryKeys.TelemetryError.DatabaseConnectionError, info.errorNumber.toString())
@@ -1125,6 +1149,20 @@ export class ConnectionManagementService extends Disposable implements IConnecti
 		// If the URI is disconnected, ensure the UI state is consistent and resolve true
 		owner.onDisconnect();
 		return Promise.resolve(true);
+	}
+
+	/**
+	 * Replaces connection info uri with new uri.
+	 */
+	public changeConnectionUri(newUri: string, oldUri: string): void {
+		this._connectionStatusManager.changeConnectionUri(newUri, oldUri);
+		if (!this._uriToProvider[oldUri]) {
+			this._logService.error(`No provider found for old URI : '${oldUri}'`);
+			throw new Error(nls.localize('connectionManagementService.noProviderForUri', 'Could not find provider for uri: {0}', oldUri));
+		}
+		// Provider will persist after disconnect, it is okay to overwrite the map if it exists from a previously deleted connection.
+		this._uriToProvider[newUri] = this._uriToProvider[oldUri];
+		delete this._uriToProvider[oldUri];
 	}
 
 	/**

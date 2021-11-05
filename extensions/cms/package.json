@@ -2,7 +2,7 @@
   "name": "cms",
   "displayName": "%cms.displayName%",
   "description": "%cms.description%",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "publisher": "Microsoft",
   "preview": true,
   "license": "https://raw.githubusercontent.com/Microsoft/azuredatastudio/main/LICENSE.txt",
@@ -22,6 +22,12 @@
     "type": "git",
     "url": "https://github.com/Microsoft/azuredatastudio.git"
   },
+	"capabilities": {
+    "virtualWorkspaces": false,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+	},
   "main": "./out/extension",
   "contributes": {
     "configuration": {

@@ -120,6 +120,11 @@ export interface IConnectionManagementService {
 	connectAndSaveProfile(connection: IConnectionProfile, uri: string, options?: IConnectionCompletionOptions, callbacks?: IConnectionCallbacks): Promise<IConnectionResult>;
 
 	/**
+	 * Replaces a connectioninfo's associated uri with a new uri.
+	 */
+	changeConnectionUri(newUri: string, oldUri: string): void
+
+	/**
 	 * Finds existing connection for given profile and purpose is any exists.
 	 * The purpose is connection by default
 	 */
@@ -212,6 +217,11 @@ export interface IConnectionManagementService {
 	getDefaultProviderId(): string | undefined;
 
 	getUniqueConnectionProvidersByNameMap(providerNameToDisplayNameMap: { [providerDisplayName: string]: string }): { [providerDisplayName: string]: string };
+
+	/**
+	 * Gets the default authentication type from the configuration service
+	 */
+	getDefaultAuthenticationTypeId(): string;
 
 	/**
 	 * Cancels the connection
