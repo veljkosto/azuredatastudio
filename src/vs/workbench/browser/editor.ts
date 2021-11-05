@@ -77,6 +77,7 @@ export class EditorRegistry implements IEditorRegistry {
 	private readonly mapEditorToInputs = new Map<EditorDescriptor, readonly SyncDescriptor<EditorInput>[]>();
 
 	registerEditor(descriptor: EditorDescriptor, inputDescriptors: readonly SyncDescriptor<EditorInput>[]): IDisposable {
+		console.log('Registering editor ' + descriptor.typeId);
 		this.mapEditorToInputs.set(descriptor, inputDescriptors);
 
 		const remove = insert(this.editors, descriptor);
@@ -102,21 +103,23 @@ export class EditorRegistry implements IEditorRegistry {
 	}
 
 	private findEditorDescriptors(input: EditorInput, byInstanceOf?: boolean): EditorDescriptor[] {
+		console.log(`Finding editor for ${input.getTitle()} (${input.typeId})`);
 		const matchingDescriptors: EditorDescriptor[] = [];
 
 		for (const editor of this.editors) {
 			const inputDescriptors = this.mapEditorToInputs.get(editor) || [];
 			for (const inputDescriptor of inputDescriptors) {
 				const inputClass = inputDescriptor.ctor;
-
 				// Direct check on constructor type (ignores prototype chain)
 				if (!byInstanceOf && input.constructor === inputClass) {
+					console.log(`Found matching constructor ${editor.typeId}`);
 					matchingDescriptors.push(editor);
 					break;
 				}
 
 				// Normal instanceof check
 				else if (byInstanceOf && input instanceof inputClass) {
+					console.log(`Found matching instance ${editor.typeId}`);
 					matchingDescriptors.push(editor);
 					break;
 				}
@@ -127,7 +130,7 @@ export class EditorRegistry implements IEditorRegistry {
 		if (!byInstanceOf && matchingDescriptors.length === 0) {
 			return this.findEditorDescriptors(input, true);
 		}
-
+		console.log(`Found matching descriptors [${matchingDescriptors.map(d => d.name + ' (' + d.typeId + ')').join(',')}]`);
 		return matchingDescriptors;
 	}
 
