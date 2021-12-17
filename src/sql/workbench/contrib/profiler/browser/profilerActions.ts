@@ -60,6 +60,22 @@ export class ProfilerConnect extends Action {
 	}
 }
 
+export class ProfilerLoadFile extends Action {
+	public static ID = 'profiler.loadfile';
+	public static LABEL = nls.localize('loadfile', "Load File");
+
+	constructor(
+		id: string, label: string,
+		@IProfilerService private _profilerService: IProfilerService
+	) {
+		super(id, label, 'add');
+	}
+
+	public override async run(input: ProfilerInput): Promise<void> {
+		return this._profilerService.launchOpenXELFileDialogue(input);
+	}
+}
+
 export class ProfilerStart extends Action {
 	public static ID = 'profiler.start';
 	public static LABEL = nls.localize('start', "Start");

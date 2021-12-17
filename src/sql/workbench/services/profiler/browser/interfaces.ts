@@ -140,6 +140,11 @@ export interface IProfilerService {
 	 * @param filter filter object
 	 */
 	saveFilter(filter: ProfilerFilter): Promise<void>;
+	/**
+	 * Launches the file select window for picking a XEL file.
+	 * @param input input object
+	 */
+	launchOpenXELFileDialogue(input: ProfilerInput): Thenable<void>;
 }
 
 export interface IProfilerSettings {

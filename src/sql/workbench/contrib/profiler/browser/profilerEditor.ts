@@ -150,6 +150,7 @@ export class ProfilerEditor extends EditorPane {
 	private _stopAction: Actions.ProfilerStop;
 	private _autoscrollAction: Actions.ProfilerAutoScroll;
 	private _createAction: Actions.ProfilerCreate;
+	private _loadFileAction: Actions.ProfilerLoadFile;
 	private _collapsedPanelAction: Actions.ProfilerCollapsablePanelAction;
 	private _filterAction: Actions.ProfilerFilterSession;
 	private _clearFilterAction: Actions.ProfilerClearSessionFilter;
@@ -236,6 +237,8 @@ export class ProfilerEditor extends EditorPane {
 		this._startAction.enabled = false;
 		this._createAction = this._instantiationService.createInstance(Actions.ProfilerCreate, Actions.ProfilerCreate.ID, Actions.ProfilerCreate.LABEL);
 		this._createAction.enabled = true;
+		this._loadFileAction = this._instantiationService.createInstance(Actions.ProfilerLoadFile, Actions.ProfilerLoadFile.ID, Actions.ProfilerLoadFile.LABEL);
+		this._loadFileAction.enabled = true;
 		this._stopAction = this._instantiationService.createInstance(Actions.ProfilerStop, Actions.ProfilerStop.ID, Actions.ProfilerStop.LABEL);
 		this._stopAction.enabled = false;
 		this._pauseAction = this._instantiationService.createInstance(Actions.ProfilerPause, Actions.ProfilerPause.ID, Actions.ProfilerPause.LABEL);
@@ -278,6 +281,8 @@ export class ProfilerEditor extends EditorPane {
 
 		this._actionBar.setContent([
 			{ action: this._createAction },
+			{ element: Taskbar.createTaskbarSeparator() },
+			{ action: this._loadFileAction },
 			{ element: Taskbar.createTaskbarSeparator() },
 			{ element: this._createTextElement(nls.localize('profiler.sessionSelectLabel', "Select Session:")) },
 			{ element: sessionsContainer },
@@ -608,6 +613,7 @@ export class ProfilerEditor extends EditorPane {
 	private _updateToolbar(): void {
 		this._startAction.enabled = !this.input.state.isRunning && !this.input.state.isPaused && this.input.state.isConnected;
 		this._createAction.enabled = !this.input.state.isRunning && !this.input.state.isPaused && this.input.state.isConnected;
+		this._loadFileAction.enabled = !this.input.state.isRunning && !this.input.state.isPaused && this.input.state.isConnected;
 		this._stopAction.enabled = !this.input.state.isStopped && (this.input.state.isRunning || this.input.state.isPaused) && this.input.state.isConnected;
 		this._pauseAction.enabled = !this.input.state.isStopped && (this.input.state.isRunning || this.input.state.isPaused && this.input.state.isConnected);
 	}

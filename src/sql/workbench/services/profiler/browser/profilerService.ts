@@ -9,6 +9,7 @@ import { IConnectionProfile } from 'sql/platform/connection/common/interfaces';
 import { ProfilerInput } from 'sql/workbench/browser/editor/profiler/profilerInput';
 import { ProfilerColumnEditorDialog } from 'sql/workbench/services/profiler/browser/profilerColumnEditorDialog';
 
+import { IFileDialogService, IOpenDialogOptions } from 'vs/platform/dialogs/common/dialogs';
 import * as azdata from 'azdata';
 
 import { IConfigurationService, ConfigurationTarget } from 'vs/platform/configuration/common/configuration';
@@ -67,6 +68,7 @@ export class ProfilerService implements IProfilerService {
 		@IConnectionManagementService private _connectionService: IConnectionManagementService,
 		@IConfigurationService public _configurationService: IConfigurationService,
 		@IInstantiationService private _instantiationService: IInstantiationService,
+		@IFileDialogService private readonly _fileDialogService: IFileDialogService,
 		@INotificationService private _notificationService: INotificationService,
 		@ICommandService private _commandService: ICommandService,
 		@IStorageService private _storageService: IStorageService
@@ -289,5 +291,22 @@ export class ProfilerService implements IProfilerService {
 	public async saveFilter(filter: ProfilerFilter): Promise<void> {
 		const config = [filter];
 		await this._configurationService.updateValue(PROFILER_FILTER_SETTINGS, config, ConfigurationTarget.USER);
+	}
+
+	public async launchOpenXELFileDialogue(input: ProfilerInput): Promise<void> {
+		let options: IOpenDialogOptions = {
+			openLabel: undefined,
+			canSelectFiles: true,
+			canSelectFolders: false,
+			canSelectMany: false,
+			defaultUri: undefined,
+			title: undefined,
+			filters: [{ extensions: ['xel'], name: 'XEL Files' }]
+		};
+		let uris = await this._fileDialogService.showOpenDialog(options);
+		for (const uri in uris) {
+			//console.log('uri is ' + uris[uri]);
+		}
+		return Promise.resolve();
 	}
 }
