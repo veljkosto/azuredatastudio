@@ -2006,6 +2006,11 @@ declare module 'azdata' {
 		connectSession(sessionId: string): Thenable<boolean>;
 		disconnectSession(sessionId: string): Thenable<boolean>;
 
+		createFileLoad(): Thenable<boolean>;
+		startFileLoad(): Thenable<boolean>;
+		pauseFileLoad(): Thenable<boolean>;
+		stopFileLoad(): Thenable<boolean>;
+
 		registerOnSessionEventsAvailable(handler: (response: ProfilerSessionEvents) => any): void;
 		registerOnSessionStopped(handler: (response: ProfilerSessionStoppedParams) => any): void;
 		registerOnProfilerSessionCreated(handler: (response: ProfilerSessionCreatedParams) => any): void;
