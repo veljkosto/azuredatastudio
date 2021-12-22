@@ -895,6 +895,17 @@ export interface DisconnectSessionParams {
 
 export interface DisconnectSessionResponse { }
 
+export interface OpenXelFileParams {
+	/**
+	 * Session Owner URI
+	 */
+	ownerUri: string
+
+	filePath: string
+}
+
+export interface OpenXelFileResponse { }
+
 /**
  * Profiler Event
  */
@@ -1012,6 +1023,10 @@ export namespace GetXEventSessionsRequest {
 
 export namespace DisconnectSessionRequest {
 	export const type = new RequestType<DisconnectSessionParams, DisconnectSessionResponse, void, void>('profiler/disconnect');
+}
+
+export namespace OpenXelFileRequest {
+	export const type = new RequestType<DisconnectSessionParams, DisconnectSessionResponse, void, void>('profiler/openxel');
 }
 
 export namespace ProfilerEventsAvailableNotification {
