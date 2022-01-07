@@ -523,7 +523,8 @@ export class ProfilerEditor extends EditorPane {
 					shouldFocus: FindStartFocusAction.FocusFindInput,
 					shouldAnimate: true,
 					updateSearchScope: false,
-					loop: true
+					loop: true,
+					seedSearchStringFromNonEmptySelection: false
 				});
 			}
 		} else {
