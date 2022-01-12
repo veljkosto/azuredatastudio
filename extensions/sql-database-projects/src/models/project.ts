@@ -911,8 +911,9 @@ export class Project implements ISqlProject {
 		return outputItemGroup;
 	}
 
-	private async addFileToProjFile(filePath: string, xmlTag: string, attributes?: Map<string, string>): Promise<void> {
+	private async addFileToProjFile(filePath: string, xmlTag: string, attributes?: Map<string, string>): Promise<boolean> {
 		let itemGroup;
+		let sqlprojUpdated = false;
 
 		if (xmlTag === constants.PreDeploy || xmlTag === constants.PostDeploy) {
 			let prePostScriptExist = { scriptExist: true };
@@ -934,6 +935,7 @@ export class Project implements ISqlProject {
 					if (trimmedUri === basename) {
 						// remove folder entry from sqlproj
 						this.removeFolderNode(folder);
+						sqlprojUpdated = true;
 					}
 				});
 			}
@@ -943,7 +945,7 @@ export class Project implements ISqlProject {
 			// don't need to add an entry if it's already included by a glob pattern
 			// unless it has an attribute that needs to be added, like external streaming job which needs it so it can be determined if validation can run on it
 			if (attributes?.size === 0 && currentFiles.find(f => f.relativePath === utils.convertSlashesForSqlProj(filePath))) {
-				return;
+				return sqlprojUpdated;
 			}
 
 			itemGroup = this.findOrCreateItemGroup(xmlTag);
@@ -960,9 +962,12 @@ export class Project implements ISqlProject {
 		}
 
 		itemGroup.appendChild(newFileNode);
+		sqlprojUpdated = true;
+
+		return sqlprojUpdated;
 	}
 
-	private async removeFileFromProjFile(path: string): Promise<void> {
+	private async removeFileFromProjFile(path: string): Promise<boolean> {
 		const fileNodes = this.projFileXmlDoc!.documentElement.getElementsByTagName(constants.Build);
 		const preDeployNodes = this.projFileXmlDoc!.documentElement.getElementsByTagName(constants.PreDeploy);
 		const postDeployNodes = this.projFileXmlDoc!.documentElement.getElementsByTagName(constants.PostDeploy);
@@ -980,7 +985,7 @@ export class Project implements ISqlProject {
 				if (this.isSdkStyleProject) {
 					break;
 				} else {
-					return;
+					return true;
 				}
 			}
 		}
@@ -993,15 +998,17 @@ export class Project implements ISqlProject {
 				await this.serializeToProjFile(this.projFileXmlDoc);
 			}
 			const currentFiles = await this.readFilesInProject();
+			let sqlprojUpdated = false;
 
 			// only add a node to exclude the file if it's still included by a glob
 			if (currentFiles.find(f => f.relativePath === utils.convertSlashesForSqlProj(path))) {
 				const removeFileNode = this.projFileXmlDoc!.createElement(constants.Build);
 				removeFileNode.setAttribute(constants.Remove, utils.convertSlashesForSqlProj(path));
 				this.findOrCreateItemGroup(constants.Build).appendChild(removeFileNode);
+				sqlprojUpdated = true;
 			}
 
-			return;
+			return deleted || sqlprojUpdated;
 		}
 
 		throw new Error(constants.unableToFindObject(path, constants.fileObject));
@@ -1050,15 +1057,15 @@ export class Project implements ISqlProject {
 		this.findOrCreateItemGroup(constants.Folder).appendChild(newFolderNode);
 	}
 
-	private async removeFolderFromProjFile(folderPath: string): Promise<void> {
+	private async removeFolderFromProjFile(folderPath: string): Promise<boolean> {
 		let deleted = this.removeFolderNode(folderPath);
-
+		let sqlprojUpdated = deleted;
 		// TODO: consider removing this check when working on migration scenario. If a user converts to an SDK-style project and adding this
 		// exclude XML doesn't hurt for non-SDK-style projects, then it might be better to just it anyway so that they don't have to exclude the folder
 		// again when they convert to an SDK-style project
 		if (this.isSdkStyleProject) {
 			// update sqlproj if a node was deleted and load files and folders again
-			await this.writeToSqlProjAndUpdateFilesFolders();
+			await this.updateFilesFolders(deleted);
 
 			// get latest folders to see if it still exists
 			const currentFolders = await this.readFolders();
@@ -1070,7 +1077,8 @@ export class Project implements ISqlProject {
 				this.findOrCreateItemGroup(constants.Build).appendChild(removeFileNode);
 
 				// write changes and update files so everything is up to date for the next removal
-				await this.writeToSqlProjAndUpdateFilesFolders();
+				await this.updateFilesFolders(true);
+				sqlprojUpdated = true;
 			}
 
 			deleted = true;
@@ -1079,6 +1087,8 @@ export class Project implements ISqlProject {
 		if (!deleted) {
 			throw new Error(constants.unableToFindObject(folderPath, constants.folderObject));
 		}
+
+		return sqlprojUpdated;
 	}
 
 	private removeFolderNode(folderPath: string): boolean {
@@ -1094,10 +1104,17 @@ export class Project implements ISqlProject {
 		return deleted;
 	}
 
-	private async writeToSqlProjAndUpdateFilesFolders(): Promise<void> {
-		await this.serializeToProjFile(this.projFileXmlDoc);
-		const projFileText = await fs.readFile(this._projectFilePath);
-		this.projFileXmlDoc = new xmldom.DOMParser().parseFromString(projFileText.toString());
+	/**
+	 * Reads the files and folders from the sqlproj and the default glob for SDK style projects
+	 * @param writeToSqlProj write the projFileXmlDoc to the sqlproj
+	 */
+	private async updateFilesFolders(writeToSqlProj: boolean): Promise<void> {
+		if (writeToSqlProj) {
+			await this.serializeToProjFile(this.projFileXmlDoc);
+			const projFileText = await fs.readFile(this._projectFilePath);
+			this.projFileXmlDoc = new xmldom.DOMParser().parseFromString(projFileText.toString());
+		}
+
 		this._files = await this.readFilesInProject();
 		this.files.push(...(await this.readFolders()));
 	}
@@ -1353,22 +1370,28 @@ export class Project implements ISqlProject {
 	}
 
 	private async addToProjFile(entry: ProjectEntry, xmlTag?: string, attributes?: Map<string, string>): Promise<void> {
+		let sqlprojUpdated = false;
 		switch (entry.type) {
 			case EntryType.File:
-				await this.addFileToProjFile((<FileProjectEntry>entry).relativePath, xmlTag ? xmlTag : constants.Build, attributes);
+				sqlprojUpdated = await this.addFileToProjFile((<FileProjectEntry>entry).relativePath, xmlTag ? xmlTag : constants.Build, attributes);
 				break;
 			case EntryType.Folder:
 				await this.addFolderToProjFile((<FileProjectEntry>entry).relativePath);
+				sqlprojUpdated = true;
 				break;
 			case EntryType.DatabaseReference:
 				await this.addDatabaseReferenceToProjFile(<IDatabaseReferenceProjectEntry>entry);
+				sqlprojUpdated = true;
 				break;
 			case EntryType.SqlCmdVariable:
 				await this.addSqlCmdVariableToProjFile(<SqlCmdVariableProjectEntry>entry);
+				sqlprojUpdated = true;
 				break; // not required but adding so that we dont miss when we add new items
 		}
 
-		await this.serializeToProjFile(this.projFileXmlDoc);
+		if (sqlprojUpdated) {
+			await this.serializeToProjFile(this.projFileXmlDoc);
+		}
 	}
 
 	private async removeFromProjFile(entries: ProjectEntry | ProjectEntry[]): Promise<void> {
@@ -1376,11 +1399,14 @@ export class Project implements ISqlProject {
 			entries = [entries];
 		}
 
+		let sqlprojUpdated = false;
+
 		// remove any folders first, otherwise unnecessary Build remove entries might get added for sdk style
 		// projects to exclude both the folder and the files in the folder
 		const folderEntries = entries.filter(e => e.type === EntryType.Folder);
 		for (const folder of folderEntries) {
-			await this.removeFolderFromProjFile((<FileProjectEntry>folder).relativePath);
+			const updated = await this.removeFolderFromProjFile((<FileProjectEntry>folder).relativePath);
+			sqlprojUpdated = sqlprojUpdated || updated;
 		}
 
 		entries = entries.filter(e => e.type !== EntryType.Folder);
@@ -1388,18 +1414,23 @@ export class Project implements ISqlProject {
 		for (const entry of entries) {
 			switch (entry.type) {
 				case EntryType.File:
-					await this.removeFileFromProjFile((<FileProjectEntry>entry).relativePath);
+					const updated = await this.removeFileFromProjFile((<FileProjectEntry>entry).relativePath);
+					sqlprojUpdated = sqlprojUpdated || updated;
 					break;
 				case EntryType.DatabaseReference:
 					this.removeDatabaseReferenceFromProjFile(<IDatabaseReferenceProjectEntry>entry);
+					sqlprojUpdated = true;
 					break;
 				case EntryType.SqlCmdVariable:
 					this.removeSqlCmdVariableFromProjFile((<SqlCmdVariableProjectEntry>entry).variableName);
+					sqlprojUpdated = true;
 					break; // not required but adding so that we dont miss when we add new items
 			}
 		}
 
-		await this.serializeToProjFile(this.projFileXmlDoc);
+		if (sqlprojUpdated) {
+			await this.serializeToProjFile(this.projFileXmlDoc);
+		}
 	}
 
 	private async serializeToProjFile(projFileContents: any): Promise<void> {
@@ -1501,6 +1532,10 @@ export class Project implements ISqlProject {
 	 * @returns Project entry for the last folder in the path, if path is under the project folder; otherwise `undefined`.
 	 */
 	private async ensureFolderItems(relativeFolderPath: string): Promise<FileProjectEntry | undefined> {
+		if (!relativeFolderPath) {
+			return;
+		}
+
 		const absoluteFolderPath = path.join(this.projectFolderPath, relativeFolderPath);
 		const normalizedProjectFolderPath = path.normalize(this.projectFolderPath);
 
