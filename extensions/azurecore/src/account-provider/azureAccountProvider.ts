@@ -16,9 +16,10 @@ import { Deferred } from './interfaces';
 
 import { SimpleTokenCache } from './simpleTokenCache';
 import { Logger } from '../utils/Logger';
-import { MultiTenantTokenResponse, Token, AzureAuth } from './auths/azureAuth';
+import { MultiTenantTokenResponse, Token } from './auths/azureAuth';
 import { AzureAuthCodeGrant } from './auths/azureAuthCodeGrant';
 import { AzureDeviceCode } from './auths/azureDeviceCode';
+import { AzureAuth } from '@microsoft/ads-adal-library';
 
 const localize = nls.loadMessageBundle();
 
@@ -168,6 +169,7 @@ export class AzureAccountProvider implements azdata.AccountProvider, vscode.Disp
 			return { canceled: true };
 		}
 
+		//TODO: this is where to replace startLogin
 		return pick.azureAuth.startLogin();
 	}
 
