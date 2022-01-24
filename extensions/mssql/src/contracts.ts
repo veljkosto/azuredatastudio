@@ -1071,7 +1071,7 @@ export namespace ProcessTableDesignerEditRequest {
 }
 
 export namespace PublishTableDesignerChangesRequest {
-	export const type = new RequestType<azdata.designers.TableInfo, void, void, void>('tabledesigner/save');
+	export const type = new RequestType<azdata.designers.TableInfo, void, void, void>('tabledesigner/publish');
 }
 
 export namespace TableDesignerGenerateScriptRequest {
@@ -1079,7 +1079,7 @@ export namespace TableDesignerGenerateScriptRequest {
 }
 
 export namespace TableDesignerGenerateChangePreviewReportRequest {
-	export const type = new RequestType<azdata.designers.TableInfo, string, void, void>('tabledesigner/report');
+	export const type = new RequestType<azdata.designers.TableInfo, string, void, void>('tabledesigner/generatepreviewreport');
 }
 export namespace DisposeTableDesignerRequest {
 	export const type = new RequestType<azdata.designers.TableInfo, void, void, void>('tabledesigner/dispose');
