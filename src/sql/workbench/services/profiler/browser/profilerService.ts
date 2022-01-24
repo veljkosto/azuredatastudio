@@ -305,7 +305,7 @@ export class ProfilerService implements IProfilerService {
 		};
 		let uris = await this._fileDialogService.showOpenDialog(options);
 		for (const uri in uris) {
-			//console.log('uri is ' + uris[uri]);
+			this._notificationService.info('uri is ' + uri);
 		}
 		return Promise.resolve();
 	}
