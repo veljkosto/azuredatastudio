@@ -911,6 +911,9 @@ class SuggestAdapter {
 		const insertRange = replaceRange.with({ end: pos });
 
 		const sw = new StopWatch(true);
+
+		// TODO: here is where request gets sent to provide completion items, might need some way to check if document is connected before
+		// sending these
 		const itemsOrList = await asPromise(() => this._provider.provideCompletionItems(doc, pos, token, typeConvert.CompletionContext.to(context)));
 
 		if (!itemsOrList) {
