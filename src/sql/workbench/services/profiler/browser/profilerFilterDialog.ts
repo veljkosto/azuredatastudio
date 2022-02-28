@@ -70,6 +70,7 @@ export class ProfilerFilterDialog extends Modal {
 	private _saveFilterButton?: Button;
 	private _input?: ProfilerInput;
 	private _clauseRows: ClauseRowUI[] = [];
+	private _statusText: HTMLElement;
 
 
 	constructor(
@@ -130,6 +131,7 @@ export class ProfilerFilterDialog extends Modal {
 
 		this.createClauseTableActionLink(AddClauseText, body, () => { this.addClauseRow(false); });
 		this.createClauseTableActionLink(ClearText, body, () => { this.handleClearButtonClick(); });
+		this.createStatusBar(body);
 	}
 
 	protected layout(height?: number): void {
@@ -152,6 +154,7 @@ export class ProfilerFilterDialog extends Modal {
 	}
 
 	private handleClearButtonClick() {
+		this._statusText.innerText = 'All Clauses Cleared!';
 		this._clauseRows.forEach(clause => {
 			clause.row.remove();
 		});
@@ -171,6 +174,13 @@ export class ProfilerFilterDialog extends Modal {
 				e.stopPropagation();
 			}
 		});
+	}
+
+	private createStatusBar(parent: HTMLElement): void {
+		this._statusText = DOM.append(parent, DOM.$('.profiler-filter-clause-table-status', {
+			'tabIndex': '0',
+			'role': 'status'
+		}));
 	}
 
 	private createSelectBox(container: HTMLElement, options: string[], selectedOption: string, ariaLabel: string): SelectBox {
@@ -273,6 +283,7 @@ export class ProfilerFilterDialog extends Modal {
 	private removeRow(clauseId: string) {
 		const idx = this._clauseRows.findIndex(entry => { return entry.id === clauseId; });
 		if (idx !== -1) {
+			this._statusText.innerText = 'Row index ' + idx + ' has been removed';
 			this._clauseRows[idx].row.remove();
 			this._clauseRows.splice(idx, 1);
 		}
