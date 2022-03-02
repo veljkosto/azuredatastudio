@@ -116,9 +116,9 @@ export class CodeComponent extends CellView implements OnInit, OnChanges {
 			let lastActiveCell = document.getElementsByClassName('notebook-cell active')[0];
 			let cell = document.activeElement.closest('.notebook-cell');
 			if (lastActiveCell !== cell) {
-				lastActiveCell?.classList.remove('active');
-				(lastActiveCell as HTMLElement).blur();
-				cell?.classList.add('active');
+				// lastActiveCell?.classList.remove('active');
+				// (lastActiveCell as HTMLElement).blur();
+				// cell?.classList.add('active');
 				// update the model
 				this.model.updateActiveCell(this.cellModel);
 				if (!(this._changeRef['destroyed'])) {
@@ -288,6 +288,9 @@ export class CodeComponent extends CellView implements OnInit, OnChanges {
 		}));
 		this._register(DOM.addDisposableListener(this.toolbarElement.nativeElement, DOM.EventType.FOCUS_IN, () => {
 			this._model.updateActiveCell(this.cellModel, true);
+			// if (!(this._changeRef['destroyed'])) {
+			// 	this._changeRef.detectChanges();
+			// }
 		}));
 
 		this.layout();
