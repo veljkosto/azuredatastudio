@@ -1103,6 +1103,13 @@ export class TableDesignerFeature extends SqlOpsFeature<undefined> {
 			id: UUID.generateUuid(),
 			registerOptions: undefined
 		});
+		this._client.onRequest(contracts.GetSecurityTokenForTableDesignerRequest.type, (request): Promise<string> => {
+			return new Promise(resolve => {
+				setTimeout(() => {
+					resolve('security token');
+				}, 5000);
+			});
+		});
 	}
 
 	protected registerProvider(options: undefined): Disposable {

@@ -1113,4 +1113,7 @@ export namespace TableDesignerGenerateChangePreviewReportRequest {
 export namespace DisposeTableDesignerRequest {
 	export const type = new RequestType<azdata.designers.TableInfo, void, void, void>('tabledesigner/dispose');
 }
+export namespace GetSecurityTokenForTableDesignerRequest {
+	export const type = new RequestType<azdata.designers.TableInfo, string, void, void>('tabledesigner/getsecuritytoken');
+}
 // ------------------------------- < Table Designer > ------------------------------------
