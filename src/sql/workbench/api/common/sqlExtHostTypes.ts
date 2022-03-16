@@ -665,7 +665,11 @@ export const enum NotebookEditOperationType {
 	/**
 	 * Updates a cell outputs with the specified new values.
 	 */
-	UpdateCellOutput = 4
+	UpdateCellOutput = 4,
+	/**
+	 * Updates the notebook document's metadata with the specified values.
+	 */
+	UpdateDocumentMetadata = 5
 }
 
 // TODO This should be split up into separate edit operation types
@@ -686,6 +690,10 @@ export interface INotebookEditOperation {
 	 * Whether to append the content to the existing content or replace it.
 	 */
 	append?: boolean;
+	/**
+	 * New metadata to set for this notebook document.
+	 */
+	metadata?: Record<string, any>;
 }
 
 export class ConnectionProfile {

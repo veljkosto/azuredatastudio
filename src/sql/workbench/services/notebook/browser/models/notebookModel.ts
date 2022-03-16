@@ -923,6 +923,8 @@ export class NotebookModel extends Disposable implements INotebookModel {
 						isDirty: true
 					});
 					break;
+				case NotebookEditOperationType.UpdateDocumentMetadata:
+					break;
 			}
 		}
 	}
