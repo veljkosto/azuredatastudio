@@ -1,6 +1,10 @@
 trigger: none
 pr: none
 
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'windows-2019'
 steps:
 - task: DockerInstaller@0
   displayName: Docker Installer
