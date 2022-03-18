@@ -14,7 +14,7 @@ else
 	# --disable-setuid-sandbox: setuid sandboxes requires root and is used in containers so we disable this
 	# --disable-dev-shm-usage --use-gl=swiftshader: when run on docker containers where size of /dev/shm
 	# partition < 64MB which causes OOM failure for chromium compositor that uses the partition for shared memory
-	LINUX_EXTRA_ARGS="--no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage --use-gl=swiftshader"
+	LINUX_EXTRA_ARGS="--no-sandbox --disable-dev-shm-usage --use-gl=swiftshader"
 fi
 
 VSCODECRASHDIR=$ROOT/.build/crashes
@@ -60,10 +60,10 @@ else
 	export PYTHON_TEST_PATH=$VSCODEUSERDATADIR/TestPythonInstallation
 	echo $PYTHON_TEST_PATH
 
-	"$INTEGRATION_TEST_ELECTRON_PATH" $LINUX_NO_SANDBOX --nogpu --extensionDevelopmentPath=$ROOT/extensions/notebook --extensionTestsPath=$ROOT/extensions/notebook/out/integrationTest --user-data-dir=$VSCODEUSERDATADIR --extensions-dir=$VSCODEEXTDIR --remote-debugging-port=9222 --disable-telemetry --disable-crash-reporter --disable-updates --skip-getting-started --disable-inspect
+	"$INTEGRATION_TEST_ELECTRON_PATH" $LINUX_EXTRA_ARGS --nogpu --extensionDevelopmentPath=$ROOT/extensions/notebook --extensionTestsPath=$ROOT/extensions/notebook/out/integrationTest --user-data-dir=$VSCODEUSERDATADIR --extensions-dir=$VSCODEEXTDIR --remote-debugging-port=9222 --disable-telemetry --disable-crash-reporter --disable-updates --skip-getting-started --disable-inspect
 fi
 
-"$INTEGRATION_TEST_ELECTRON_PATH" $LINUX_NO_SANDBOX \
+"$INTEGRATION_TEST_ELECTRON_PATH" $LINUX_EXTRA_ARGS \
 --extensionDevelopmentPath=$ROOT/extensions/integration-tests \
 --extensionTestsPath=$ROOT/extensions/integration-tests/out/test \
 --user-data-dir=$VSCODEUSERDATADIR --logsPath=$VSCODELOGSDIR --extensions-dir=$VSCODEEXTDIR \
