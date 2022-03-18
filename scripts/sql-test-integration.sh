@@ -42,8 +42,7 @@ else
 	# because we run extension tests from their source folders
 	# and the build bundles extensions into .build webpacked
 	# {{SQL CARBON EDIT}} Don't compile unused extensions
-	yarn gulp 	compile-extension:integration-test
-
+	yarn gulp 	compile-extension:integration-tests
 
 	# Configuration for more verbose output
 	export VSCODE_CLI=1
