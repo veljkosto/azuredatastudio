@@ -1006,6 +1006,7 @@ export interface INotebookShowOptions {
 	defaultKernel?: azdata.nb.IKernelSpec;
 	initialContent?: string;
 	initialDirtyState?: boolean;
+	documentMetadata?: azdata.nb.INotebookMetadata;
 }
 
 export interface ExtHostNotebookDocumentsAndEditorsShape {

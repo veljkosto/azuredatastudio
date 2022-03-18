@@ -269,15 +269,20 @@ export class NotebookService extends Disposable implements INotebookService {
 		}
 
 		let serializedContent: string;
+		let metadata: nb.INotebookMetadata;
 		if (contents) {
 			// Have to serialize contents again first, since our notebook code assumes input is based on the raw file contents
 			let manager = await this.getOrCreateSerializationManager(providerId, uri);
 			serializedContent = await manager.contentManager.serializeNotebook(contents);
+
+			// Preserve prior metadata in case serialized format doesn't keep it (like with .dib files)
+			metadata = contents.metadata;
 		}
 
 		let options: INotebookShowOptions = {
 			providerId: providerId,
-			initialContent: serializedContent
+			initialContent: serializedContent,
+			documentMetadata: metadata
 		};
 		return this.createNotebookInput(options, resource);
 	}
@@ -312,6 +317,7 @@ export class NotebookService extends Disposable implements INotebookService {
 			if (isINotebookInput(fileInput)) {
 				fileInput.defaultKernel = options.defaultKernel;
 				fileInput.connectionProfile = options.connectionProfile;
+				fileInput.defaultMetadata = options.documentMetadata;
 
 				if (isUntitled) {
 					let untitledModel = await fileInput.resolve();

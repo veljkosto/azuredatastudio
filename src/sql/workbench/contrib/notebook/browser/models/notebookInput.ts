@@ -223,13 +223,14 @@ export abstract class NotebookInput extends EditorInput implements INotebookInpu
 	private _standardKernels: IStandardKernelWithProvider[];
 	private _connectionProfile: IConnectionProfile;
 	private _defaultKernel: azdata.nb.IKernelSpec;
+	private _defaultMetadata: azdata.nb.INotebookMetadata;
 	public hasBootstrapped = false;
 	// Holds the HTML content for the editor when the editor discards this input and loads another
 	private _parentContainer: HTMLElement;
 	private readonly _layoutChanged: Emitter<void> = this._register(new Emitter<void>());
 	private _model: NotebookEditorModel;
 	private _untitledEditorModel: IUntitledTextEditorModel;
-	private _contentLoader: IContentLoader;
+	private _contentLoader: NotebookEditorContentLoader;
 	private _providersLoaded: Promise<void>;
 	private _dirtyListener: IDisposable;
 	private _notebookEditorOpenedTimestamp: number;
@@ -283,7 +284,7 @@ export abstract class NotebookInput extends EditorInput implements INotebookInpu
 	public get contentLoader(): IContentLoader {
 		if (!this._contentLoader) {
 			let contentManager = this.instantiationService.createInstance(LocalContentManager);
-			this._contentLoader = this.instantiationService.createInstance(NotebookEditorContentLoader, this, contentManager);
+			this._contentLoader = this.instantiationService.createInstance(NotebookEditorContentLoader, this, contentManager, this._defaultMetadata);
 		}
 		return this._contentLoader;
 	}
@@ -364,6 +365,17 @@ export abstract class NotebookInput extends EditorInput implements INotebookInpu
 
 	public set defaultKernel(kernel: azdata.nb.IKernelSpec) {
 		this._defaultKernel = kernel;
+	}
+
+	public get defaultMetadata(): azdata.nb.INotebookMetadata {
+		return this._defaultMetadata;
+	}
+
+	public set defaultMetadata(metadata: azdata.nb.INotebookMetadata) {
+		this._defaultMetadata = metadata;
+		if (this._contentLoader) {
+			this._contentLoader.defaultMetadata = metadata;
+		}
 	}
 
 	get layoutChanged(): Event<void> {
@@ -461,7 +473,7 @@ export abstract class NotebookInput extends EditorInput implements INotebookInpu
 				this._standardKernels.push(...standardKernels);
 			}
 			let serializationProvider = await this.notebookService.getOrCreateSerializationManager(this._providerId, this._resource);
-			this._contentLoader = this.instantiationService.createInstance(NotebookEditorContentLoader, this, serializationProvider.contentManager);
+			this._contentLoader = this.instantiationService.createInstance(NotebookEditorContentLoader, this, serializationProvider.contentManager, this._defaultMetadata);
 		}
 	}
 
@@ -541,12 +553,22 @@ export abstract class NotebookInput extends EditorInput implements INotebookInpu
 export class NotebookEditorContentLoader implements IContentLoader {
 	constructor(
 		private notebookInput: NotebookInput,
-		private contentManager: azdata.nb.ContentManager) {
+		private contentManager: azdata.nb.ContentManager,
+		private _defaultMetadata: azdata.nb.INotebookMetadata | undefined) {
+	}
+
+	public set defaultMetadata(metadata: azdata.nb.INotebookMetadata) {
+		this._defaultMetadata = metadata;
 	}
 
 	async loadContent(): Promise<azdata.nb.INotebookContents> {
 		let notebookEditorModel = await this.notebookInput.resolve();
 		let notebookContents = await this.contentManager.deserializeNotebook(notebookEditorModel.contentString);
+
+		// Overwrite deserialized metadata with the default override, if available
+		if (this._defaultMetadata) {
+			notebookContents = Object.assign(notebookContents, { metadata: this._defaultMetadata });
+		}
 
 		// Special case .NET Interactive kernel spec to handle inconsistencies between notebook providers and jupyter kernel specs
 		if (notebookContents.metadata?.kernelspec?.display_name?.startsWith(DotnetInteractiveJupyterLabelPrefix)) {
