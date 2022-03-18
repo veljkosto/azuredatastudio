@@ -33,11 +33,11 @@ if (process.argv.length === 3 && process.argv[2]) {
 			break;
 		case 'BASHWIN':
 			if (!fs.existsSync(LAUNCH_GIT_BASH_WINDOWS)) {
-				throw `Not able to find git-bash.exe in its default location: ${LAUNCH_GIT_BASH_WINDOWS}, please update the variable LAUNCH_GIT_BASH_WINDOWS accordingly.`;
+				throw new Error(`Not able to find git-bash.exe in its default location: ${LAUNCH_GIT_BASH_WINDOWS}, please update the variable LAUNCH_GIT_BASH_WINDOWS accordingly.`);
 			}
 			let bashPath = LAUNCH_GIT_BASH_WINDOWS;
 			// quote the path with double quote if it contains spaces
-			if (bashPath.indexOf(' ') != -1) {
+			if (bashPath.indexOf(' ') !== -1) {
 				bashPath = '"' + bashPath + '"';
 			}
 
@@ -90,9 +90,6 @@ const AKV_URL = 'https://sqltoolssecretstore.vault.azure.net/';
 const SECRET_AZURE_SERVER = 'ads-integration-test-azure-server';
 const SECRET_AZURE_SERVER_USERNAME = 'ads-integration-test-azure-server-username';
 const SECRET_AZURE_SERVER_PASSWORD = 'ads-integration-test-azure-server-password';
-const SECRET_BDC_SERVER = 'ads-integration-test-bdc-server';
-const SECRET_BDC_SERVER_USERNAME = 'ads-integration-test-bdc-server-username';
-const SECRET_BDC_SERVER_PASSWORD = 'ads-integration-test-bdc-server-password';
 const SECRET_STANDALONE_SERVER = 'ads-integration-test-standalone-server';
 const SECRET_STANDALONE_SERVER_USERNAME = 'ads-integration-test-standalone-server-username';
 const SECRET_STANDALONE_SERVER_PASSWORD = 'ads-integration-test-standalone-server-password';
@@ -104,9 +101,6 @@ const SECRET_STANDALONE_SERVER_PASSWORD_2019 = 'ads-integration-test-standalone-
 const ENVAR_AZURE_SERVER = 'AZURE_SQL';
 const ENVAR_AZURE_SERVER_USERNAME = 'AZURE_SQL_USERNAME';
 const ENVAR_AZURE_SERVER_PASSWORD = 'AZURE_SQL_PWD';
-const ENVAR_BDC_SERVER = 'BDC_BACKEND_HOSTNAME';
-const ENVAR_BDC_SERVER_USERNAME = 'BDC_BACKEND_USERNAME';
-const ENVAR_BDC_SERVER_PASSWORD = 'BDC_BACKEND_PWD';
 const ENVAR_STANDALONE_SERVER = 'STANDALONE_SQL';
 const ENVAR_STANDALONE_SERVER_USERNAME = 'STANDALONE_SQL_USERNAME';
 const ENVAR_STANDALONE_SERVER_PASSWORD = 'STANDALONE_SQL_PWD';
@@ -122,9 +116,6 @@ const SecretEnVarMapping = [];
 SecretEnVarMapping.push([SECRET_AZURE_SERVER, ENVAR_AZURE_SERVER]);
 SecretEnVarMapping.push([SECRET_AZURE_SERVER_PASSWORD, ENVAR_AZURE_SERVER_PASSWORD]);
 SecretEnVarMapping.push([SECRET_AZURE_SERVER_USERNAME, ENVAR_AZURE_SERVER_USERNAME]);
-SecretEnVarMapping.push([SECRET_BDC_SERVER, ENVAR_BDC_SERVER]);
-SecretEnVarMapping.push([SECRET_BDC_SERVER_PASSWORD, ENVAR_BDC_SERVER_PASSWORD]);
-SecretEnVarMapping.push([SECRET_BDC_SERVER_USERNAME, ENVAR_BDC_SERVER_USERNAME]);
 SecretEnVarMapping.push([SECRET_STANDALONE_SERVER, ENVAR_STANDALONE_SERVER]);
 SecretEnVarMapping.push([SECRET_STANDALONE_SERVER_PASSWORD, ENVAR_STANDALONE_SERVER_PASSWORD]);
 SecretEnVarMapping.push([SECRET_STANDALONE_SERVER_USERNAME, ENVAR_STANDALONE_SERVER_USERNAME]);
@@ -140,7 +131,7 @@ process.env[ENVAR_RUN_PYSPARK_TEST] = '0';
 const promises = [];
 
 // Open up a web browser to the login page so the user doesn't have to copy the URL manually
-const start = (process.platform == 'darwin' ? 'open' : process.platform == 'win32' ? 'start' : 'xdg-open');
+const start = (process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open');
 child_process.exec(`${start} https://microsoft.com/devicelogin`);
 
 // Fetch the values from AKV

@@ -5,16 +5,11 @@
 
 import 'mocha';
 import * as azdata from 'azdata';
-import { getBdcServer, TestServerProfile, getAzureServer, getStandaloneServer } from './testConfig';
+import { TestServerProfile, getAzureServer, getStandaloneServer } from './testConfig';
 import { connectToServer, createDB, DefaultConnectTimeoutInMs, asyncTimeout, tryDeleteDB } from './utils';
 import * as assert from 'assert';
 
 suite('Object Explorer integration suite', () => {
-	test.skip('BDC instance node label test', async function () {
-		const expectedNodeLabel = ['Databases', 'Security', 'Server Objects'];
-		const server = await getBdcServer();
-		await verifyOeNode(server, DefaultConnectTimeoutInMs, expectedNodeLabel);
-	});
 	test('Standalone instance node label test', async function () {
 		if (process.platform === 'win32') {
 			const expectedNodeLabel = ['Databases', 'Security', 'Server Objects'];
@@ -26,18 +21,6 @@ suite('Object Explorer integration suite', () => {
 		const expectedNodeLabel = ['Databases', 'Security'];
 		const server = await getAzureServer();
 		await verifyOeNode(server, DefaultConnectTimeoutInMs, expectedNodeLabel);
-	});
-	test.skip('BDC instance context menu test', async function () {
-		const server = await getBdcServer();
-		let expectedActions: string[];
-		// Properties comes from the admin-tool-ext-win extension which is for Windows only, so the item won't show up on non-Win32 platforms
-		if (process.platform === 'win32') {
-			expectedActions = ['Manage', 'New Query', 'New Notebook', 'Disconnect', 'Delete Connection', 'Refresh', 'Data-tier Application wizard', 'Launch Profiler', 'Properties'];
-		}
-		else {
-			expectedActions = ['Manage', 'New Query', 'New Notebook', 'Disconnect', 'Delete Connection', 'Refresh', 'Data-tier Application wizard', 'Launch Profiler'];
-		}
-		return await verifyContextMenu(server, expectedActions);
 	});
 	test('Azure SQL DB context menu test  @UNSTABLE@', async function () {
 		const server = await getAzureServer();
@@ -82,8 +65,6 @@ async function verifyOeNode(server: TestServerProfile, timeout: number, expected
 
 	const index = nodes.findIndex(node => node.nodePath.includes(server.serverName));
 	assert(index !== -1, `Failed to find server: "${server.serverName}" in OE tree`);
-	// TODO: #7146 HDFS isn't always filled in by the call to getChildren since it's loaded asynchronously. To avoid this test being flaky just removing
-	// the node for now if it exists until a proper fix can be made.
 
 	let children: azdata.objectexplorer.ObjectExplorerNode[];
 	try {
@@ -92,10 +73,9 @@ async function verifyOeNode(server: TestServerProfile, timeout: number, expected
 		return assert.fail('getChildren() timed out...', e);
 	}
 
-	const nonHDFSChildren = children.filter(c => c.label !== 'HDFS');
-	const actualLabelsString = nonHDFSChildren.map(c => c.label).join(',');
+	const actualLabelsString = children.map(c => c.label).join(',');
 	const expectedLabelString = expectedNodeLabel.join(',');
-	return assert(expectedNodeLabel.length === nonHDFSChildren.length && expectedLabelString === actualLabelsString, `Expected node label: "${expectedLabelString}", Actual: "${actualLabelsString}"`);
+	return assert(expectedNodeLabel.length === children.length && expectedLabelString === actualLabelsString, `Expected node label: "${expectedLabelString}", Actual: "${actualLabelsString}"`);
 }
 
 async function verifyDBContextMenu(server: TestServerProfile, timeoutinMS: number, expectedActions: string[]): Promise<void> {
