@@ -22,7 +22,7 @@ const TEST_CMS_GROUP = `adsTestCmsGroup_${uuid.v4().asHex()}`;
 const TEST_CMS_SERVER = `adsTestCmsServer_${uuid.v4().asHex()}`;
 const TEST_CMS_REG_SERVER = `adsTestCmsRegisteredServer_${uuid.v4().asHex()}`;
 
-suite('CMS integration test suite', () => {
+suite.skip('CMS integration test suite', () => {
 
 	setup(async function () {
 		// Set up CMS provider

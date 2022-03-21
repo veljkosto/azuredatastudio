@@ -19,7 +19,7 @@ const retryCount = 24; // 2 minutes
 const dacpac1: string = path.join(__dirname, '../../testData/Database1.dacpac');
 
 
-suite('Dacpac integration test suite @DacFx@', () => {
+suite.skip('Dacpac integration test suite @DacFx@', () => {
 	suiteSetup(async function () {
 		await utils.sleep(5000); // To ensure the providers are registered.
 		console.log(`Start dacpac tests`);

@@ -26,7 +26,7 @@ const retryCount = 12; // 1 minute
 const folderPath = path.join(os.tmpdir(), 'SchemaCompareTest');
 const testTimeout = 10 * 60 * 1000;	// 10 minutes
 
-suite('Schema compare integration test suite @DacFx@', () => {
+suite.skip('Schema compare integration test suite @DacFx@', () => {
 	suiteSetup(async function () {
 		let attempts: number = 20;
 		while (attempts > 0) {

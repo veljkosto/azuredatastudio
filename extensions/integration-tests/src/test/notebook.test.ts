@@ -14,7 +14,7 @@ import { connectToServer, sleep, testServerProfileToIConnectionProfile } from '.
 import * as fs from 'fs';
 import { promisify } from 'util';
 
-suite('Notebook integration test suite', function () {
+suite.skip('Notebook integration test suite', function () {
 	setup(async function () {
 		console.log(`Start "${this.currentTest.title}"`);
 		let server = await getStandaloneServer();
