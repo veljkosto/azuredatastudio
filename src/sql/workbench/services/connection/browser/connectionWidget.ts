@@ -34,6 +34,9 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { ILogService } from 'vs/platform/log/common/log';
 import { attachButtonStyler } from 'vs/platform/theme/common/styler';
 import { Dropdown } from 'sql/base/browser/ui/editableDropdown/browser/dropdown';
+import { IErrorMessageService } from 'sql/platform/errorMessage/common/errorMessageService';
+import Severity from 'vs/base/common/severity';
+import { debounce } from 'vs/base/common/decorators';
 
 export enum AuthenticationType {
 	SqlLogin = 'SqlLogin',
@@ -44,9 +47,12 @@ export enum AuthenticationType {
 	None = 'None' // Kusto supports no authentication
 }
 
+const ConnectionStringText = localize('connectionWidget.connectionString', "Connection string");
+
 export class ConnectionWidget extends lifecycle.Disposable {
 	private _previousGroupOption: string;
 	private _serverGroupOptions: IConnectionProfileGroup[];
+	private _connectionStringInput: InputBox;
 	private _serverNameInputBox: InputBox;
 	private _userNameInputBox: InputBox;
 	private _passwordInputBox: InputBox;
@@ -115,6 +121,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		@IConfigurationService private _configurationService: IConfigurationService,
 		@IAccountManagementService private _accountManagementService: IAccountManagementService,
 		@ILogService protected _logService: ILogService,
+		@IErrorMessageService private _errorMessageService: IErrorMessageService
 	) {
 		super();
 		this._callbacks = callbacks;
@@ -176,40 +183,56 @@ export class ConnectionWidget extends lifecycle.Disposable {
 
 	protected async _handleClipboard(): Promise<void> {
 		if (this._configurationService.getValue<boolean>('connection.parseClipboardForConnectionString')) {
-			let paste = await this._clipboardService.readText();
-			this._connectionManagementService.buildConnectionInfo(paste, this._providerName).then(e => {
-				if (e) {
-					let profile = new ConnectionProfile(this._capabilitiesService, this._providerName);
-					profile.options = e.options;
-					if (profile.serverName) {
-						this.initDialog(profile);
-					}
-				}
-			});
+			const connectionString = await this._clipboardService.readText();
+			await this.handleConnectionString(connectionString);
+		}
+	}
+
+	private async handleConnectionString(connectionString: string, showError: boolean = false): Promise<void> {
+		if (!connectionString) {
+			return;
+		}
+		const connectionInfo = await this._connectionManagementService.buildConnectionInfo(connectionString, this._providerName);
+		if (connectionInfo) {
+			const profile = new ConnectionProfile(this._capabilitiesService, this._providerName);
+			profile.options = connectionInfo.options;
+			if (profile.serverName) {
+				this.initDialog(profile);
+			}
+		} else if (showError) {
+			this._errorMessageService.showDialog(Severity.Error, ConnectionStringText, localize('connectionWidget.invalidConnectionString', "The specified text is not a valid connection string. Text: {0}", connectionString));
 		}
 	}
 
 	protected fillInConnectionForm(authTypeChanged: boolean = false): void {
-		// Server Name
+		this.addConnectionStringInput();
 		this.addServerNameOption();
-
-		// Authentication type
 		this.addAuthenticationTypeOption(authTypeChanged);
-
-		// Login Options
 		this.addLoginOptions();
-
-		// Database
 		this.addDatabaseOption();
-
-		// Server Group
 		this.addServerGroupOption();
-
-		// Connection Name
 		this.addConnectionNameOptions();
-
-		// Advanced Options
 		this.addAdvancedOptions();
+	}
+
+	private addConnectionStringInput(): void {
+		if (this._connectionManagementService.getProviderProperties(this._providerName).showConnectionStringOption) {
+			let connectionStringContainer = DialogHelper.appendRow(this._tableContainer, ConnectionStringText, 'connection-label', 'connection-input');
+			this._connectionStringInput = new InputBox(connectionStringContainer, this._contextViewService, {
+				ariaLabel: ConnectionStringText,
+				flexibleHeight: true,
+				flexibleMaxHeight: 100,
+				placeholder: localize('connectionWidget.connectionStringPlaceHolder', "Populate connection information with a connection string")
+			});
+			this._connectionStringInput.onDidChange(async () => {
+				await this.onConnectionStringChange();
+			});
+		}
+	}
+
+	@debounce(200)
+	private async onConnectionStringChange(): Promise<void> {
+		await this.handleConnectionString(this._connectionStringInput.value, true);
 	}
 
 	protected addAuthenticationTypeOption(authTypeChanged: boolean = false): void {
@@ -347,6 +370,9 @@ export class ConnectionWidget extends lifecycle.Disposable {
 
 	protected registerListeners(): void {
 		// Theme styler
+		if (this._connectionStringInput) {
+			this._register(styler.attachInputBoxStyler(this._connectionStringInput, this._themeService));
+		}
 		this._register(styler.attachInputBoxStyler(this._serverNameInputBox, this._themeService));
 		this._register(styler.attachInputBoxStyler(this._connectionNameInputBox, this._themeService));
 		this._register(styler.attachInputBoxStyler(this._userNameInputBox, this._themeService));
