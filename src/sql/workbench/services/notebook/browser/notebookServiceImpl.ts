@@ -756,51 +756,54 @@ export class NotebookService extends Disposable implements INotebookService {
 	}
 
 	private waitOnSerializationProviderAvailability(providerDescriptor: SerializationProviderDescriptor, timeout?: number): Promise<ISerializationProvider | undefined> {
-		// Wait up to 30 seconds for the provider to be registered
-		timeout = timeout ?? 30000;
-		let promises: Promise<ISerializationProvider | undefined>[] = [
-			providerDescriptor.instanceReady,
-			new Promise<ISerializationProvider | undefined>((resolve, reject) => setTimeout(() => {
-				if (!providerDescriptor.instance) {
-					this._serializationProviders.delete(providerDescriptor.providerId); // Remove waiting descriptor so we don't timeout again
-					onUnexpectedError(localize('serializationProviderTimeout', 'Waiting for Serialization Provider availability timed out for notebook provider \'{0}\'', providerDescriptor.providerId));
-				}
-				resolve(undefined);
-			}, timeout))
-		];
-		return Promise.race(promises);
+		return this._extensionService.whenInstalledExtensionsRegistered().then(() => {
+			timeout = timeout ?? 10000;
+			let promises: Promise<ISerializationProvider | undefined>[] = [
+				providerDescriptor.instanceReady,
+				new Promise<ISerializationProvider | undefined>((resolve, reject) => setTimeout(() => {
+					if (!providerDescriptor.instance) {
+						this._serializationProviders.delete(providerDescriptor.providerId); // Remove waiting descriptor so we don't timeout again
+						onUnexpectedError(localize('serializationProviderTimeout', 'Waiting for Serialization Provider availability timed out for notebook provider \'{0}\'', providerDescriptor.providerId));
+					}
+					resolve(undefined);
+				}, timeout))
+			];
+			return Promise.race(promises);
+		});
 	}
 
 	private waitOnExecuteProviderAvailability(providerDescriptor: ExecuteProviderDescriptor, timeout?: number): Promise<IExecuteProvider | undefined> {
-		// Wait up to 30 seconds for the provider to be registered
-		timeout = timeout ?? 30000;
-		let promises: Promise<IExecuteProvider | undefined>[] = [
-			providerDescriptor.instanceReady,
-			new Promise<IExecuteProvider | undefined>((resolve, reject) => setTimeout(() => {
-				if (!providerDescriptor.instance) {
-					this._executeProviders.delete(providerDescriptor.providerId); // Remove waiting descriptor so we don't timeout again
-					onUnexpectedError(localize('executeProviderTimeout', 'Waiting for Execute Provider availability timed out for notebook provider \'{0}\'', providerDescriptor.providerId));
-				}
-				resolve(undefined);
-			}, timeout))
-		];
-		return Promise.race(promises);
+		return this._extensionService.whenInstalledExtensionsRegistered().then(() => {
+			timeout = timeout ?? 10000;
+			let promises: Promise<IExecuteProvider | undefined>[] = [
+				providerDescriptor.instanceReady,
+				new Promise<IExecuteProvider | undefined>((resolve, reject) => setTimeout(() => {
+					if (!providerDescriptor.instance) {
+						this._executeProviders.delete(providerDescriptor.providerId); // Remove waiting descriptor so we don't timeout again
+						onUnexpectedError(localize('executeProviderTimeout', 'Waiting for Execute Provider availability timed out for notebook provider \'{0}\'', providerDescriptor.providerId));
+					}
+					resolve(undefined);
+				}, timeout))
+			];
+			return Promise.race(promises);
+		});
 	}
 
 	private waitOnStandardKernelsAvailability(kernelsDescriptor: StandardKernelsDescriptor, timeout?: number): Promise<nb.IStandardKernel[] | undefined> {
-		// Wait up to 30 seconds for the kernels to be registered
-		timeout = timeout ?? 30000;
-		let promises: Promise<nb.IStandardKernel[] | undefined>[] = [
-			kernelsDescriptor.instanceReady,
-			new Promise<nb.IStandardKernel[] | undefined>((resolve, reject) => setTimeout(() => {
-				if (!kernelsDescriptor.instance) {
-					this._providerToStandardKernels.delete(kernelsDescriptor.providerId.toUpperCase()); // Remove waiting descriptor so we don't timeout again
-					onUnexpectedError(localize('standardKernelsTimeout', 'Waiting for Standard Kernels availability timed out for notebook provider \'{0}\'', kernelsDescriptor.providerId));
-				}
-				resolve(undefined);
-			}, timeout))
-		];
-		return Promise.race(promises);
+		return this._extensionService.whenInstalledExtensionsRegistered().then(() => {
+			timeout = timeout ?? 10000;
+			let promises: Promise<nb.IStandardKernel[] | undefined>[] = [
+				kernelsDescriptor.instanceReady,
+				new Promise<nb.IStandardKernel[] | undefined>((resolve, reject) => setTimeout(() => {
+					if (!kernelsDescriptor.instance) {
+						this._providerToStandardKernels.delete(kernelsDescriptor.providerId.toUpperCase()); // Remove waiting descriptor so we don't timeout again
+						onUnexpectedError(localize('standardKernelsTimeout', 'Waiting for Standard Kernels availability timed out for notebook provider \'{0}\'', kernelsDescriptor.providerId));
+					}
+					resolve(undefined);
+				}, timeout))
+			];
+			return Promise.race(promises);
+		});
 	}
 
 	//Returns an instantiation of RenderMimeRegistry class
