@@ -37,6 +37,7 @@ import { Dropdown } from 'sql/base/browser/ui/editableDropdown/browser/dropdown'
 import { IErrorMessageService } from 'sql/platform/errorMessage/common/errorMessageService';
 import Severity from 'vs/base/common/severity';
 import { debounce } from 'vs/base/common/decorators';
+import { Event, Emitter } from 'vs/base/common/event';
 
 export enum AuthenticationType {
 	SqlLogin = 'SqlLogin',
@@ -72,6 +73,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 	private _loadingDatabaseName: string = localize('loadingDatabaseOption', "Loading...");
 	private _serverGroupDisplayString: string = localize('serverGroup', "Server group");
 	private _token: string;
+	private _onConnectionStringParsed = new Emitter<ConnectionProfile>();
 	protected _container: HTMLElement;
 	protected _serverGroupSelectBox: SelectBox;
 	protected _authTypeSelectBox: SelectBox;
@@ -110,6 +112,12 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		color: undefined,
 		description: undefined,
 	};
+
+	/**
+	 * The event fired when the connection string is successfully parsed.
+	 */
+	public readonly ConnectionStringParsed: Event<ConnectionProfile> = this._onConnectionStringParsed.event;
+
 	constructor(options: azdata.ConnectionOption[],
 		callbacks: IConnectionComponentCallbacks,
 		providerName: string,
@@ -197,6 +205,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 			const profile = new ConnectionProfile(this._capabilitiesService, this._providerName);
 			profile.options = connectionInfo.options;
 			if (profile.serverName) {
+				this._onConnectionStringParsed.fire(profile);
 				this.initDialog(profile);
 			}
 		} else if (showError) {
