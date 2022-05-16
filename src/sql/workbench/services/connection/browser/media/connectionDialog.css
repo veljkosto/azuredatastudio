@@ -3,14 +3,46 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-.connection-label {
+.info-button-container {
+	justify-content: right;
+}
+
+.connection-label, .file-label{
 	width: 80px;
 	padding-bottom: 5px;
 }
 
-.connection-input {
+.connection-input, .file-input{
 	width: 200px;
 	padding-bottom: 5px;
+}
+
+.certificate-input {
+	width: 100%;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+.file-double-input {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.file-row {
+	padding-bottom: 5px;
+}
+
+.cer-button {
+	width: 40px;
+	padding-bottom: 5px;
+}
+
+.signing-certificate-info-button {
+	width: 100px;
+	visibility: hidden;
+	margin-bottom: 5px;
 }
 
 .connection-dialog {
@@ -48,8 +80,12 @@
 	flex: 0 0 auto;
 }
 
-.connection-provider-info {
-	margin: 15px;
+.file-info {
+	margin: 0px 15px;
+}
+
+.connection-provider-info  {
+	margin-top: 15px;
 }
 
 .connection-recent-content {
@@ -60,6 +96,10 @@
 
 .connection-recent-content .server-explorer-viewlet {
 	flex: 1 1;
+}
+
+.connection-table {
+	margin: 0 15px;
 }
 
 .connection-table-content {

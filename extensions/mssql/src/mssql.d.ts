@@ -48,6 +48,8 @@ declare module 'mssql' {
 		readonly sqlAssessment: ISqlAssessmentService;
 
 		readonly sqlMigration: ISqlMigrationService;
+
+		readonly c2s: IC2sService;
 	}
 
 	/**
@@ -900,5 +902,51 @@ declare module 'mssql' {
 
 	export interface ISqlMigrationService {
 		getAssessments(ownerUri: string, databases: string[]): Promise<AssessmentResult | undefined>;
+	}
+
+	// Veljko - C2s
+
+	export interface C2sTestResponse {
+		resultText: string;
+	}
+
+	export interface GetSigningCertficateResponse {
+		base64Certificate: string;
+		subject: string;
+	}
+
+	export interface SaveResponse {
+		isSuccess: boolean;
+		message: string;
+	}
+
+	export interface OpenResponse {
+		isSuccess: boolean;
+		message: string;
+		connectionParams: { [name: string]: any };
+		signingCertificate: string;
+	}
+
+	export interface ShowSigningCertficateResponse {
+		isSuccess: boolean;
+		message: string;
+	}
+
+	// //diskutabilno, da li je ovo potrebno
+	// export interface SaveParams {
+	// 	savePath: string;
+	// 	saveOptions: { [name: string]: any };
+	// }
+
+	export interface IC2sService {
+		C2sTest(testParam: string): Promise<C2sTestResponse>;
+
+		GetSigningCertificate(): Promise<GetSigningCertficateResponse>;
+
+		Save(savePath: string, connectionParams: { [name: string]: any }, shouldSignFile: boolean, signingCertificate: string, passwordEncryptionOption: string, encryptionCertificatePath: string): Promise<SaveResponse>;
+
+		Open(openPath: string): Promise<OpenResponse>;
+
+		ShowSigningCertificate(signingCertificate: string): Promise<ShowSigningCertficateResponse>;
 	}
 }

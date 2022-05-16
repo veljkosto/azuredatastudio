@@ -22,3 +22,4 @@ import './mainThreadQueryEditor';
 import './mainThreadResourceProvider';
 import './mainThreadTasks';
 import './mainThreadWorkspace';
+import './mainThreadC2s';

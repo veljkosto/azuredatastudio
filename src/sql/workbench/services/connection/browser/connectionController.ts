@@ -6,7 +6,7 @@
 import { IConnectionManagementService } from 'sql/platform/connection/common/connectionManagement';
 import { IConnectionComponentCallbacks, IConnectionComponentController, IConnectionValidateResult } from 'sql/workbench/services/connection/browser/connectionDialogService';
 import { AdvancedPropertiesController } from 'sql/workbench/services/connection/browser/advancedPropertiesController';
-import { IConnectionProfile } from 'sql/platform/connection/common/interfaces';
+import { IC2sModel, IConnectionProfile } from 'sql/platform/connection/common/interfaces';
 import { ConnectionProfileGroup, IConnectionProfileGroup } from 'sql/platform/connection/common/connectionProfileGroup';
 import * as Constants from 'sql/platform/connection/common/constants';
 import * as azdata from 'azdata';
@@ -17,16 +17,25 @@ import { ConnectionWidget } from 'sql/workbench/services/connection/browser/conn
 import { IServerGroupController } from 'sql/platform/serverGroup/common/serverGroupController';
 import { ILogService } from 'vs/platform/log/common/log';
 import { ConnectionProviderProperties } from 'sql/platform/capabilities/common/capabilitiesService';
+import { IC2sService } from 'sql/workbench/services/connection/browser/c2sService';
+import { URI } from 'vs/base/common/uri';
+import { IFileDialogService } from 'vs/platform/dialogs/common/dialogs';
 
 export class ConnectionController implements IConnectionComponentController {
 	private _advancedController: AdvancedPropertiesController;
 	private _model: IConnectionProfile;
+	private _c2sModel: IC2sModel;
 	private _providerName: string;
 	protected _callback: IConnectionComponentCallbacks;
 	protected _connectionWidget: ConnectionWidget;
 	protected _providerOptions: azdata.ConnectionOption[];
 	/* key: uri, value : list of databases */
 	protected _databaseCache = new Map<string, string[]>();
+
+	private _defaultPath = 'C:\\Users\\a-vstojkic\\OneDrive - Microsoft\\Documents\\';
+	private _fileFiltersC2s = [{ extensions: ['c2s', 'C2S', 'C2s'], name: 'Connect to SQL Files (*.C2S)|*.c2s' }];
+	private _fileFiltersCer = [{ extensions: ['cer', 'CER', 'Cer'], name: 'X.509 Files *.cer' }];
+	private _availableFileSystems = ['file'];
 
 	constructor(
 		connectionProperties: ConnectionProviderProperties,
@@ -35,7 +44,9 @@ export class ConnectionController implements IConnectionComponentController {
 		@IConnectionManagementService protected readonly _connectionManagementService: IConnectionManagementService,
 		@IInstantiationService protected readonly _instantiationService: IInstantiationService,
 		@IServerGroupController protected readonly _serverGroupController: IServerGroupController,
-		@ILogService private readonly _logService: ILogService
+		@ILogService private readonly _logService: ILogService,
+		@IC2sService private readonly _c2sService: IC2sService,
+		@IFileDialogService private readonly _fileDialogService: IFileDialogService
 	) {
 		this._callback = callback;
 		this._providerOptions = connectionProperties.connectionOptions;
@@ -51,8 +62,96 @@ export class ConnectionController implements IConnectionComponentController {
 					return result;
 				}),
 			onAzureTenantSelection: (azureTenantId?: string) => this.onAzureTenantSelection(azureTenantId),
+			onC2s: () => this.handleC2sTest().then(value => { return value; }),
+			onGetSigningCertificate: () => this.handleGetSigningCertificate(),
+			onChooseEncryptionCertificate: () => this.handleChooseEncryptionCertificate(),
+			onOpen: () => this.handleOpenFile(),
+			onSave: () => this.handleSaveFile(),
+			onSignFileChange: (shouldSignFile: boolean) => this.handleSignFileChange(shouldSignFile),
+			onPasswordEncryptionChange: (option: string) => this.handlePasswordEncryptionChange(option),
+			onShowSigningCertificate: () => this.handleShowSigningCertificate()
 		}, providerName);
 		this._providerName = providerName;
+	}
+
+	//Veljko
+	async handleSignFileChange(shouldSignFile: boolean) {
+		this._c2sModel.shouldSignFile = shouldSignFile;
+		this._connectionWidget.setSaveButtonEnabled(!(shouldSignFile && !this._c2sModel.signingCertificate));
+	}
+
+	//Veljko
+	async handlePasswordEncryptionChange(passwordOption: string) {
+		this._c2sModel.encryptPasswordOption = passwordOption;
+		this._connectionWidget.setSaveButtonEnabled(!(passwordOption === 'epwc' && !this._c2sModel.encryptionCertificatePath));
+	}
+
+	//Veljko
+	async handleC2sTest(): Promise<string> {
+		return Promise.resolve(this._c2sService.testC2s('').then(results => {
+			return results.resultText;
+		}));
+	}
+
+	//Veljko
+	async handleChooseEncryptionCertificate(): Promise<string> {
+		return this._fileDialogService.showOpenDialog({ defaultUri: URI.parse(this._defaultPath), availableFileSystems: this._availableFileSystems, filters: this._fileFiltersCer })
+			.then(result => {
+				this._c2sModel.encryptionCertificatePath = result[0].fsPath;
+				this._connectionWidget.setSaveButtonEnabled(true);
+				return result[0].path;
+			});
+	}
+
+	//Veljko
+	async handleGetSigningCertificate(): Promise<string> {
+		return Promise.resolve(this._c2sService.getSigningCertificate().then(value => {
+			this._c2sModel.signingCertificate = value;
+			this._connectionWidget.setSaveButtonEnabled(true);
+			return value.subject;
+		}));
+	}
+
+	//Veljko
+	async handleOpenFile(): Promise<string> {
+		let openPath = await this._fileDialogService.showOpenDialog({ defaultUri: URI.parse(this._defaultPath), availableFileSystems: this._availableFileSystems, filters: this._fileFiltersC2s })
+			.then(result => result[0].fsPath);
+		return this._c2sService.open(openPath).then(result => {
+			Object.entries(result.connectionParams).forEach(([key, value]) => {
+				this._model[key] = value;
+			});
+			this._model.options = result.connectionParams;
+			this.fillInConnectionInputs(this._model);
+
+			if (result.signingCertificate) {
+				this._c2sModel.signingCertificateFromFile = result.signingCertificate;
+				this._connectionWidget.showSignedFileButton(true);
+			}
+			return result.message;
+		});
+	}
+
+	//Veljko
+	async handleSaveFile(): Promise<string> {
+		if (!this._connectionWidget.connect(this._model)) {
+			return 'Connection not valid error';
+		}
+
+		const savePath = await this._fileDialogService.showSaveDialog({ defaultUri: URI.parse(this._defaultPath), availableFileSystems: this._availableFileSystems, filters: this._fileFiltersC2s }).then(result => result.fsPath);
+		const connectionParams = this._model.options;
+		const shouldSignFile = this._c2sModel.shouldSignFile;
+		const signingCertificate = this._c2sModel.signingCertificate !== null ? this._c2sModel.signingCertificate.base64Certificate : null;
+		const passwordEncryptionOption = this._c2sModel.encryptPasswordOption;
+		const encryptionCertificatePath = this._c2sModel.encryptionCertificatePath;
+
+		let response = this._c2sService.save(savePath, connectionParams, shouldSignFile, signingCertificate, passwordEncryptionOption, encryptionCertificatePath);
+		return (await response).message;
+	}
+
+	async handleShowSigningCertificate(): Promise<void> {
+		if (this._c2sModel.signingCertificateFromFile) {
+			this._c2sService.showSigningCertificate(this._c2sModel.signingCertificateFromFile);
+		}
 	}
 
 	protected async onFetchDatabases(serverName: string, authenticationType: string, userName?: string, password?: string, authToken?: string): Promise<string[]> {
@@ -127,9 +226,9 @@ export class ConnectionController implements IConnectionComponentController {
 		this._advancedController.showDialog(advancedOption, this._model.options);
 	}
 
-	public showUiComponent(container: HTMLElement): void {
+	public showUiComponent(container: HTMLElement, provider: string): void {
 		this._databaseCache = new Map<string, string[]>();
-		this._connectionWidget.createConnectionWidget(container);
+		this._connectionWidget.createConnectionWidget(container, false, provider);
 	}
 
 	private flattenGroups(group: ConnectionProfileGroup, allGroups: IConnectionProfileGroup[]): void {
@@ -162,6 +261,7 @@ export class ConnectionController implements IConnectionComponentController {
 	}
 
 	public initDialog(providers: string[], connectionInfo: IConnectionProfile): void {
+		this._c2sModel = { encryptPasswordOption: 'dsp', encryptionCertificatePath: null, openPath: null, savePath: null, shouldSignFile: false, signingCertificate: null, signingCertificateFromFile: null };
 		this._connectionWidget.updateServerGroup(this.getAllServerGroups(providers));
 		this._model = connectionInfo;
 		this._model.providerName = this._providerName;

@@ -21,6 +21,16 @@ export interface IConnectionProfileStore {
 	id: string;
 }
 
+export interface IC2sModel {
+	shouldSignFile: boolean;
+	encryptPasswordOption: string;
+	signingCertificate: { base64Certificate: string, subject: string };
+	encryptionCertificatePath: string;
+	savePath: string;
+	openPath: string;
+	signingCertificateFromFile: string;
+}
+
 export enum ServiceOptionType {
 	string = 'string',
 	multistring = 'multistring',

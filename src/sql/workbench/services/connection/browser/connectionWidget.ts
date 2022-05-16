@@ -6,6 +6,7 @@
 import 'vs/css!./media/sqlConnection';
 
 import { Button } from 'sql/base/browser/ui/button/button';
+import { InfoButton } from 'sql/base/browser/ui/infoButton/infoButton';
 import { SelectBox, SelectOptionItemSQL } from 'sql/base/browser/ui/selectBox/selectBox';
 import { Checkbox } from 'sql/base/browser/ui/checkbox/checkbox';
 import { InputBox } from 'sql/base/browser/ui/inputBox/inputBox';
@@ -34,6 +35,10 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { ILogService } from 'vs/platform/log/common/log';
 import { attachButtonStyler } from 'vs/platform/theme/common/styler';
 import { Dropdown } from 'sql/base/browser/ui/editableDropdown/browser/dropdown';
+import { SIDE_BAR_BACKGROUND } from 'vs/workbench/common/theme';
+import { contrastBorder } from 'vs/platform/theme/common/colorRegistry';
+import { IErrorMessageService } from 'sql/platform/errorMessage/common/errorMessageService';
+import Severity from 'vs/base/common/severity';
 
 export enum AuthenticationType {
 	SqlLogin = 'SqlLogin',
@@ -75,6 +80,20 @@ export class ConnectionWidget extends lifecycle.Disposable {
 	protected _connectionNameInputBox: InputBox;
 	protected _databaseNameInputBox: Dropdown;
 	protected _advancedButton: Button;
+	//VELJKO
+	protected _fileInfoContainer: HTMLElement;
+	protected _fileContainer: HTMLElement;
+	protected _fileTableContainer: HTMLElement;
+	protected _fileTitleSeparator: HTMLElement;
+	private _signFileCheckBox: Checkbox;
+	private _passwordEncryptionDropdown: SelectBox;
+	protected _signingCertificateInputBox: InputBox;
+	protected _encryptionCertificateInputBox: InputBox;
+	protected _SaveButton: Button;
+	protected _OpenButton: Button;
+	protected _chooseSigCerButton: Button;
+	protected _chooseEncCerButton: Button;
+	protected _signCertInfoButton: Button;
 	private static readonly _authTypes: AuthenticationType[] =
 		[AuthenticationType.AzureMFA, AuthenticationType.AzureMFAAndUser, AuthenticationType.Integrated, AuthenticationType.SqlLogin, AuthenticationType.dSTSAuth, AuthenticationType.None];
 	private static readonly _osByName = {
@@ -115,6 +134,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		@IConfigurationService private _configurationService: IConfigurationService,
 		@IAccountManagementService private _accountManagementService: IAccountManagementService,
 		@ILogService protected _logService: ILogService,
+		@IErrorMessageService protected _errorMessageService: IErrorMessageService
 	) {
 		super();
 		this._callbacks = callbacks;
@@ -156,15 +176,15 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		return undefined;
 	}
 
-	public createConnectionWidget(container: HTMLElement, authTypeChanged: boolean = false): void {
+	public createConnectionWidget(container: HTMLElement, authTypeChanged: boolean = false, provider: string = ''): void {
 		this._serverGroupOptions = [this.DefaultServerGroup];
 		this._serverGroupSelectBox = new SelectBox(this._serverGroupOptions.map(g => g.name), this.DefaultServerGroup.name, this._contextViewService, undefined, { ariaLabel: this._serverGroupDisplayString });
 		this._previousGroupOption = this._serverGroupSelectBox.value;
 		this._container = DOM.append(container, DOM.$('div.connection-table'));
 		this._tableContainer = DOM.append(this._container, DOM.$('table.connection-table-content'));
 		this._tableContainer.setAttribute('role', 'presentation');
-		this.fillInConnectionForm(authTypeChanged);
-		this.registerListeners();
+		this.fillInConnectionForm(authTypeChanged, provider);
+		this.registerListeners(provider);
 		if (this._authTypeSelectBox) {
 			this.onAuthTypeSelected(this._authTypeSelectBox.value);
 		}
@@ -172,6 +192,18 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		DOM.addDisposableListener(container, 'paste', e => {
 			this._handleClipboard().catch(err => this._logService.error(`Unexpected error parsing clipboard contents for connection widget : ${err}`));
 		});
+	}
+
+	public setSaveButtonEnabled(enabled: boolean): void {
+		this._SaveButton.enabled = enabled;
+	}
+
+	public showSignedFileButton(show: boolean): void {
+		this._signCertInfoButton.enabled = show;
+		this._signCertInfoButton.element.style.visibility = show ? 'visible' : 'hidden';
+		if (show) {
+			this._signCertInfoButton.focus();
+		}
 	}
 
 	protected async _handleClipboard(): Promise<void> {
@@ -189,7 +221,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		}
 	}
 
-	protected fillInConnectionForm(authTypeChanged: boolean = false): void {
+	protected fillInConnectionForm(authTypeChanged: boolean = false, provider: string = ''): void {
 		// Server Name
 		this.addServerNameOption();
 
@@ -210,6 +242,26 @@ export class ConnectionWidget extends lifecycle.Disposable {
 
 		// Advanced Options
 		this.addAdvancedOptions();
+
+		if (provider === 'Microsoft SQL Server') {
+			// Add File Separator
+			this.addFileSeparator();
+
+			// Add Sign File Option
+			this.addSignFileOption();
+
+			// Password Storage Dropdown
+			this.addPasswordEncryptionDropdown();
+
+			// Signing Certificate
+			this.addSigningCertificateOption();
+
+			// Encryption Certificate
+			this.addEncryptionCertificateOption();
+
+			// Save/Open Buttons
+			this.addSaveOpenButtons();
+		}
 	}
 
 	protected addAuthenticationTypeOption(authTypeChanged: boolean = false): void {
@@ -313,16 +365,6 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		this._advancedButton = this.createAdvancedButton(this._tableContainer, AdvancedLabel);
 	}
 
-	private validateUsername(value: string, isOptionRequired: boolean): boolean {
-		let currentAuthType = this._authTypeSelectBox ? this.getMatchingAuthType(this._authTypeSelectBox.value) : undefined;
-		if (!currentAuthType || currentAuthType === AuthenticationType.SqlLogin) {
-			if (!value && isOptionRequired) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	protected createAdvancedButton(container: HTMLElement, title: string): Button {
 		let rowContainer = DOM.append(container, DOM.$('tr'));
 		DOM.append(rowContainer, DOM.$('td'));
@@ -338,6 +380,161 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		return button;
 	}
 
+	protected addFileSeparator(): void {
+		this._fileTitleSeparator = DOM.append(this._container.parentElement, DOM.$('.file-title'));
+		this._fileTitleSeparator.innerText = localize('fileTitle', "File");
+
+		let theme = this._themeService.getColorTheme();
+
+		const borderColor = theme.getColor(contrastBorder);
+		const border = borderColor ? borderColor.toString() : null;
+		const backgroundColor = theme.getColor(SIDE_BAR_BACKGROUND);
+
+		this._fileTitleSeparator.style.borderWidth = border ? '1px 0px' : null;
+		this._fileTitleSeparator.style.borderStyle = border ? 'solid none' : null;
+		this._fileTitleSeparator.style.borderColor = border;
+		this._fileTitleSeparator.style.backgroundColor = backgroundColor ? backgroundColor.toString() : null;
+		this._fileTitleSeparator.style.fontWeight = '600';
+		this._fileTitleSeparator.style.fontSize = '14px';
+		this._fileTitleSeparator.style.padding = '5px 15px';
+		this._fileTitleSeparator.style.margin = '5px 0px';
+	}
+
+	private addSignFileOption(): void {
+		this._fileInfoContainer = DOM.append(this._container.parentElement, DOM.$('div.file-info'));
+		this._fileContainer = DOM.append(this._fileInfoContainer, DOM.$('div.file-table'));
+		this._fileTableContainer = DOM.append(this._fileContainer, DOM.$('table.file-table-content'));
+		this._fileTableContainer.setAttribute('role', 'presentation');
+
+		let signFileLabel = localize('signFile', "Sign file");
+
+		let rowContainer = DOM.append(this._fileTableContainer, DOM.$(`tr.sign-file-checkbox-row`));
+		let checkboxContainer = DOM.append(rowContainer, DOM.$(`td.file`));
+		this._signFileCheckBox = new Checkbox(checkboxContainer, { label: signFileLabel, checked: false, ariaLabel: signFileLabel });
+		this._signFileCheckBox.onChange(value => {
+			this._callbacks.onSignFileChange(value);
+			this._chooseSigCerButton.enabled = value;
+		});
+
+
+
+	}
+
+	private addPasswordEncryptionDropdown(): void {
+		let passwordStorageLabel = localize('file.passwordStorageLabel', "Password storage");
+		let passwordEncryptionDropdown = DialogHelper.appendRow(this._fileTableContainer, passwordStorageLabel, 'file-label', 'file-input', 'password-checkbox-row');
+		this._passwordEncryptionDropdown = new SelectBox([], undefined, this._contextViewService, passwordEncryptionDropdown, { ariaLabel: passwordStorageLabel });
+		DialogHelper.appendInputSelectBox(passwordEncryptionDropdown, this._passwordEncryptionDropdown);
+		let passwordEncryptionOptions: SelectOptionItemSQL[] = [{ text: 'Do not store password', value: 'dsp' }, { text: 'Encrypt password with machine key', value: 'epwmk' }, { text: 'Encrypt password with certificate', value: 'epwc' }];
+		this._passwordEncryptionDropdown.setOptions(passwordEncryptionOptions);
+		this._passwordEncryptionDropdown.onDidSelect(value => {
+			this._chooseEncCerButton.enabled = this._passwordEncryptionDropdown.value === 'epwc';
+			this._callbacks.onPasswordEncryptionChange(this._passwordEncryptionDropdown.value);
+		});
+	}
+
+	private addSigningCertificateOption(): void {
+		let signingCertificateLabel = localize('file.singningCertificateLabel', "Signing certificate");
+		let signingCertificateBuilder = DialogHelper.appendRow(this._fileTableContainer, signingCertificateLabel, 'file-label', 'file-double-input', 'file-row');
+		let el = signingCertificateBuilder;
+		signingCertificateBuilder = DOM.append(signingCertificateBuilder, DOM.$('div.certificate-input'));
+		this._signingCertificateInputBox = new InputBox(signingCertificateBuilder, this._contextViewService, { ariaLabel: signingCertificateLabel });
+		this._signingCertificateInputBox.disable();
+		let element = DOM.append(el, DOM.$('div.cer-button'));
+		let button = new Button(element, { secondary: true });
+		button.label = '...';
+		button.onDidClick(() => {
+			this._callbacks.onGetSigningCertificate().then(value => {
+				this._signingCertificateInputBox.value = value;
+			});
+		});
+		button.enabled = false;
+		this._chooseSigCerButton = button;
+	}
+
+	private addEncryptionCertificateOption(): void {
+		let encryptionCertificateLabel = localize('file.encryptionCertificateLabel', "Encryption certificate");
+		let encryptionCertificateBuilder = DialogHelper.appendRow(this._fileTableContainer, encryptionCertificateLabel, 'file-label', 'file-double-input');
+		let el = encryptionCertificateBuilder;
+		encryptionCertificateBuilder = DOM.append(encryptionCertificateBuilder, DOM.$('div.certificate-input'));
+		this._encryptionCertificateInputBox = new InputBox(encryptionCertificateBuilder, this._contextViewService, { ariaLabel: encryptionCertificateLabel });
+		this._encryptionCertificateInputBox.disable();
+		let element = DOM.append(el, DOM.$('div.cer-button'));
+		let button = new Button(element, { secondary: true });
+		button.label = '...';
+		button.onDidClick(() => {
+			this._callbacks.onChooseEncryptionCertificate().then(value => this._encryptionCertificateInputBox.value = value);
+		});
+		button.enabled = false;
+		this._chooseEncCerButton = button;
+	}
+
+	private addSaveOpenButtons(): void {
+		let rowContainer = DOM.append(this._fileTableContainer, DOM.$('tr'));
+		let cellContainer = DOM.append(rowContainer, DOM.$('td'));
+
+		this.addSignedFileButton(cellContainer);
+
+		cellContainer = DOM.append(rowContainer, DOM.$('td'));
+		cellContainer.setAttribute('align', 'right');
+
+		this.addOpenButton(cellContainer);
+
+		this.addSaveButton(cellContainer);
+	}
+
+	private addSignedFileButton(cellContainer: HTMLElement): void {
+		let infoButtonContainer = DOM.append(cellContainer, DOM.$(`td.signing-certificate-info-button`));
+		infoButtonContainer.style.alignItems = 'left';
+		let el = new InfoButton(infoButtonContainer);
+		el.label = 'Signed File';
+
+		el.onDidClick(() => {
+			this._callbacks.onShowSigningCertificate();
+		});
+		el.enabled = false;
+		this._signCertInfoButton = el;
+	}
+
+	private addOpenButton(cellContainer: HTMLElement): void {
+		let cellContainerOpen = DOM.append(cellContainer, DOM.$('td'));
+		cellContainerOpen.setAttribute('align', 'right');
+		cellContainerOpen.style.flexDirection = 'row';
+		let divContainer = DOM.append(cellContainerOpen, DOM.$('div.save-button'));
+		let button = new Button(divContainer, { secondary: true });
+		button.label = 'Open...';
+		button.onDidClick(() => {
+			//open file
+			this._callbacks.onOpen();
+		});
+		this._OpenButton = button;
+	}
+
+	private addSaveButton(cellContainer: HTMLElement): void {
+		let cellContainerSave = DOM.append(cellContainer, DOM.$('td'));
+		cellContainerSave.setAttribute('align', 'right');
+		let divContainer = DOM.append(cellContainerSave, DOM.$('div.open-button'));
+		let button = new Button(divContainer, { secondary: true });
+		button.label = 'Save...';
+		button.onDidClick(() => {
+			//save file
+			this._callbacks.onSave()
+				.then(value => this._errorMessageService.showDialog(Severity.Info, 'File', value))
+				.catch(value => this._errorMessageService.showDialog(Severity.Error, 'File', value));
+		});
+		this._SaveButton = button;
+	}
+
+	private validateUsername(value: string, isOptionRequired: boolean): boolean {
+		let currentAuthType = this._authTypeSelectBox ? this.getMatchingAuthType(this._authTypeSelectBox.value) : undefined;
+		if (!currentAuthType || currentAuthType === AuthenticationType.SqlLogin) {
+			if (!value && isOptionRequired) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private appendCheckbox(container: HTMLElement, label: string, cellContainerClass: string, rowContainerClass: string, isChecked: boolean): Checkbox {
 		let rowContainer = DOM.append(container, DOM.$(`tr.${rowContainerClass}`));
 		DOM.append(rowContainer, DOM.$('td'));
@@ -345,7 +542,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		return new Checkbox(checkboxContainer, { label, checked: isChecked, ariaLabel: label });
 	}
 
-	protected registerListeners(): void {
+	protected registerListeners(provider: string = ''): void {
 		// Theme styler
 		this._register(styler.attachInputBoxStyler(this._serverNameInputBox, this._themeService));
 		this._register(styler.attachInputBoxStyler(this._connectionNameInputBox, this._themeService));
@@ -354,6 +551,19 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		this._register(attachButtonStyler(this._advancedButton, this._themeService));
 		this._register(styler.attachCheckboxStyler(this._rememberPasswordCheckBox, this._themeService));
 		this._register(styler.attachSelectBoxStyler(this._azureAccountDropdown, this._themeService));
+		if (provider === 'Microsoft SQL Server') {
+			//Veljko
+			this._register(styler.attachCheckboxStyler(this._signFileCheckBox, this._themeService));
+			this._register(styler.attachSelectBoxStyler(this._passwordEncryptionDropdown, this._themeService));
+			this._register(styler.attachInputBoxStyler(this._signingCertificateInputBox, this._themeService));
+			this._register(styler.attachInputBoxStyler(this._encryptionCertificateInputBox, this._themeService));
+			this._register(attachButtonStyler(this._SaveButton, this._themeService));
+			this._register(attachButtonStyler(this._OpenButton, this._themeService));
+			this._register(attachButtonStyler(this._chooseSigCerButton, this._themeService));
+			this._register(attachButtonStyler(this._chooseEncCerButton, this._themeService));
+			this._register(attachButtonStyler(this._signCertInfoButton, this._themeService));
+			//
+		}
 		if (this._serverGroupSelectBox) {
 			this._register(styler.attachSelectBoxStyler(this._serverGroupSelectBox, this._themeService));
 			this._register(this._serverGroupSelectBox.onDidSelect(selectedGroup => {
@@ -405,6 +615,11 @@ export class ConnectionWidget extends lifecycle.Disposable {
 			}));
 		}
 
+		//veljko
+		if (this._passwordEncryptionDropdown) {
+			this._register(styler.attachSelectBoxStyler(this._passwordEncryptionDropdown, this._themeService));
+		}
+
 		if (this._azureTenantDropdown) {
 			this._register(styler.attachSelectBoxStyler(this._azureTenantDropdown, this._themeService));
 			this._register(this._azureTenantDropdown.onDidSelect((selectInfo) => {
@@ -453,6 +668,7 @@ export class ConnectionWidget extends lifecycle.Disposable {
 
 	protected onAuthTypeSelected(selectedAuthType: string) {
 		let currentAuthType = this.getMatchingAuthType(selectedAuthType);
+		this.adjustSaveOptions(currentAuthType);
 		this._userNameInputBox.hideMessage();
 		this._passwordInputBox.hideMessage();
 		this._azureAccountDropdown.hideMessage();
@@ -498,6 +714,15 @@ export class ConnectionWidget extends lifecycle.Disposable {
 		} else if (currentAuthType === AuthenticationType.SqlLogin) {
 			this._tableContainer.classList.remove('hide-username');
 			this._tableContainer.classList.remove('hide-password');
+		}
+	}
+
+	private adjustSaveOptions(selectedAuthType: AuthenticationType) {
+		if (this._passwordEncryptionDropdown && selectedAuthType === AuthenticationType.SqlLogin) {
+			this._passwordEncryptionDropdown.enable();
+		} else {
+			this._passwordEncryptionDropdown.disable();
+			this._passwordEncryptionDropdown.select(0);
 		}
 	}
 

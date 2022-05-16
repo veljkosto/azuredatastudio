@@ -88,8 +88,8 @@ export class ConnectionDialogWidget extends Modal {
 	public onShowUiComponent: Event<OnShowUIResponse> = this._onShowUiComponent.event;
 
 	private _onFillinConnectionInputs = new Emitter<IConnectionProfile>();
-
 	public onFillinConnectionInputs: Event<IConnectionProfile> = this._onFillinConnectionInputs.event;
+
 	private _onResetConnection = new Emitter<void>();
 	public onResetConnection: Event<void> = this._onResetConnection.event;
 

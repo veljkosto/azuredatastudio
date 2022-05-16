@@ -3,7 +3,7 @@
  *  Licensed under the Source EULA. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-.advanced-button {
+.advanced-button, .save-button, .open-button {
 	width: 100px;
 	padding-bottom: 5px;
 }

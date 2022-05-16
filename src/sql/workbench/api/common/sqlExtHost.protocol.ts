@@ -12,6 +12,7 @@ import { URI, UriComponents } from 'vs/base/common/uri';
 import { IDisposable } from 'vs/base/common/lifecycle';
 
 import type * as azdata from 'azdata';
+import type * as mssql from 'mssql';
 import type * as vscode from 'vscode';
 import type * as azurecore from 'azurecore';
 
@@ -33,6 +34,14 @@ import { ITelemetryEventProperties } from 'sql/platform/telemetry/common/telemet
 
 export abstract class ExtHostAzureAccountShape {
 	public $getSubscriptions(account: azurecore.AzureAccount, ignoreErrors?: boolean, selectedOnly?: boolean): Thenable<azurecore.GetSubscriptionsResult> { throw ni(); }
+}
+
+export abstract class ExtHostC2sShape {
+	public $c2sTest(testParam: string): Thenable<mssql.C2sTestResponse> { throw ni(); }
+	public $getSigningCertificate(): Thenable<mssql.GetSigningCertficateResponse> { throw ni(); }
+	public $save(savePath: string, connectionParams: { [name: string]: any }, shouldSignFile: boolean, signingCertificate: string, passwordEncryptionOption: string, encryptionCertificatePath: string): Thenable<mssql.SaveResponse> { throw ni(); }
+	public $open(openPath: string): Thenable<mssql.OpenResponse> { throw ni(); }
+	public $showSigningCertificate(signingCertificate: string): Thenable<mssql.ShowSigningCertficateResponse> { throw ni(); }
 }
 
 export abstract class ExtHostAccountManagementShape {
@@ -617,6 +626,10 @@ export interface MainThreadAccountManagementShape extends IDisposable {
 	$getAccountsForProvider(providerId: string): Thenable<azdata.Account[]>;
 }
 
+export interface MainThreadC2sShape extends IDisposable {
+
+}
+
 export interface MainThreadAzureAccountShape extends IDisposable {
 
 }
@@ -724,6 +737,7 @@ export const SqlMainContext = {
 	MainThreadNotebookDocumentsAndEditors: createMainId<MainThreadNotebookDocumentsAndEditorsShape>('MainThreadNotebookDocumentsAndEditors'),
 	MainThreadExtensionManagement: createMainId<MainThreadExtensionManagementShape>('MainThreadExtensionManagement'),
 	MainThreadWorkspace: createMainId<MainThreadWorkspaceShape>('MainThreadWorkspace'),
+	MainThreadC2s: createMainId<MainThreadC2sShape>('MainThreadC2s'),
 };
 
 export const SqlExtHostContext = {
@@ -747,6 +761,7 @@ export const SqlExtHostContext = {
 	ExtHostNotebookDocumentsAndEditors: createExtId<ExtHostNotebookDocumentsAndEditorsShape>('ExtHostNotebookDocumentsAndEditors'),
 	ExtHostExtensionManagement: createExtId<ExtHostExtensionManagementShape>('ExtHostExtensionManagement'),
 	ExtHostWorkspace: createExtId<ExtHostWorkspaceShape>('ExtHostWorkspace'),
+	ExtHostC2s: createExtId<ExtHostC2sShape>('ExtHostC2s'),
 };
 
 export interface MainThreadDashboardShape extends IDisposable {

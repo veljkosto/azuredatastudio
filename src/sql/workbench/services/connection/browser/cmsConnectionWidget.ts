@@ -28,6 +28,7 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { ILayoutService } from 'vs/platform/layout/browser/layoutService';
 import { ConnectionWidget, AuthenticationType } from 'sql/workbench/services/connection/browser/connectionWidget';
 import { ILogService } from 'vs/platform/log/common/log';
+import { IErrorMessageService } from 'sql/platform/errorMessage/common/errorMessageService';
 
 /**
  * Connection Widget clas for CMS Connections
@@ -51,9 +52,10 @@ export class CmsConnectionWidget extends ConnectionWidget {
 		@IConfigurationService _configurationService: IConfigurationService,
 		@IAccountManagementService _accountManagementService: IAccountManagementService,
 		@ILogService _logService: ILogService,
+		@IErrorMessageService _errorMessageService: IErrorMessageService
 	) {
 		super(options, callbacks, providerName, _themeService, _contextViewService, _connectionManagementService, _capabilitiesService,
-			_clipboardService, _configurationService, _accountManagementService, _logService);
+			_clipboardService, _configurationService, _accountManagementService, _logService, _errorMessageService);
 		let authTypeOption = this._optionsMaps[ConnectionOptionSpecialType.authType];
 		if (authTypeOption) {
 			let authTypeDefault = this.getAuthTypeDefault(authTypeOption, OS);

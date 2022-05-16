@@ -43,6 +43,7 @@ export const objectExplorerPrefix: string = 'objectexplorer://';
 export const SqlAssessmentService = 'sqlAssessmentService';
 export const SqlMigrationService = 'sqlMigrationService';
 export const NotebookConvertService = 'notebookConvertService';
+export const C2sService = 'c2sService';
 
 export enum BuiltInCommands {
 	SetContext = 'setContext'

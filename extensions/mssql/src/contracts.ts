@@ -1080,6 +1080,54 @@ export namespace SqlMigrationRefreshPerfDataCollectionRequest {
 
 // ------------------------------- <Sql Migration> -----------------------------
 
+// ------------------------------- < C2s > ------------------------------------
+
+export interface C2sTestParams {
+	testParam: string;
+}
+
+export namespace C2sTestRequest {
+	export const type = new RequestType<C2sTestParams, mssql.C2sTestResponse, void, void>('c2s/test');
+}
+
+export interface GetSigningCertificateParams {
+}
+
+export namespace GetSigningCertificateRequest {
+	export const type = new RequestType<GetSigningCertificateParams, mssql.GetSigningCertficateResponse, void, void>('c2s/getSigningCertificate');
+}
+
+export interface SaveParams {
+	savePath: string;
+	connectionParams: { [name: string]: any };
+	shouldSignFile: boolean;
+	signingCertificate: string;
+	passwordEncryptionOption: string;
+	encryptionCertificatePath: string;
+}
+
+export namespace SaveRequest {
+	export const type = new RequestType<SaveParams, mssql.SaveResponse, void, void>('c2s/save');
+}
+
+export interface OpenParams {
+	openPath: string;
+}
+
+export namespace OpenRequest {
+	export const type = new RequestType<OpenParams, mssql.OpenResponse, void, void>('c2s/open');
+}
+
+export interface ShowSigningCertificateParams {
+	signingCertificate: string;
+}
+
+export namespace ShowSigningCertificateRequest {
+	export const type = new RequestType<ShowSigningCertificateParams, mssql.ShowSigningCertficateResponse, void, void>('c2s/showSigningCertificate');
+}
+
+// ------------------------------- < /C2s > -----------------------------------
+
 // ------------------------------- < Table Designer > ------------------------------------
 
 export interface TableDesignerEditRequestParams {

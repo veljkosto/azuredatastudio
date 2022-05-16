@@ -181,6 +181,7 @@ import { JobManagementService } from 'sql/workbench/services/jobManagement/commo
 import { IBackupService } from 'sql/platform/backup/common/backupService';
 import { BackupService } from 'sql/platform/backup/common/backupServiceImp';
 import { IBackupUiService } from 'sql/workbench/contrib/backup/common/backupUiService';
+import { C2sService, IC2sService } from 'sql/workbench/services/connection/browser/c2sService';
 import { BackupUiService } from 'sql/workbench/contrib/backup/browser/backupUiService';
 import { IRestoreDialogController, IRestoreService } from 'sql/workbench/services/restore/common/restoreService';
 import { RestoreService, RestoreDialogController } from 'sql/workbench/services/restore/browser/restoreServiceImpl';
@@ -256,6 +257,7 @@ registerSingleton(IAssessmentService, AssessmentService);
 registerSingleton(IDataGridProviderService, DataGridProviderService);
 registerSingleton(ITableDesignerService, TableDesignerService);
 registerSingleton(IExecutionPlanService, ExecutionPlanService);
+registerSingleton(IC2sService, C2sService);
 //#endregion
 
 

@@ -86,11 +86,13 @@ import { IQueryHistoryService } from 'sql/workbench/services/queryHistory/common
 import { QueryHistoryService } from 'sql/workbench/services/queryHistory/common/queryHistoryServiceImpl';
 import { IAzureAccountService } from 'sql/platform/azureAccount/common/azureAccountService';
 import { AzureAccountService } from 'sql/workbench/services/azureAccount/browser/azureAccountService';
+import { C2sService, IC2sService } from 'sql/workbench/services/connection/browser/c2sService';
 
 registerSingleton(ISqlOAuthService, SqlOAuthService);
 registerSingleton(sqlIClipboardService, sqlClipboardService);
 registerSingleton(IQueryHistoryService, QueryHistoryService);
 registerSingleton(IAzureAccountService, AzureAccountService);
+registerSingleton(IC2sService, C2sService);
 // {{SQL CARBON EDIT}} - End
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

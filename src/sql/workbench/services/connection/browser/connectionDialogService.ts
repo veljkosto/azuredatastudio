@@ -44,10 +44,18 @@ export interface IConnectionComponentCallbacks {
 	onSetAzureTimeOut?: () => void;
 	onFetchDatabases?: (serverName: string, authenticationType: string, userName?: string, password?: string, token?: string) => Promise<string[]>;
 	onAzureTenantSelection?: (azureTenantId?: string) => void;
+	onC2s?: () => Promise<string>;
+	onGetSigningCertificate?: () => Promise<string>;
+	onChooseEncryptionCertificate?: () => Promise<string>;
+	onSave?: () => Promise<string>;
+	onOpen?: () => Promise<string>;
+	onSignFileChange?: (shouldSignFile: boolean) => void;
+	onPasswordEncryptionChange?: (passwordEncryptionOption: string) => void;
+	onShowSigningCertificate?: () => void;
 }
 
 export interface IConnectionComponentController {
-	showUiComponent(container: HTMLElement, didChange?: boolean): void;
+	showUiComponent(container: HTMLElement, provider: string, didChange?: boolean): void;
 	initDialog(providers: string[], model: IConnectionProfile): void;
 	validateConnection(): IConnectionValidateResult;
 	fillInConnectionInputs(connectionInfo: IConnectionProfile): void;
@@ -341,10 +349,10 @@ export class ConnectionDialogService implements IConnectionDialogService {
 			previousModel.dispose();
 		}
 		if (this._inputModel && this._inputModel.options) {
-			this.uiController.showUiComponent(input.container,
+			this.uiController.showUiComponent(input.container, input.selectedProviderDisplayName,
 				this._inputModel.options.authTypeChanged);
 		} else {
-			this.uiController.showUiComponent(input.container);
+			this.uiController.showUiComponent(input.container, input.selectedProviderDisplayName);
 		}
 
 	}

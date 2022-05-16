@@ -11,6 +11,8 @@ import { CmsConnectionWidget } from 'sql/workbench/services/connection/browser/c
 import { IServerGroupController } from 'sql/platform/serverGroup/common/serverGroupController';
 import { ILogService } from 'vs/platform/log/common/log';
 import { ConnectionProviderProperties } from 'sql/platform/capabilities/common/capabilitiesService';
+import { IC2sService } from 'sql/workbench/services/connection/browser/c2sService';
+import { IFileDialogService } from 'vs/platform/dialogs/common/dialogs';
 
 /**
  * Connection Controller for CMS Connections
@@ -24,9 +26,11 @@ export class CmsConnectionController extends ConnectionController {
 		@IConnectionManagementService _connectionManagementService: IConnectionManagementService,
 		@IInstantiationService _instantiationService: IInstantiationService,
 		@IServerGroupController _serverGroupController: IServerGroupController,
-		@ILogService _logService: ILogService
+		@ILogService _logService: ILogService,
+		@IC2sService _c2sService: IC2sService,
+		@IFileDialogService _fileDialogService: IFileDialogService
 	) {
-		super(connectionProperties, callback, providerName, _connectionManagementService, _instantiationService, _serverGroupController, _logService);
+		super(connectionProperties, callback, providerName, _connectionManagementService, _instantiationService, _serverGroupController, _logService, _c2sService, _fileDialogService);
 		let specialOptions = this._providerOptions.filter(
 			(property) => (property.specialValueType !== null && property.specialValueType !== undefined));
 		this._connectionWidget = this._instantiationService.createInstance(CmsConnectionWidget, specialOptions, {
@@ -41,7 +45,7 @@ export class CmsConnectionController extends ConnectionController {
 		}, providerName);
 	}
 
-	public override showUiComponent(container: HTMLElement, authTypeChanged: boolean = false): void {
+	public override showUiComponent(container: HTMLElement, provider: string, authTypeChanged: boolean = false): void {
 		this._databaseCache = new Map<string, string[]>();
 		this._connectionWidget.createConnectionWidget(container, authTypeChanged);
 	}
